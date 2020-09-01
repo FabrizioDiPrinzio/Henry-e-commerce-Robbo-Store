@@ -1,0 +1,18 @@
+.NavBar {
+  display: flex-box;
+  flex-direction: row;
+  background: #563488;
+}
+
+.Title {
+font-family: Ropa Sans;
+font-style: normal;
+font-weight: normal;
+font-size: 24px;
+line-height: 26px;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+}

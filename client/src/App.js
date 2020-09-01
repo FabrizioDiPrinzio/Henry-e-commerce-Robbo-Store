@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Product_Card from './Components/Product Card/Product_Card.jsx';
+import ProductCard from './Components/Product Card/ProductCard.jsx';
 import Catalogo from './Components/Catalogo/Catalogo.jsx';
 import NavBar from './Components/Nav Bar/NavBar.jsx';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
@@ -14,7 +14,7 @@ function App() {
 					exact
 					path="/product_card"
 					render={() => (
-						<Product_Card
+						<ProductCard
 							product="R.O.B el robot"
 							image="https://i.pinimg.com/236x/47/5d/09/475d09c299b6b704f684f0e9f534df47.jpg"
 							price="99"

@@ -1,18 +1,14 @@
 import React from 'react';
-import Product_Card from '../Product Card/Product_Card.jsx';
+import ProductCard from '../Product Card/ProductCard.jsx';
+import s from './Catalogo.module.css';
 
 export default function Catalogo({robots}) {
 	return (
 		<div>
-			<ul>
+			<ul className={s.list}>
 				{robots.map(bot => (
-					<li>
-						<Product_Card
-							product={bot.product}
-							image={bot.image}
-							price={bot.price}
-							key={bot.id}
-						/>
+					<li className={s.listItem} key={bot.id}>
+						<ProductCard product={bot.product} image={bot.image} price={bot.price} />
 					</li>
 				))}
 			</ul>

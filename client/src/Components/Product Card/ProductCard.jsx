@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './Product_Card.module.css';
+import s from './ProductCard.module.css';
 
 export default function ProductCard({product, image, price}) {
 	return (

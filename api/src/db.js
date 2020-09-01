@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); //Es la forma de requerir el archivo .env//
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');

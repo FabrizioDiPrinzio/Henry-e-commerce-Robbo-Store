@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import Catalogo from './Components/Catalogo.jsx';
+import Producto from './Components/Producto.jsx';
+import NavBar from './Components/NavBar.jsx';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Route path="/" component={NavBar} />
+
+        <Route
+          exact
+          path="/producto"
+          render={() => (
+            <Producto
+              titulo="ROBBERS" descripcion="Robot nuevo sin usar" precio="$999" cantidad="100"
+            />
+          )}
+        />
+      </Router>
     </div>
   );
 }
-
-export default App;

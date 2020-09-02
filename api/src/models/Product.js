@@ -14,7 +14,7 @@ module.exports = sequelize => {
 			allowNull: false,
 			validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
+					if (typeof value !== 'string') throw new Error('Name must be a string!!!!');
 				}
 			}
 		},

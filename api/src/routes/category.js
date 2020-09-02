@@ -25,7 +25,7 @@ router.put('/:id', (req, res) => {
 	const {name, description} = req.body;
 	const {id} = req.params;
 
-	if (!name || !description) return res.sendStatus(400);
+	if (!name || !description) return res.status(400).send('faltan parametros');
 	else {
 		Categories.findByPk(id)
 			.then(category => {

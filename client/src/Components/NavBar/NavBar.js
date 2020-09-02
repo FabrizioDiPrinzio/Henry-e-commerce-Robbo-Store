@@ -19,7 +19,7 @@ export default function NavBar(props) {
 		// 		<Link to="/catalogo">
 		// 			<a className="Catalogo">Catalogo</a>
 		// 		</Link>
-
+/**/
 
 			}
 <div>

@@ -44,7 +44,7 @@ router.put('/:id', (req, res) => {
 	const {name, price, stock, image, description} = req.body;
 	const {id} = req.params;
 
-	if (!name || !price || !stock || !image || !description) return res.sendStatus(400);
+	if (!name || !price || !stock || !image || !description) return res.status(400).send('faltan parametros');
 	else {
 		Product.findByPk(id)
 			.then(robot => {

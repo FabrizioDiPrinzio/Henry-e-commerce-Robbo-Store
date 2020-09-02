@@ -8,7 +8,13 @@ export default function Catalogo({robots}) {
 			<ul className={s.list}>
 				{robots.map(bot => (
 					<li className={s.listItem} key={bot.id}>
-						<ProductCard product={bot.product} image={bot.image} price={bot.price} />
+						<ProductCard
+							product={bot.product}
+							image={bot.image}
+							price={bot.price}
+							stock={bot.stock}
+							id={bot.id}
+						/>
 					</li>
 				))}
 			</ul>

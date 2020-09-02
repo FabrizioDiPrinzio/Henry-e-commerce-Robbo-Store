@@ -53,4 +53,4 @@ export default class FormularioCategoria extends React.Component{
 					</div>
 			</form>
 		);}
-}
+ }

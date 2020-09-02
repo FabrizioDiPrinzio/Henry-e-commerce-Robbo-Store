@@ -9,10 +9,21 @@ root {
 .productCard {
 	display: flex;
 	position: relative;
-	height: 400px;
+	height: 380px;
 	width: 300px;
 	background-color: #617cc7ff;
 	border: 1px solid black;
+	align-items: center;
+	justify-content: space-evenly;
+	flex-direction: column;
+}
+
+.body {
+	display: flex;
+	position: relative;
+	height: 330px;
+	width: 300px;
+	background-color: #617cc7ff;
 	align-items: center;
 	justify-content: space-around;
 	flex-direction: column;
@@ -22,11 +33,11 @@ root {
 	display: flex;
 	position: absolute;
 	top: 5px;
+	font-weight: bold;
 }
 
 .topBar {
 	display: flex;
-	background-color: #563488ff;
 	position: relative;
 }
 
@@ -42,13 +53,21 @@ root {
 	border-bottom-left-radius: 85%;
 }
 
-img {
-	display: flex;
+.container {
+	height: 250px;
+	border: none;
+}
+
+.container img {
+	max-height: 100%;
+	max-width: 100%;
 }
 
 .price {
 	display: flex;
+	justify-content: space-between;
 }
 
-.buttons {
+.stock {
+	font-weight: bold;
 }

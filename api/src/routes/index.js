@@ -1,16 +1,16 @@
-const { Router } = require('express');
+const express = require('express');
 // import all routers;
 const productRouter = require('./product.js');
 
-const router = Router();
+const app = express();
 
 // load each router on a route
 // i.e: router.use('/auth', authRouter);
-// router.use('/auth', authRouter);
-router.use('/products', productRouter);
+// app.use('/auth', authRouter);
+app.use('/products', productRouter);
 
-router.get('/', (req, res)=>{
-    res.send('Hola')
-    });
+app.get('/', (req, res) => {
+	res.send('Hola');
+});
 
-module.exports = router;
+module.exports = app;

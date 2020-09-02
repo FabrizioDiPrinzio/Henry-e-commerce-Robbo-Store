@@ -1,0 +1,11 @@
+.list {
+	display: flex;
+	justify-content: center;
+	list-style-type: none;
+}
+
+.listItem {
+	display: inline-block;
+	justify-content: space-around;
+	padding: 20px;
+}

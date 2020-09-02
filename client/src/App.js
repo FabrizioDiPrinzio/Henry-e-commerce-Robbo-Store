@@ -19,18 +19,7 @@ function App() {
 			<Router>
 				<Route path="/" render={() => <NavBar onSearch={Robot => alert(Robot)} />} />
 				<Route exact path="/" component={Home} />
-				<Route
-					exact
-					path="/product_card"
-					render={() => (
-						<ProductCard
-							product="R.O.B el robot"
-							image="https://i.pinimg.com/236x/47/5d/09/475d09c299b6b704f684f0e9f534df47.jpg"
-							price="99"
-							stock="10"
-						/>
-					)}
-				/>
+				<Route exact path="/product_card" render={() => <ProductCard robot={robots[0]} />} />
 				<Route exact path="/catalogo" render={() => <Catalogo robots={robots} />} />
 				<Route exact path="/productotest" render={() => <Producto robot={robots[0]} />} />
 				<Route

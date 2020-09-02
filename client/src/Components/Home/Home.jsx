@@ -1,6 +1,6 @@
 import React from 'react';
-import NavBar from '../NavBar/NavBar.js';
-//import Carousel from './Carousel.js';
+import NavBar from '../NavBar/NavBar.jsx';
+//import Carousel from './Carousel.jsx';
 import './Home.css';
 
 function Home() {

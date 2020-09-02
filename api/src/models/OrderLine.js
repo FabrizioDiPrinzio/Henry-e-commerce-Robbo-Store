@@ -13,11 +13,17 @@ module.exports = (sequelize) => {
     price:{
       type: DataTypes.FLOAT,
       allowNull: false,
+      validate: {
+        isNumeric: true,
+      }
     },
 
     quantity:{
       type: DataTypes.INTEGER,
       allowNull: false,
+      validate: {
+        isNumeric: true,
+      }
     },
   });
 };

@@ -2,8 +2,8 @@ import React from 'react';
 import './App.css';
 import ProductCard from './Components/Product Card/ProductCard.jsx';
 import Catalogo from './Components/Catalogo/Catalogo.jsx';
-import NavBar from './Components/NavBar/NavBar.js';
-import Home from './Components/Home/Home.js';
+import NavBar from './Components/NavBar/NavBar.jsx';
+import Home from './Components/Home/Home.jsx';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 function App() {

@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-    sequelize.define('shipping', {
+    sequelize.define('purchase_order', {
 
   //Vinculada en db.js por ser una FK
 

@@ -3,15 +3,15 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-sequelize.define('product-categories', {
+sequelize.define('product_categories', {
 
-    idProduct:{
+    // idProduct:{
 
-        },
+    //     },
 
-    idCategories:{
+    // idCategories:{
 
-        }
+    //     }
     });
 };
 

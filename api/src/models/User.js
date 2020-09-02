@@ -24,8 +24,7 @@ module.exports = (sequelize) => {
         isUnique: true,
         validate: {
             isEmail: true,
-            isUnique: sequelize.validateIsUnique('email')
-        }
+            }
         },
         
     password:{

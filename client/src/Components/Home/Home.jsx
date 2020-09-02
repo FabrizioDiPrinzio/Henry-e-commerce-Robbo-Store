@@ -1,5 +1,5 @@
 import React from 'react';
-import NavBar from '../NavBar/NavBar.js';
+import {Link} from 'react-router-dom';
 //import Carousel from './Carousel.js';
 import './Home.css';
 
@@ -11,11 +11,18 @@ function Home() {
 					<h1>Carousel</h1>
 				</div>
 				<div className="Product-card">
-					<h1>Product Card container</h1>
+					<Link to="/product_card">
+						<h1>Product Card container</h1>
+					</Link>
+				</div>
+				<div>
+					<Link to="/catalogo">
+						<h1>Catalogo</h1>
+					</Link>
 				</div>
 			</body>
 		</div>
 	);
 }
-
+/**/
 export default Home;

@@ -11,11 +11,21 @@ module.exports = (sequelize) => {
     name:{
         type: DataTypes.STRING,
         allowNull: false,
-        },
+        validate: {
+          isString(value) {
+            if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
+          }
+        }
+      },
         
     description:{
         type: DataTypes.TEXT,
         allowNull: false,
+        validate: {
+          isString(value) {
+            if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
+            }
+          }
         },
     });
 };

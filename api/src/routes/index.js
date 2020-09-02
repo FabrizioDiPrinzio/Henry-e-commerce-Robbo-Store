@@ -10,7 +10,7 @@ const router = Router();
 router.use('/products', productRouter);
 
 router.get('/', (req, res)=>{
-    res.send('Hola')
+    res.send()
     });
 
 module.exports = router;

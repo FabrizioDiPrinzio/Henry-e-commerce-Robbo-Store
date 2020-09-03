@@ -19,7 +19,7 @@ function App() {
 			<Router>
 				<Route path="/" render={() => <NavBar onSearch={Robot => alert(Robot)} />} />
 				<Route exact path="/" component={Home} />
-				<Route exact path="/" render={() => <Catalogo robots={robots} />} />
+				<Route exact path="/" component={Catalogo} />
 				<Route exact path="/product_card" render={() => <ProductCard robot={robots[0]} />} />
 				<Route exact path="/productotest" render={() => <Producto robot={robots[0]} />} />
 				<Route

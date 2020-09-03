@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const {Categories, Product} = require('../db.js');
 
+router.get('/names', (req, res) => {
+	Categories.findAll()
+		.then(c => {
+			const respuesta = c.map((e) => ({name: e.name, description: e.description }))
+			return res.send(respuesta);
+		})
+		.catch(err => {return res.status(400).send(err.message)});
+});
+
 router.post('/', (req, res) => {
 	const {name, description} = req.body;
 	if (!name || !description){

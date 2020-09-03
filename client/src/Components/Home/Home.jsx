@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 //import Carousel from './Carousel.js';
+import ProductForm from '../FormularioProducto/ProductForm.js';
 import './Home.css';
 
 function Home() {
@@ -15,11 +16,7 @@ function Home() {
 						<h1>Product Card container</h1>
 					</Link>
 				</div>
-				<div>
-					<Link to="/catalogo">
-						<h1>Catalogo</h1>
-					</Link>
-				</div>
+				{/*<ProductForm/>*/}
 			</body>
 		</div>
 	);

@@ -67,10 +67,9 @@ router.post('/:idProducto/category/:idCategoria', async (req, res) => {
 	const categoria = await Categories.findByPk(idCategoria);
 
 	producto.addCategory(categoria).then(() => {
-		Product.findAll({where: {id: idProducto}, include: [Categories]}).then(response =>
-			res.send(response)
-		);
-	});
+		categoria.addProduct(producto)
+	}).then(() => Product.findAll({where: {id: idProducto}, include: [Categories]}))
+	.then(response => res.send(response))
 });
 
 router.delete('/:idProducto/category/:idCategoria', (req, res) => {

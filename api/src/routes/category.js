@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {Categories} = require('../db.js');
+const {Categories, Product} = require('../db.js');
 
 router.post('/', (req, res) => {
 	const {name, description} = req.body;
@@ -44,6 +44,19 @@ router.put('/:id', (req, res) => {
 			.catch(err => res.status(400).send(err.message));
 	}
 });
+
+
+
+
+router.get('/:nombreCategoria', async (req, res) => {
+	const name = req.params.nombreCategoria;
+	Categories.findOne({where: {name}, include: [Product]})
+	.then(response => res.send(response))
+
+});
+
+
+
 
 
 module.exports = router;

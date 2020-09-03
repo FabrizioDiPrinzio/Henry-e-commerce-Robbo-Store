@@ -5,7 +5,7 @@ import s from './ProductCard.module.css';
 export default function ProductCard({robot}) {
 	return (
 		<div className={s.productCard}>
-			<div className={s.title}>{robot.product}</div>
+			<div className={s.title}>{robot.name}</div>
 			<div className={s.body}>
 				<div className={s.topBar}>
 					<Link to={`/producto/${robot.id}`}>
@@ -13,7 +13,7 @@ export default function ProductCard({robot}) {
 						<div className={s.info}>i</div>
 					</Link>
 					<div className={s.container}>
-						<img src={robot.image} alt={robot.product} />
+						<img src={robot.image} alt={robot.name} />
 					</div>
 				</div>
 				<div className={s.price}>

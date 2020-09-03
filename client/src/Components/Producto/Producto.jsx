@@ -9,9 +9,9 @@ export default function Producto({robot}) {
 	return (
 		<div className="Container">
 			<div className="">
-				<h3 className="">{robot.product}</h3>
-				<img src={robot.image} alt={robot.product} />
-				<p className="">{robot.descripcion}</p>
+				<h3 className="">{robot.name}</h3>
+				<img src={robot.image} alt={robot.name} />
+				<p className="">{robot.description}</p>
 				<ul className="">
 					<li className="">U$S{robot.price}</li>
 					<li className="">

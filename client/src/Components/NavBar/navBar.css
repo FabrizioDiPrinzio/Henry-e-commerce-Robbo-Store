@@ -23,6 +23,7 @@
   max-width: var(--max-width);
   margin: auto;
 }
+
 /*
 .Home {
   color:white;
@@ -97,20 +98,20 @@
   background: #D2E3F9;
   max-width: var(--max-width);
   margin: auto;
+  height: 50px;
+  margin-bottom: 200px;
   display: flex;
-  justify-content:space-between;
-  padding: 5px;
+  overflow: visible;
+  box-shadow: 0 10px 10px 0 rgb(0,0,0,0.2)
 }
 
 .SearchBtn {
   background: var(--baby-blue-eyes);
   border-radius: 3px;
+  height: 40px;
   border: 4px solid  var(--baby-blue-eyes);
   color:white;
-  margin:0 5px 0 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin:4px 5px 0 10px;
 }
 
 .SearchInput {

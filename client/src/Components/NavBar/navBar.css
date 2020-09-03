@@ -13,12 +13,15 @@
 
 
 /*NavBar -------------  */
+.navBarContainer {
+  background: var(--ksu-purple);
+  width: 100%;
+}
 
 .NavBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--ksu-purple);
   padding: 3px;
   max-width: var(--max-width);
   margin: auto;
@@ -76,7 +79,13 @@
 
 
 /*Searchabar -------------  */
+.SearchBarContainer {
+  width: 100%;
+  background: #D2E3F9;
+  box-shadow: 0 10px 10px 0 rgb(0,0,0,0.2)
 
+
+}
 
 .CategoryBtn {
   background: #563488;
@@ -95,14 +104,12 @@
 }
 
 .SearchBar {
-  background: #D2E3F9;
   max-width: var(--max-width);
   margin: auto;
   height: 50px;
   margin-bottom: 200px;
   display: flex;
   overflow: visible;
-  box-shadow: 0 10px 10px 0 rgb(0,0,0,0.2)
 }
 
 .SearchBtn {

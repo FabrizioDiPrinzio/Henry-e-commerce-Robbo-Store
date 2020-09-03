@@ -8,15 +8,15 @@ const [stateMenu, setStateMenu] = useState({
 	line : 'line',
 	menu : 'menuClose',
 	cross : 'crossHide',
-	categorias : ['Arduino','Industriales','Domésticos']
+	categorias : ['Arduino','Industriales','Domésticos','Arduino','Industriales','Domésticos','Arduino','Industriales','Domésticos']
 });
 
 const clickHandle = event => {
 	event.preventDefault();
 	setStateMenu({...stateMenu, 
-		line : stateMenu.line =='line' ? 'lineHide' : 'line',
-	 	menu : stateMenu.menu =='menuClose' ? 'menuOpen' : 'menuClose',
-	 	cross : stateMenu.cross =='crossHide' ? 'cross' : 'crossHide'})
+		line : stateMenu.line === 'line' ? 'lineHide' : 'line',
+	 	menu : stateMenu.menu ==='menuClose' ? 'menuOpen' : 'menuClose',
+	 	cross : stateMenu.cross ==='crossHide' ? 'cross' : 'crossHide'})
 }
 
 

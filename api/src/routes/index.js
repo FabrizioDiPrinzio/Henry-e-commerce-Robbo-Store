@@ -4,12 +4,28 @@ const productRouter = require('./product.js');
 const {Product} = require('../db.js');
 const {Op} = require('sequelize');
 
+
+
+
+
+const category = require('./category.js')
+
+
+
+
+
+
+
+
+
 const app = express();
 
 // load each router on a route
 // i.e: router.use('/auth', authRouter);
 // app.use('/auth', authRouter);
 app.use('/products', productRouter);
+app.use('/products/category', category);
+
 
 app.get('/', (req, res) => {
 	res.send('Hola');

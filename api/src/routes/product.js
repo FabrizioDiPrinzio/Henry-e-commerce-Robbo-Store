@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const category = require('./category'); // rutas
-const {Product , Categories } = require('../db.js'); //database
-
+const {Product, Categories, product_categories} = require('../db.js'); //database
 
 router.get('/', (req, res, next) => {
 	Product.findAll()
@@ -26,7 +25,7 @@ router.post('/', (req, res) => {
 router.get('/:id', (req, res) => {
 	const {id} = req.params;
 
-	Product.findByPk(id).then(robot => res.send(robot));
+	Product.findAll({where: {id}, include: [Categories]}).then(robot => res.send(robot));
 });
 
 router.delete('/:id', (req, res) => {
@@ -42,7 +41,8 @@ router.put('/:id', (req, res) => {
 	const {name, price, stock, image, description} = req.body;
 	const {id} = req.params;
 
-	if (!name || !price || !stock || !image || !description) return res.status(400).send('faltan parametros');
+	if (!name || !price || !stock || !image || !description)
+		return res.status(400).send('faltan parametros');
 	else {
 		Product.findByPk(id)
 			.then(robot => {
@@ -61,26 +61,24 @@ router.put('/:id', (req, res) => {
 	}
 });
 
+router.post('/:idProducto/category/:idCategoria', async (req, res) => {
+	const {idProducto, idCategoria} = req.params;
+	const producto = await Product.findByPk(idProducto);
+	const categoria = await Categories.findByPk(idCategoria);
 
-
-router.post('/:idProducto/category/:idCategoria', (req, res) => {
-	// req.body no se que viene por ahora
-	const {idProducto, idCategoria} = req.params
-	const producto = Product.findByPk(idProducto);
-	const categoria = Categories.findByPk(idCategoria);
-
-	Promise.all([producto, categoria]).then(
-		
-		producto.addCategories(categoria).then(response => {
-		console.log(response);
-		return res.sendStatus(200);
-		})
-	)
-	
-
+	producto.addCategory(categoria).then(() => {
+		Product.findAll({where: {id: idProducto}, include: [Categories]}).then(response =>
+			res.send(response)
+		);
+	});
 });
 
+router.delete('/:idProducto/category/:idCategoria', (req, res) => {
+	const {idProducto, idCategoria} = req.params;
 
-
+	product_categories
+		.destroy({where: {productId: idProducto, categoryId: idCategoria}})
+		.then(() => res.sendStatus(200));
+});
 
 module.exports = router;

@@ -9,7 +9,6 @@ export default function ProductCard({robot}) {
 			<div className={s.body}>
 				<div className={s.topBar}>
 					<Link to={`/producto/${robot.id}`}>
-						{console.log(robot)}
 						<div className={s.info}>i</div>
 					</Link>
 					<div className={s.container}>

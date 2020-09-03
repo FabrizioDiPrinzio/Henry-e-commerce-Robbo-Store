@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const app = express();
-const category = require('./category');
-const {Product} = require('../db.js');
+const category = require('./category'); // rutas
+const {Product , Categories } = require('../db.js'); //database
 
-app.use('/category', category);
 
 router.get('/', (req, res, next) => {
 	Product.findAll()
@@ -44,7 +42,7 @@ router.put('/:id', (req, res) => {
 	const {name, price, stock, image, description} = req.body;
 	const {id} = req.params;
 
-	if (!name || !price || !stock || !image || !description) return res.sendStatus(400);
+	if (!name || !price || !stock || !image || !description) return res.status(400).send('faltan parametros');
 	else {
 		Product.findByPk(id)
 			.then(robot => {
@@ -62,5 +60,27 @@ router.put('/:id', (req, res) => {
 			.catch(err => res.status(400).send(err.message));
 	}
 });
+
+
+
+router.post('/:idProducto/category/:idCategoria', (req, res) => {
+	// req.body no se que viene por ahora
+	const {idProducto, idCategoria} = req.params
+	const producto = Product.findByPk(idProducto);
+	const categoria = Categories.findByPk(idCategoria);
+
+	Promise.all([producto, categoria]).then(
+		
+		producto.addCategories(categoria).then(response => {
+		console.log(response);
+		return res.sendStatus(200);
+		})
+	)
+	
+
+});
+
+
+
 
 module.exports = router;

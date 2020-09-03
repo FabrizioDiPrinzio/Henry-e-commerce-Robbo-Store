@@ -6,7 +6,6 @@ import Menu from './Menu/Menu.jsx';
 
 document.addEventListener('scroll', e => {
 	const searchBar = document.querySelector(".SearchBarContainer")
-	console.log(window.scrollY)
 	if (window.scrollY > 50) {
 			searchBar.style.top = '0'
 		} else {

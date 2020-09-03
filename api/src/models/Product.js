@@ -13,6 +13,7 @@ module.exports = sequelize => {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
+				isUnique: true,
 				isString(value) {
 					if (typeof value !== 'string') throw new Error('Name must be a string!!!!');
 				}

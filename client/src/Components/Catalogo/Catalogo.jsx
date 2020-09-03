@@ -7,10 +7,8 @@ export default function Catalogo() {
 	const [robots, setRobots] = useState([]);
 
 	useEffect(() => {
-		axios.get('http://localhost:3001/products').then(res => {
-			setRobots(res.data);
-		});
-	});
+		axios.get('http://localhost:3001/products').then(res => setRobots(res.data));
+	}, []);
 
 	return (
 		<div>

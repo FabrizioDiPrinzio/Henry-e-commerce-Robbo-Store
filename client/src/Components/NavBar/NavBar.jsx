@@ -4,7 +4,6 @@ import './navBar.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Menu from './Menu/Menu.jsx';
 
-
 export default function NavBar(props) {
 	return (
 		<div className="navBarContainer">
@@ -12,19 +11,6 @@ export default function NavBar(props) {
 				<Link to="/">
 					<span className="Title">Robbo Store</span>
 				</Link>
-				{
-					//
-					// <Link to="/">
-					// 			<a className="Home">Home</a>
-					// 		</Link>
-					// 		<Link to="/product_card">
-					// 			<a className="ProductCard">Product Card</a>
-					// 		</Link>
-					// 		<Link to="/catalogo">
-					// 			<a className="Catalogo">Catalogo</a>
-					// 		</Link>
-					/**/
-				}
 				<div>
 					<button className="UserBtn">
 						<svg
@@ -62,7 +48,7 @@ export default function NavBar(props) {
 
 			<div className="SearchBarContainer">
 				<div className="SearchBar">
-				<Menu />
+					<Menu />
 					<input className="SearchInput" type="text" placeholder="Buscar..." />
 					<button className="SearchBtn" onClick={() => props.onSearch('Buscando robot...')}>
 						<svg
@@ -83,7 +69,6 @@ export default function NavBar(props) {
 							/>
 						</svg>
 					</button>
-
 				</div>
 			</div>
 		</div>

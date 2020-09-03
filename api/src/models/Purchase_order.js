@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
         }
     },
 
-    recipiant_name: {
+    recipient_name: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -30,7 +30,7 @@ module.exports = (sequelize) => {
         }
     },
     
-    recipian_lastname: {
+    recipient_lastname: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const category = require('./category'); // rutas
-const {Product, Categories, product_categories} = require('../db.js'); //database
+const {Product, Categories, product_categories, Pics} = require('../db.js'); //database
 
 router.get('/', (req, res, next) => {
 	Product.findAll()
@@ -11,15 +11,25 @@ router.get('/', (req, res, next) => {
 		.catch(next);
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
 	const {name, price, stock, image, description} = req.body;
-	if (!name || !price || !stock || !image || !description) return res.sendStatus(400);
+	if (!name || !price || !stock || !image || !description ) return res.sendStatus(400);
+	
+	const newBody = {
+		...req.body,
+		image: image[0]
+	}
 
-	Product.create(req.body)
-		.then(response => {
-			return res.status(201).send(response);
-		})
-		.catch(err => res.status(400).send(err.message));
+	try {
+		let newProduct = await Product.create(newBody)
+		image.map(img => {
+			Pics.create({imageUrl: img})
+			.then(newPic => newProduct.addPic(newPic))
+			.then(response => res.status(201).send(response))
+		} )
+	}
+	catch (error) { res.status(400).send(error.message)}
+
 });
 
 router.get('/:id', (req, res) => {

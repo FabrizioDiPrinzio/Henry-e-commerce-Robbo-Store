@@ -36,13 +36,11 @@ module.exports = sequelize => {
 			}
 		},
 
-		images: {
-			type: DataTypes.ARRAY(DataTypes.TEXT), // hay que definir que contiene el array, en este caso array de textos.
+		image: {
+			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				isArray(value) {
-					if (Array.isArray(value)) throw new Error('Images must be inside an Array! Why u hate Arrays? o(TヘTo)');
-				}
+				isUrl: true
 			}
 		},
 

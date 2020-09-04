@@ -1,5 +1,6 @@
 import React from 'react';
 //import Carousel from './Carousel.js';
+import ProductForm from '../FormularioCategoria/FormularioCategoria.jsx'
 import './Home.css';
 
 function Home() {
@@ -9,7 +10,7 @@ function Home() {
 				<div className="Carousel">
 					<h1>Carousel</h1>
 				</div>
-				{/*<ProductForm/>*/}
+					<ProductForm propiedadRandom='una string' />
 			</body>
 		</div>
 	);

@@ -1,56 +1,87 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './FormularioCategoria.css';
 import {Link} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
+import axios from 'axios';
 //------ Fin de imports -----
 
-export default class FormularioCategoria extends React.Component{
-	constructor(props){
-		super(props);
-		this.state={nombre: '', descripcion: ''};
-		this.handleInputChange = this.handleInputChange.bind(this);
-	}
+const urlBack = process.env.REACT_APP_API_URL;
 
-	handleInputChange(event) {
-			const target = event.target;
-			const name = target.name;
-			this.setState({
-					[name]: target.value
-			});
-		}
+// axios.get(`${urlBack}/laruta`);
 
-	render() {
 
-		return (
-			<form className="form" onSubmit={() => this.props.onSend(this.state)}>
+
+export default function FormularioCategoria(props) {
+	const [state, setState] = useState({
+		"name": '',
+		"description": ''
+	});
+
+	const referenciaForms = useRef(null);
+
+  
+	const handleSubmit = (evt) => {
+		evt.preventDefault();
+		
+		axios.post(`${urlBack}/products/category`, state)
+		.then(response => alert(response.statusText))
+		.catch(error => alert('no se pudo agregar la categoria'))
+
+		referenciaForms.current.reset();
+ 	}
+
+ 	const handleImputChange = (event) => {
+ 		setState(
+ 			{
+ 				...state,
+ 				[event.target.name]: event.target.value
+    		}
+    	)
+ 	}
+
+	return (
+
+  		<form ref={referenciaForms} className="form" onSubmit={handleSubmit}>
 			<div className="container">
-					<h3 className="titulo">Agregar - Categorías</h3>
+					<h3 className="titulo">Agregar Categorías</h3>
 					<label htmlFor="nombre" className="">
 						Nombre
 					</label>
 					<input
 						className="form-control"
 						type="text"
-						name="nombre"
+						name="name"
 						placeholder="Categoria"
-						onChange=""
+						onChange={handleImputChange}
 					/>
+
 					<label htmlFor="descripcion" className="">
 						Descripción
 					</label>
-					<textarea className="form-control"></textarea>
+
+					<textarea
+						className="form-control"
+						name="description"
+						placeholder="Ingrese una Descripción de la Categoria"
+						onChange={handleImputChange}
+					></textarea>
+
 					<br />
-					<Link to={'/categorias/agregar-categoria'}>
-						<button type="submit" className="" value="Enviar" onClick="">
-							Enviar
-						</button>
-					</Link>
-					<Link to={'/categorias/cancelar-categoria'}>
-						<button type="button" className="" value="Cancelar" onClick="">
-							Cancelar
-						</button>
-					</Link>
+					<button type="submit" className="" value="Enviar" onClick={handleSubmit}>
+						Enviar
+					</button>
 					</div>
 			</form>
-		);}
- }
+
+
+  
+  );
+}
+
+
+
+
+
+
+
+

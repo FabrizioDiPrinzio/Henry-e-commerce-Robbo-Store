@@ -41,7 +41,7 @@ router.put('/:id', (req, res) => {
 	const {name, price, stock, image, description} = req.body;
 	const {id} = req.params;
 
-	if (!name || !price || !stock || !image || !description)
+	if (!name && !price && !stock && !image && !description)
 		return res.status(400).send('faltan parametros');
 	else {
 		Product.findByPk(id)
@@ -49,9 +49,13 @@ router.put('/:id', (req, res) => {
 				if (!robot) return res.status(400).send('No se encontró el robot :(');
 
 				robot.name = name ? name : robot.name;
+				robot.save();
 				robot.image = image ? image : robot.image;
-				robot.description = description ? description : robot.desciription;
+				robot.save();
+				robot.description = description ? description : robot.description;
+				robot.save();
 				robot.price = price ? price : robot.price;
+				robot.save();
 				robot.stock = stock ? stock : robot.stock;
 				robot.save();
 
@@ -66,10 +70,13 @@ router.post('/:idProducto/category/:idCategoria', async (req, res) => {
 	const producto = await Product.findByPk(idProducto);
 	const categoria = await Categories.findByPk(idCategoria);
 
-	producto.addCategory(categoria).then(() => {
-		categoria.addProduct(producto)
-	}).then(() => Product.findAll({where: {id: idProducto}, include: [Categories]}))
-	.then(response => res.send(response))
+	producto
+		.addCategory(categoria)
+		.then(() => {
+			categoria.addProduct(producto);
+		})
+		.then(() => Product.findAll({where: {id: idProducto}, include: [Categories]}))
+		.then(response => res.send(response));
 });
 
 router.delete('/:idProducto/category/:idCategoria', (req, res) => {

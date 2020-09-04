@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import './menu.css';
 import axios from 'axios';
 
@@ -45,7 +46,7 @@ export default function Menu() {
 					{categories.map(categoria => {
 						return (
 							<li className="categoria">
-								<a href="#"> {categoria} </a>
+								<Link to={`/${categoria}`}> {categoria}</Link>
 							</li>
 						);
 					})}

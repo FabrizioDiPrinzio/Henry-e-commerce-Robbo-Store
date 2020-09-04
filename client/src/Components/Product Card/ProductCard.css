@@ -1,4 +1,4 @@
-root {
+:root {
 	--beau-blue: #d2e3f9ff;
 	--baby-blue-eyes: #98b7f0ff;
 	--glaucous: #617cc7ff;
@@ -11,7 +11,7 @@ root {
 	position: relative;
 	height: 380px;
 	width: 300px;
-	background-color: #617cc7ff;
+	background-color: var(--glaucous);
 	border: 1px solid black;
 	align-items: center;
 	justify-content: space-evenly;
@@ -23,7 +23,7 @@ root {
 	position: relative;
 	height: 330px;
 	width: 300px;
-	background-color: #617cc7ff;
+	background-color: var(--glaucous);
 	align-items: center;
 	justify-content: space-around;
 	flex-direction: column;
@@ -46,9 +46,9 @@ root {
 	display: flex;
 	position: absolute;
 	top: 0px;
-	right: 0px;
+	right: 15px;
 	width: 20px;
-	background-color: #d53467ff;
+	background-color: var(--razzmatazz);
 	color: white;
 	border-bottom-left-radius: 85%;
 }

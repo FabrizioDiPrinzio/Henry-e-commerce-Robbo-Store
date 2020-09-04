@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import './menu.css';
 import axios from 'axios';
 
+const urlBack = process.env.REACT_APP_API_URL;
+
 export default function Menu() {
 	const [stateMenu, setStateMenu] = useState({
 		line: 'line',
@@ -11,7 +13,7 @@ export default function Menu() {
 	const [categories, setCategories] = useState([]);
 
 	useEffect(() => {
-		axios.get('http://localhost:3001/products/category/names').then(res => {
+		axios.get(`${urlBack}/products/category/names`).then(res => {
 			const resp = res.data.map(e => {
 				return e.name;
 			});

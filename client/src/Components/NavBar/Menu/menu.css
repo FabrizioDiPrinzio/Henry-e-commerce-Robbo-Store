@@ -81,7 +81,7 @@
 	width: 200px;
 	display: flex;
 	justify-content: flex-end;
-
+	position: absolute;
 	margin-left: -15px;
 	border-radius: 0 3px 3px 0;
 	box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2),
@@ -97,6 +97,7 @@
 	margin-left: -15px;
 	justify-content: flex-end;
 	padding-bottom: 20px;
+	position: absolute;
 }
 
 .list {

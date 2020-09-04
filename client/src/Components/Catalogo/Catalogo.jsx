@@ -3,11 +3,13 @@ import ProductCard from '../Product Card/ProductCard.jsx';
 import s from './Catalogo.module.css';
 import axios from 'axios';
 
+const urlBack = process.env.REACT_APP_API_URL;
+
 export default function Catalogo() {
 	const [robots, setRobots] = useState([]);
 
 	useEffect(() => {
-		axios.get('http://localhost:3001/products').then(res => setRobots(res.data));
+		axios.get(`${urlBack}/products`).then(res => setRobots(res.data));
 	}, []);
 
 	return (

@@ -7,10 +7,6 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-// axios.get(`${urlBack}/laruta`);
-
-
-
 export default function FormularioCategoria(props) {
 	const [state, setState] = useState({
 		"name": '',
@@ -19,7 +15,6 @@ export default function FormularioCategoria(props) {
 
 	const referenciaForms = useRef(null);
 
-  
 	const handleSubmit = (evt) => {
 		evt.preventDefault();
 		
@@ -47,6 +42,7 @@ export default function FormularioCategoria(props) {
 					<label htmlFor="nombre" className="">
 						Nombre
 					</label>
+        
 					<input
 						className="form-control"
 						type="text"
@@ -58,7 +54,7 @@ export default function FormularioCategoria(props) {
 					<label htmlFor="descripcion" className="">
 						Descripción
 					</label>
-
+        
 					<textarea
 						className="form-control"
 						name="description"
@@ -71,17 +67,6 @@ export default function FormularioCategoria(props) {
 						Enviar
 					</button>
 					</div>
-			</form>
-
-
-  
+			</form>  
   );
 }
-
-
-
-
-
-
-
-

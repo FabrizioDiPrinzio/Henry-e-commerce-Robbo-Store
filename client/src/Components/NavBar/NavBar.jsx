@@ -4,6 +4,17 @@ import './navBar.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Menu from './Menu/Menu.jsx';
 
+document.addEventListener('scroll', e => {
+	const searchBar = document.querySelector(".SearchBarContainer")
+	if (window.scrollY > 50) {
+			searchBar.style.top = '0'
+		} else {
+			searchBar.style.top = (48 - window.scrollY ) + 'px'
+		}
+
+	
+})
+
 export default function NavBar(props) {
 	return (
 		<div className="navBarContainer">
@@ -46,7 +57,7 @@ export default function NavBar(props) {
 				</div>
 			</nav>
 
-			<div className="SearchBarContainer">
+			<div className="SearchBarContainer" >
 				<div className="SearchBar">
 					<Menu />
 					<input className="SearchInput" type="text" placeholder="Buscar..." />

@@ -19,6 +19,7 @@ useEffect(() => {
 		});
 		setCategories(resp);
 	});
+
 });
 
 const clickHandle = event => {

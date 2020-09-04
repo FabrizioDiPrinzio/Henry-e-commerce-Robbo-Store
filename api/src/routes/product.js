@@ -13,54 +13,59 @@ router.get('/', (req, res, next) => {
 
 router.post('/', async (req, res) => {
 	const {name, price, stock, image, description} = req.body;
-	if (!name || !price || !stock || !image || !description ) return res.sendStatus(400);
-	
+	if (!name || !price || !stock || !image || !description) return res.sendStatus(400);
+
 	const newBody = {
 		...req.body,
 		image: image[0]
-	}
+	};
 
 	try {
-		let newProduct = await Product.create(newBody)
+		let newProduct = await Product.create(newBody);
 		image.map(img => {
 			Pics.create({imageUrl: img})
-			.then(newPic => newProduct.addPic(newPic))
-			.then(response => res.status(201).send(response))
-		} )
+				.then(newPic => newProduct.addPic(newPic))
+				.then(response => res.status(201).send(response));
+		});
+	} catch (error) {
+		res.status(400).send(error.message);
 	}
-	catch (error) { res.status(400).send(error.message)}
-
 });
 
 router.get('/:id', (req, res) => {
 	const {id} = req.params;
 
-	Product.findAll({where: {id}, include: [Categories]}).then(robot => res.send(robot));
+	Product.findAll({where: {id}, include: [Categories, Pics]}).then(robot => res.send(robot));
 });
 
 router.delete('/:id', (req, res) => {
 	const {id} = req.params;
 
-	Product.destroy({where: {id}}).then(response => {
+	Product.destroy({where: {id}, include: [Pics]}).then(response => {
 		if (response === 0) return res.sendStatus(404);
 		else return res.sendStatus(200);
 	});
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
 	const {name, price, stock, image, description} = req.body;
 	const {id} = req.params;
+
+	/*
+	formulario editar Producto:
+		cambiar la image principal con findOrCrete y asociar esa imagen al producto (en la tabla pics)
+	formulario CRUD de Pics 
+		CRUD pics Y asociarlas SIEMPRE a un producto	
+  */
 
 	if (!name && !price && !stock && !image && !description)
 		return res.status(400).send('faltan parametros');
 	else {
-		Product.findByPk(id)
+		await Product.findByPk(id) 
 			.then(robot => {
 				if (!robot) return res.status(400).send('No se encontró el robot :(');
 
 				robot.name = name ? name : robot.name;
-				robot.save();
-				robot.image = image ? image : robot.image;
 				robot.save();
 				robot.description = description ? description : robot.description;
 				robot.save();
@@ -68,10 +73,19 @@ router.put('/:id', (req, res) => {
 				robot.save();
 				robot.stock = stock ? stock : robot.stock;
 				robot.save();
-
-				return res.send(robot);
-			})
-			.catch(err => res.status(400).send(err.message));
+				if (image) {
+					Pics.findOrCreate({
+						where: {imageUrl: image, productId: robot.id}
+					}).then(() => {
+						robot.image = image;
+						robot.save();
+					});
+					robot.save()
+				}
+				robot.save()
+      }).catch(err => res.status(400).send(err.message));
+      let respuestaFinal = await Product.findByPk(id);
+		return res.send(respuestaFinal);
 	}
 });
 

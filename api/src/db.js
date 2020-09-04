@@ -45,7 +45,7 @@ Reviews.belongsTo(Product);
 User.hasMany(Reviews);
 Product.hasMany(Reviews);
 
-Product.hasMany(Pics);
+Product.hasMany(Pics, {onDelete: 'CASCADE'});
 Pics.belongsTo(Product);
 
 

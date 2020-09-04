@@ -51,6 +51,7 @@ router.put('/:id', (req, res) => {
 				if (!category) return res.status(400).send('No se encontró la categoria :(');
 
 				category.name = name ? name : category.name;
+				category.save();
 				category.description = description ? description : category.desciription;
 				category.save();
 

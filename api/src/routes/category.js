@@ -58,7 +58,7 @@ router.put('/:id', (req, res) => {
 
 
 router.get('/:nombreCategoria', async (req, res) => {
-	const name = req.params.nombreCategoria;
+	const name = decodeURI(req.params.nombreCategoria);
 	Categories.findOne({where: {name}, include: [Product]})
 	.then(response => res.send(response))
 

@@ -1,5 +1,6 @@
 import React from 'react';
 //import Carousel from './Carousel.js';
+import ProductForm from '../FormularioCategoria/FormularioCategoria.jsx'
 import './Home.css';
 import {Link} from 'react-router-dom';
 

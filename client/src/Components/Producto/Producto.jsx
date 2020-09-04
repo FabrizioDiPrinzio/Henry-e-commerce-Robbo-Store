@@ -4,13 +4,15 @@ import './Producto.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Axios from 'axios';
 
+const urlBack = process.env.REACT_APP_API_URL;
+
 export default function Producto() {
 	const [robot, setRobot] = useState({});
 	const {id} = useParams();
 
 	useEffect(
 		() => {
-			Axios.get(`http://localhost:3001/products/${id}`).then(res => setRobot(res.data[0]));
+			Axios.get(`${urlBack}/products/${id}`).then(res => setRobot(res.data[0]));
 		},
 		[id]
 	);

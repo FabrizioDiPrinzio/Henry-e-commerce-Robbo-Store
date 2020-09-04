@@ -1,28 +1,28 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import s from './ProductCard.module.css';
+import './ProductCard.css';
 
 export default function ProductCard({robot}) {
 	return (
-		<div className={s.productCard}>
-			<div className={s.title}>{robot.name}</div>
-			<div className={s.body}>
-				<div className={s.topBar}>
+		<div className="productCard">
+			<div className="title">{robot.name}</div>
+			<div className="body">
+				<div className="topBar">
 					<Link to={`/producto/${robot.id}`}>
-						<div className={s.info}>i</div>
+						<div className="info">i</div>
 					</Link>
-					<div className={s.container}>
+					<div className="container">
 						<img src={robot.image} alt={robot.name} />
 					</div>
 				</div>
-				<div className={s.price}>
+				<div className="price">
 					<div>Precio: U$S{robot.price}</div>
-					<div className={s.buttons}>
+					<div className="buttons">
 						<button>-</button>
 						<button>+</button>
 					</div>
 				</div>
-				<div className={s.stock}>{robot.stock <= 0 && 'Out of stock!'}</div>
+				<div className="stock">{robot.stock <= 0 && 'Out of stock!'}</div>
 			</div>
 		</div>
 	);

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap');
+
 :root {
 	--beau-blue: #d2e3f9ff;
 	--baby-blue-eyes: #98b7f0ff;
@@ -6,68 +8,137 @@
 	--razzmatazz: #d53467ff;
 }
 
-.productCard {
+.cardContainer {
+	width: 700px;
+	height: 150px;
 	display: flex;
+	flex-direction: row;
 	position: relative;
-	height: 380px;
-	width: 300px;
-	background-color: var(--glaucous);
-	border: 1px solid black;
-	align-items: center;
 	justify-content: space-evenly;
+	align-items: center;
+	background-color: var(--glaucous);
+	border-radius: 10px;
+	overflow: hidden;
+    box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2);
+    user-select: none;
+    text-decoration: none;
+    font-family: 'Titillium Web', sans-serif;
+
+}
+
+.imageContainer {
+	width: 25%;
+	height: 100%;
+	background-color: var(--glaucous);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.image {
+	width: 90%;
+	height: 90%;
+}
+
+.infoContainer {
+	width: 75%;
+	height: 100%;
+	padding: 20px;
+	display: flex;
 	flex-direction: column;
+}
+
+
+.title {
+	color: white;
+	border-bottom: 3px solid rgb(240,240,240,0.3);
+	width: 80%;
+	text-transform: uppercase;
+}
+
+.title:hover {
+	text-decoration: none;
+	opacity: 0.7;
 }
 
 .body {
 	display: flex;
-	position: relative;
-	height: 330px;
-	width: 300px;
-	background-color: var(--glaucous);
-	align-items: center;
-	justify-content: space-around;
-	flex-direction: column;
-}
-
-.title {
-	display: flex;
-	position: absolute;
-	top: 5px;
-	font-weight: bold;
-}
-
-.topBar {
-	display: flex;
-	position: relative;
-}
-
-.info {
-	text-align: center;
-	display: flex;
-	position: absolute;
-	top: 0px;
-	right: 15px;
-	width: 20px;
-	background-color: var(--razzmatazz);
-	color: white;
-	border-bottom-left-radius: 85%;
-}
-
-.container {
-	height: 250px;
-	border: none;
-}
-
-.container img {
-	max-height: 100%;
-	max-width: 100%;
+	flex-direction: row;
+	margin: 30px 0 0 70px;
 }
 
 .price {
-	display: flex;
-	justify-content: space-between;
+	color: white;
+	width: 300px;
+	font-size: 19px;
 }
 
-.stock {
+.stock{
+	color: white;
+	width: 300px;
+}
+
+.control{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-right: 20px;
+	margin-left: -100px;
+
+}
+
+.carrito {
+	margin-top: 10px;
+	margin-bottom: -15px;
+	color: white;
+	font-size: 18px;
+	width: 100px;
+	text-align: center;
+	background-color: var(--glaucous);
+}
+
+.cant {
+	margin-top: 3px;
+	width: 30px;
+	text-align: center;
+	border-radius: 5px;
+	border: none;
+}
+
+.botones {
+	margin-top: 30px;
+	display: flex;
+	flex-direction: row;
+}
+
+.boton {
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	font-size: 30px;
 	font-weight: bold;
+	text-align: center;
+	background-color: white;
+	box-shadow:  3px 3px 2px 0 rgb(0,0,0,0.2),
+						 	 inset 3px 3px 2px 0 rgb(240,240,240,0.3);
+}
+
+.control .boton:active{
+	box-shadow:  inset 3px 3px 2px 0 rgb(0,0,0,0.2),
+							 inset -3px -3px 2px 0 rgb(240,240,240,0.2);
+}
+
+.boton.add {
+	background-color: lightgreen;
+}
+
+.boton.rest {
+	margin-left: 5px;
+	background-color: var(--razzmatazz);
+	color: white;
+}
+
+.iconButtom {
+	margin-top: -11px;
 }

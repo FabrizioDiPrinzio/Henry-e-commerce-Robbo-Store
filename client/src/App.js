@@ -15,6 +15,7 @@ function App() {
 				<Route path="/" render={() => <NavBar onSearch={Robot => alert(Robot)} />} />
 				<Route exact path="/" component={Home} />
 				<Route exact path="/" component={Catalogo} />
+				<Route exact path="/categories/:categoria" component={Catalogo} />
 				<Route exact path="/product_form" component={FormularioProducto} />
 				<Route exact path="/category_form" component={FormularioCategoria} />
 				<Route exact path="/producto/:id" component={Producto} />

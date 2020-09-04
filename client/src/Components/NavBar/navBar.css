@@ -24,6 +24,7 @@
   align-items: center;
   padding: 3px;
   max-width: var(--max-width);
+  min-width: 300px; 
   margin: auto;
 }
 

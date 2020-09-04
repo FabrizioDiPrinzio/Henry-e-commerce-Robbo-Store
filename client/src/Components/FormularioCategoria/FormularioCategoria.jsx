@@ -28,29 +28,46 @@ export default function FormularioCategoria(props) {
  	const handleImputChange = (event) => {
  		setState(
  			{
- 				...state,
- 				[event.target.name]: event.target.value
+ 			...state,
+ 			[event.target.name]: event.target.value
     		}
-    	)
- 	}
+		)
+	}
 
-	return (
+	const [categories, setCategories] = useState([]);
 
-  		<form ref={referenciaForms} className="form" onSubmit={handleSubmit}>
+	const handleDelete =() =>{
+		// categories.splice(i,1);
+	}
+	
+	const handleEdit =() =>{
+		// categories.splice(i,1);
+	}
+
+	useEffect(() => {
+		axios.get(`${urlBack}/products/category/names`).then(res => {
+			const resp = res.data.map(e => {
+				return e.name;
+			});
+			setCategories(resp);
+		});
+	}, []);
+
+		return (
+		<form ref={referenciaForms} className="form" onSubmit={handleSubmit}>
 			<div className="container">
 					<h3 className="titulo">Agregar Categorías</h3>
 					<label htmlFor="nombre" className="">
 						Nombre
 					</label>
-        
-					<input
+				
+					<input 
 						className="form-control"
 						type="text"
 						name="name"
 						placeholder="Categoria"
 						onChange={handleImputChange}
 					/>
-
 					<label htmlFor="descripcion" className="">
 						Descripción
 					</label>
@@ -66,7 +83,29 @@ export default function FormularioCategoria(props) {
 					<button type="submit" className="" value="Enviar" onClick={handleSubmit}>
 						Enviar
 					</button>
+					<div>
+					<br/>
+						<h3>Editar y eliminar Categorías</h3>
+						<br/>
+
+						<div className={'botonOpcion'} >
+				<select name="select" >
+					{categories.map((categoria,i) => {
+						return (
+							<option value={i}> {categoria}</option> 
+						);
+					})}				
+					</select>
+					<button type="submit" className=""  value="Editar"  onClick={handleEdit}> Editar </button>
+
+					<button type="submit" className=""  value="Eliminar" onClick={() => this.handleDelete(i)}> Eliminar </button>
 					</div>
+				</div>
+			</div>
+		<div>
+				
+			</div>	
 			</form>  
-  );
+				
+	);
 }

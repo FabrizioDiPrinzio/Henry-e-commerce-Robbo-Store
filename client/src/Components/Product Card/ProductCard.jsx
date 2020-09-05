@@ -25,15 +25,26 @@ export default function ProductCard({robot}) {
 				</div>
 		</div>
 		<div className='control'>			
-			<div className='carrito'>En carrito: <br/> <input type="text" className='cant' value= {en.carrito}></input></div>
+			<div className='carrito'>
+				En carrito: <br/> 
+				<input type="text" className='cant' value= {en.carrito}></input>
+			</div>
 			<div className="botones">
-			<div className='boton add' onClick={() => setCarrito({...en, carrito : en.carrito +1})} >
-					<div className='iconButtom'>+</div>
+				<div className='butonContainer'>
+					<div className='boton add' onClick={() => setCarrito({...en, carrito : en.carrito +1})} >
+						<div className='iconButtom'>
+							+
+						</div>
+					</div>
+				</div>
+				<div className='butonContainer'>
+					<div className='boton rest' onClick={() => setCarrito({...en, carrito : en.carrito > 0 ? en.carrito -1 : 0})}>
+						<div className='iconButtom'>
+							-
+						</div>
+					</div>
+				</div>
 			</div>
-			<div className='boton rest' onClick={() => setCarrito({...en, carrito : en.carrito > 0 ? en.carrito -1 : 0})}>
-					<div className='iconButtom'>-</div>
-			</div>
-		</div>
 		</div>
 	</div>
 	);

@@ -1,12 +1,24 @@
-.list {
-	display: flex;
-	flex-direction: column;
+.catalogo {
 	align-items: center;
+	text-align: center;
+	padding: 0px;
+	width: 100%;
+	margin-top: 15px;
+}
+
+.list {
+	max-width: 700px;
+	display: inline-flex;
+	flex-direction: column;
+	text-align: center;
+	padding: 0px;
 	list-style-type: none;
+	margin-top: 50px; /* Esta es la altura de la serchbar que no la detecta por position fixed*/
 }
 
 .listItem {
 	display: inline-block;
-	justify-content: space-around;
-	padding: 20px;
+	margin: 0px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }

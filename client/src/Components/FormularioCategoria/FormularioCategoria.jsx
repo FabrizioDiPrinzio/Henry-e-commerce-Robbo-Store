@@ -62,8 +62,9 @@ export default function FormularioCategoria() {
 		<form ref={referenciaForms} className="form" onSubmit={handleAdd}>
 			<div className="container">
 				<h3 className="titulo">Agregar Categorías</h3>
-				<label htmlFor="nombre" className="">
-					Nombre
+				<br/>
+				<label htmlFor="nombre">
+					Nombre:
 				</label>
 				<input
 					className="form-control"
@@ -72,45 +73,41 @@ export default function FormularioCategoria() {
 					placeholder="Categoria"
 					onChange={handleInputChange}
 				/>
-
+				<br/>
 				<label htmlFor="descripcion" className="">
-					Descripción
+					Descripción:
 				</label>
 				<textarea
 					className="form-control"
 					name="description"
-					placeholder="Ingrese una Descripción de la Categoria"
+					placeholder="Ingrese una descripción de la categoría"
 					onChange={handleInputChange}
 				/>
-				<br />
-
-				<button type="submit" className="" value="Enviar" onClick={handleAdd}>
-					Enviar
+				<button type="submit" className="addBtn" value="Enviar" onClick={handleAdd}>
+					Agregar
 				</button>
 
 				<div>
-					<br />
-					<h3>Editar y eliminar Categorías</h3>
-					<br />
-
+				<br/>
+					<h4>Editar / Eliminar Categorías</h4>
 					<div className={'botonOpcion'}>
 						<select id="select" onChange={handleSelectChange}>
+							<option selected value="0"> Categorías... </option>
 							{categories.map(categoria => {
 								return <option value={categoria.id}>{categoria.name}</option>;
 							})}
 						</select>
-
-						<button type="submit" className="" value="Editar" onClick={handleEdit}>
+						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
 							Editar
 						</button>
 
-						<button type="submit" className="" value="Eliminar" onClick={handleDelete}>
+						<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
 							Eliminar
 						</button>
 					</div>
 				</div>
+
 			</div>
-			<div />
 		</form>
 	);
 }

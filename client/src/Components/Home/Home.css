@@ -1,13 +1,39 @@
 :root {
+  background-color: var(--ksu-purple);
   --max-width: 700px;
+  --beau-blue: #d2e3f9ff;
+  --baby-blue-eyes: #98b7f0ff;
+  --glaucous: #617cc7ff;
+  --ksu-purple: #563488ff;
+  --razzmatazz: #d53467ff
 }
 
 .Home {
   margin: auto;
-  margin-top: 100px;
   max-width: var(--max-width);
-  min-width: 300px; 
+  min-width: 300px;
   background-color: white;
   height: 1200px;
 }
+
+.Carousel {
+  color: white;
+  margin: auto;
+  margin-top:50px;
+  background-color: #98b7f0ff;
+  text-align: center;
+  padding: 100px;
+  /*box-shadow: 0 10px 10px 0 rgb(0,0,0,0.2);*/
+}
+
+p {
+text-align: justify;
+font-size: 15px;
+}
+
+body {
+  margin-bottom: 100px
+}
+
+
 /* */

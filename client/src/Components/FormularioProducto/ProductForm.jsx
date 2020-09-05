@@ -80,61 +80,72 @@ export default function ProductFormFunction() {
 	return (
 		<div>
 			<form ref={referenciaForms} className="form">
-				<h3 className="titulo">Agregar Producto</h3>
+				<h3 className="titulo">Agregar producto</h3>
+				<div className="InputContainer">
+					<div className="inpt">
+						<label htmlFor="NombreLab" className="">
+							Nombre:
+						</label>
+						<input
+							className="NameIn"
+							name="name"
+							type="text"
+							placeholder="Nombre del Producto"
+							onChange={handleInputChange}
+						/>
+					</div>
+					<div className="inpt">
+						<label htmlFor="CantidadLab" className="">
+							Cantidad:
+						</label>
+						<input
+							className="CantIn"
+							name="stock"
+							type="text"
+							placeholder="Cantidad"
+							onChange={handleInputChange}
+						/>
+					</div>
+					<div className="inpt">
+						<label htmlFor="Precio" className="">
+							Precio:
+						</label>
+						<input
+							className="Precio"
+							name="price"
+							type="text"
+							placeholder="Precio"
+							onChange={handleInputChange}
+						/>
+					</div>
+					<div className="inpt">
+						<label htmlFor="ImgLab" className="">
+							Imagen:
+						</label>
+						<input
+							className="ImgIn"
+							name="image"
+							type="text"
+							placeholder="URL de la imagen"
+							onChange={handleInputChange}
+						/>
+					</div>
+				</div>
+				<div className="inpt">
+					<label className="DescLab">Descripción:</label>
+					<textarea
+						className="description"
+						name="description"
+						placeholder="Agregue descripción del producto"
+						onChange={handleInputChange}
+					/>
+				</div>
 
-				<label htmlFor="NombreLab" className="">
-					Nombre:
-				</label>
-				<input
-					className="NameIn"
-					name="name"
-					type="text"
-					placeholder="Nombre del Producto"
-					onChange={handleInputChange}
-				/>
-				<br />
-
-				<label htmlFor="CantidadLab" className="">
-					Cantidad:
-				</label>
-				<input
-					className="CantIn"
-					name="stock"
-					type="text"
-					placeholder="Cantidad"
-					onChange={handleInputChange}
-				/>
-				<br />
-
-				<label htmlFor="Precio" className="">
-					Precio:
-				</label>
-				<input
-					className="Precio"
-					name="price"
-					type="text"
-					placeholder="Precio"
-					onChange={handleInputChange}
-				/>
-				<br />
-
-				<label htmlFor="ImgLab" className="">
-					Imagen:
-				</label>
-				<input
-					className="ImgIn"
-					name="image"
-					type="text"
-					placeholder="URL de la imagen"
-					onChange={handleInputChange}
-				/>
-				<br />
-
+				<div className="inpt">
 				<label className="CatLab">Categoría: </label>
-				<div cassName="CatList">
 					{categories.map((categoria, i) => {
 						return (
-							<label>
+							<label className="checkLab">
 								<input
 									type="checkbox"
 									className="checks"
@@ -146,36 +157,31 @@ export default function ProductFormFunction() {
 						);
 					})}
 				</div>
-				<br />
-
-				<label className="DescLab">Descripción:</label>
-				<textarea
-					className="description"
-					name="description"
-					placeholder="Agregue descripción del producto"
-					onChange={handleInputChange}
-				/>
-				<br />
 
 				<button onClick={handleAdd} className="submitBtn">
-					Agregar Producto
+					Agregar producto
 				</button>
 			</form>
 
-			<div className={'botonOpcion'}>
-				<select id="select" onChange={handleSelectChange}>
-					{robots.map(robot => {
-						return <option value={robot.id}>{robot.name}</option>;
-					})}
-				</select>
+			<div className="adit">
+				<div className={'botonOpcion'}>
+					<h4 className="titulo">Eitar / Eliminar producto</h4>
 
-				<button type="submit" className="" value="Editar" onClick={handleEdit}>
-					Editar
-				</button>
-				<button type="submit" className="" value="Eliminar" onClick={handleDelete}>
-					Eliminar
-				</button>
+					<select id="select" onChange={handleSelectChange}>
+						{robots.map(robot => {
+							return <option value={robot.id}>{robot.name}</option>;
+						})}
+					</select>
+					<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
+						Editar
+					</button>
+					<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
+						Eliminar
+					</button>
+
+				</div>
 			</div>
+
 		</div>
 	);
 }

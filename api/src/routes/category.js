@@ -6,7 +6,7 @@ const {Op} = require('sequelize');
 router.get('/names', (req, res) => {
 	Categories.findAll()
 		.then(c => {
-			const respuesta = c.map(e => ({name: e.name, description: e.description}));
+			const respuesta = c.map(e => ({id: e.id, name: e.name, description: e.description}));
 			return res.send(respuesta);
 		})
 		.catch(err => {
@@ -51,6 +51,7 @@ router.put('/:id', (req, res) => {
 				if (!category) return res.status(400).send('No se encontró la categoria :(');
 
 				category.name = name ? name : category.name;
+				category.save();
 				category.description = description ? description : category.desciription;
 				category.save();
 

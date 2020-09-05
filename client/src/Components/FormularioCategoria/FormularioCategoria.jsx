@@ -14,29 +14,18 @@ export default function FormularioCategoria() {
 
 	useEffect(() => {
 		axios.get(`${urlBack}/products/category/names`).then(res => {
-			const resp = res.data.map(e => {
-				return {
-					name: e.name,
-					id: e.id
-				};
-			});
-			setCategories(resp);
+			const categoryTypes = res.data.map(c => ({
+				name: c.name,
+				id: c.id
+			}));
+			setCategories(categoryTypes);
+			setSelected({id: categoryTypes[0] ? categoryTypes[0].id : null});
 		});
 	}, []);
 
-	const handleInputChange = event => {
-		setState({
-			...state,
-			[event.target.name]: event.target.value
-		});
-	};
+	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
 
-	const handleSelectChange = event => {
-		setSelected({
-			id: event.target.value
-		});
-		console.log(selected);
-	};
+	const handleSelectChange = event => setSelected({id: event.target.value});
 
 	const handleAdd = event => {
 		event.preventDefault();
@@ -56,8 +45,6 @@ export default function FormularioCategoria() {
 			.delete(`${urlBack}/products/category/${selected.id}`)
 			.then(response => alert(response.statusText))
 			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message));
-
-		referenciaForms.current.reset();
 	};
 
 	const handleEdit = event => {
@@ -78,7 +65,6 @@ export default function FormularioCategoria() {
 				<label htmlFor="nombre" className="">
 					Nombre
 				</label>
-
 				<input
 					className="form-control"
 					type="text"
@@ -86,21 +72,22 @@ export default function FormularioCategoria() {
 					placeholder="Categoria"
 					onChange={handleInputChange}
 				/>
+
 				<label htmlFor="descripcion" className="">
 					Descripción
 				</label>
-
 				<textarea
 					className="form-control"
 					name="description"
 					placeholder="Ingrese una Descripción de la Categoria"
 					onChange={handleInputChange}
 				/>
-
 				<br />
+
 				<button type="submit" className="" value="Enviar" onClick={handleAdd}>
 					Enviar
 				</button>
+
 				<div>
 					<br />
 					<h3>Editar y eliminar Categorías</h3>
@@ -112,14 +99,13 @@ export default function FormularioCategoria() {
 								return <option value={categoria.id}>{categoria.name}</option>;
 							})}
 						</select>
+
 						<button type="submit" className="" value="Editar" onClick={handleEdit}>
-							{' '}
-							Editar{' '}
+							Editar
 						</button>
 
 						<button type="submit" className="" value="Eliminar" onClick={handleDelete}>
-							{' '}
-							Eliminar{' '}
+							Eliminar
 						</button>
 					</div>
 				</div>

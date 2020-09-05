@@ -24,7 +24,8 @@ export default function ProductFormFunction() {
 		axios.get(`${urlBack}/products/category/names`).then(res => {
 			const categoryTypes = res.data.map(c => ({
 				name: c.name,
-				id: c.id
+				id: c.id,
+				add: null
 			}));
 			setCategories(categoryTypes);
 		});
@@ -60,30 +61,43 @@ export default function ProductFormFunction() {
 
 	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
 
-	const handleSelectChange = event => setSelected({id: event.target.value});
+	const handleSelectChange = event => {
+		setSelected({id: event.target.value});
+	};
 
-	const handleChecks = event => {};
+	const handleChecks = event => {
+		const modifyCategories = [...categories];
+		modifyCategories[event.target.value].add = event.target.checked;
+		setCategories(modifyCategories);
+	};
 
 	const handleAdd = event => {
 		event.preventDefault();
 
 		axios
-			.post(`${urlBack}/products`, state)
-			.then(response => {
-				alert(response.statusText);
+			.post(`${urlBack}/products`, state) // Creates the product
+			.then(res => {
+				alert(res.statusText);
 				setUpdate(!update);
 				setSelected({id: 0});
 				lista.current.value = 0;
+
+				const productId = res.data.id;
+				return productId;
 			})
-			.catch(error => alert('no se pudo agregar la categoria: ' + error));
-		console.log(state);
+			.then(productId => {
+				categories.map(cat => {
+					if (cat.add) axios.post(`${urlBack}/products/${productId}/category/${cat.id}`); // Adds all checked categories to the product
+				});
+			})
+			.catch(error => alert('no se pudo agregar el producto: ' + error));
 	};
 
 	const handleDelete = event => {
 		event.preventDefault();
 
 		axios
-			.delete(`${urlBack}/products/${selected.id}`)
+			.delete(`${urlBack}/products/${selected.id}`) // Deletes the product
 			.then(response => {
 				alert(response.statusText);
 				setUpdate(!update);
@@ -91,7 +105,6 @@ export default function ProductFormFunction() {
 				lista.current.value = 0;
 			})
 			.catch(error => alert('no se pudo eliminar el robot: ' + error.message));
-		console.log(state);
 	};
 
 	const handleEdit = event => {

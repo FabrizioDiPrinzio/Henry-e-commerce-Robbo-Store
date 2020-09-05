@@ -20,16 +20,19 @@ export default function ProductFormFunction() {
 	const [selected, setSelected] = useState({id: 0});
 	const lista = useRef(0);
 
+	// Gets all the existing categories and creates checkmarks of each one
 	useEffect(() => {
 		axios.get(`${urlBack}/products/category/names`).then(res => {
 			const categoryTypes = res.data.map(c => ({
 				name: c.name,
-				id: c.id
+				id: c.id,
+				add: false
 			}));
 			setCategories(categoryTypes);
 		});
 	}, []);
 
+	// Updates the robot list whenever there's a change
 	useEffect(
 		() => {
 			axios.get(`${urlBack}/products`).then(res => {
@@ -43,42 +46,86 @@ export default function ProductFormFunction() {
 		[update]
 	);
 
+	// When a product is selected, it fills all the forms with the data of said product
 	useEffect(
 		() => {
 			axios.get(`${urlBack}/products/${selected.id}`).then(res => {
-				setState({
-					name: res.data[0] ? res.data[0].name : '',
-					price: res.data[0] ? res.data[0].price : '',
-					stock: res.data[0] ? res.data[0].stock : '',
-					image: res.data[0] ? res.data[0].image : '',
-					description: res.data[0] ? res.data[0].description : ''
-				});
+				const data = res.data[0];
+				categories.map(c => (c.add = false));
+
+				if (res.data[0]) {
+					// If the product has a category, it is checked, else it is unchecked
+					data.categories.map(d => {
+						categories.map(c => {
+							if (c.id === d.id) c.add = true;
+						});
+					});
+					// Sets all the forms to the data of the selected product if said product exists
+					setState({
+						name: data.name,
+						price: data.price,
+						stock: data.stock,
+						image: data.image,
+						description: data.description
+					});
+				}
+				else {
+					// Empties all the forms if they select the default option
+					setState({
+						name: '',
+						price: '',
+						stock: '',
+						image: '',
+						description: ''
+					});
+				}
 			});
 		},
 		[selected]
 	);
 
+	// Updates the state when something is written in the forms
 	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
 
-	const handleSelectChange = event => setSelected({id: event.target.value});
+	// Sets which product is currently being selected
+	const handleSelectChange = event => {
+		setSelected({id: event.target.value});
+		console.log(categories);
+	};
 
-	const handleChecks = event => {};
+	// Sets which categories are being checked
+	const handleChecks = event => {
+		const modifyCategories = [...categories];
+		modifyCategories[event.target.value].add = event.target.checked;
+		setCategories(modifyCategories);
+	};
 
+	// Creates products
 	const handleAdd = event => {
 		event.preventDefault();
 
+		// Creates the product
 		axios
 			.post(`${urlBack}/products`, state)
-			.then(response => {
-				alert(response.statusText);
+			.then(res => {
+				alert(res.statusText);
 				setUpdate(!update);
 				setSelected({id: 0});
 				lista.current.value = 0;
+
+				const productId = res.data.id;
+				return productId;
 			})
-			.catch(error => alert('no se pudo agregar la categoria: ' + error));
-		console.log(state);
+			// Adds all checked categories to the product
+			.then(productId => {
+				categories.map(cat => {
+					if (cat.add) axios.post(`${urlBack}/products/${productId}/category/${cat.id}`);
+				});
+			})
+			.catch(error => alert('no se pudo agregar el producto: ' + error));
 	};
 
+	// Deletes the selected product
 	const handleDelete = event => {
 		event.preventDefault();
 
@@ -91,12 +138,13 @@ export default function ProductFormFunction() {
 				lista.current.value = 0;
 			})
 			.catch(error => alert('no se pudo eliminar el robot: ' + error.message));
-		console.log(state);
 	};
 
+	// Edits the selected product
 	const handleEdit = event => {
 		event.preventDefault();
 
+		// Edits the product
 		axios
 			.put(`${urlBack}/products/${selected.id}`, state)
 			.then(response => {
@@ -104,6 +152,13 @@ export default function ProductFormFunction() {
 				setUpdate(!update);
 				setSelected({id: 0});
 				lista.current.value = 0;
+			})
+			// Adds all checked categories, removes all unchecked categories
+			.then(() => {
+				categories.map(cat => {
+					if (cat.add) axios.post(`${urlBack}/products/${selected.id}/category/${cat.id}`);
+					else axios.delete(`${urlBack}/products/${selected.id}/category/${cat.id}`);
+				});
 			})
 			.catch(error => alert('no se pudo editar el robot: ' + error.message));
 	};
@@ -186,6 +241,7 @@ export default function ProductFormFunction() {
 									type="checkbox"
 									className="checks"
 									value={i}
+									checked={categoria.add}
 									onChange={handleChecks}
 								/>
 								{categoria.name}

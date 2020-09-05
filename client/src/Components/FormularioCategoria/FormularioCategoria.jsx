@@ -13,6 +13,7 @@ export default function FormularioCategoria() {
 	const [selected, setSelected] = useState({id: null, name: null});
 	const lista = useRef(0);
 
+	// Updates the category list whenever there's a change
 	useEffect(
 		() => {
 			axios.get(`${urlBack}/products/category/names`).then(res => {
@@ -26,6 +27,7 @@ export default function FormularioCategoria() {
 		[update]
 	);
 
+	// When a category is selected, it fills all the forms with the data of said category
 	useEffect(
 		() => {
 			axios.get(`${urlBack}/products/category/${selected.name}`).then(res => {
@@ -38,8 +40,10 @@ export default function FormularioCategoria() {
 		[selected]
 	);
 
+	// Updates the state when something is written in the forms
 	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
 
+	// Sets which category is currently being selected
 	const handleSelectChange = event => {
 		setSelected({
 			id: event.target.value,
@@ -47,6 +51,7 @@ export default function FormularioCategoria() {
 		});
 	};
 
+	// Creates a new category
 	const handleAdd = event => {
 		event.preventDefault();
 
@@ -61,6 +66,7 @@ export default function FormularioCategoria() {
 			.catch(error => alert('no se pudo agregar la categoria: ' + error));
 	};
 
+	// Deletes the selected category
 	const handleDelete = event => {
 		event.preventDefault();
 
@@ -75,6 +81,7 @@ export default function FormularioCategoria() {
 			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message));
 	};
 
+	// Edits the selected category
 	const handleEdit = event => {
 		event.preventDefault();
 

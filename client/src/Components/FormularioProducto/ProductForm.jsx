@@ -16,8 +16,9 @@ export default function ProductFormFunction() {
 	});
 	const [categories, setCategories] = useState([]);
 	const [robots, setRobots] = useState([]);
-	const [selected, setSelected] = useState({id: null});
-	const referenciaForms = useRef(null);
+	const [update, setUpdate] = useState(false);
+	const [selected, setSelected] = useState({id: 0});
+	const lista = useRef(0);
 
 	useEffect(() => {
 		axios.get(`${urlBack}/products/category/names`).then(res => {
@@ -29,16 +30,33 @@ export default function ProductFormFunction() {
 		});
 	}, []);
 
-	useEffect(() => {
-		axios.get(`${urlBack}/products`).then(res => {
-			const robotTypes = res.data.map(c => ({
-				name: c.name,
-				id: c.id
-			}));
-			setRobots(robotTypes);
-			setSelected({id: robotTypes[0] ? robotTypes[0].id : null});
-		});
-	}, []);
+	useEffect(
+		() => {
+			axios.get(`${urlBack}/products`).then(res => {
+				const robotTypes = res.data.map(c => ({
+					name: c.name,
+					id: c.id
+				}));
+				setRobots(robotTypes);
+			});
+		},
+		[update]
+	);
+
+	useEffect(
+		() => {
+			axios.get(`${urlBack}/products/${selected.id}`).then(res => {
+				setState({
+					name: res.data[0] ? res.data[0].name : '',
+					price: res.data[0] ? res.data[0].price : '',
+					stock: res.data[0] ? res.data[0].stock : '',
+					image: res.data[0] ? res.data[0].image : '',
+					description: res.data[0] ? res.data[0].description : ''
+				});
+			});
+		},
+		[selected]
+	);
 
 	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
 
@@ -51,10 +69,14 @@ export default function ProductFormFunction() {
 
 		axios
 			.post(`${urlBack}/products`, state)
-			.then(response => alert(response.statusText))
+			.then(response => {
+				alert(response.statusText);
+				setUpdate(!update);
+				setSelected({id: 0});
+				lista.current.value = 0;
+			})
 			.catch(error => alert('no se pudo agregar la categoria: ' + error));
-
-		referenciaForms.current.reset();
+		console.log(state);
 	};
 
 	const handleDelete = event => {
@@ -62,8 +84,14 @@ export default function ProductFormFunction() {
 
 		axios
 			.delete(`${urlBack}/products/${selected.id}`)
-			.then(response => alert(response.statusText))
+			.then(response => {
+				alert(response.statusText);
+				setUpdate(!update);
+				setSelected({id: 0});
+				lista.current.value = 0;
+			})
 			.catch(error => alert('no se pudo eliminar el robot: ' + error.message));
+		console.log(state);
 	};
 
 	const handleEdit = event => {
@@ -71,15 +99,18 @@ export default function ProductFormFunction() {
 
 		axios
 			.put(`${urlBack}/products/${selected.id}`, state)
-			.then(response => alert(response.statusText))
+			.then(response => {
+				alert(response.statusText);
+				setUpdate(!update);
+				setSelected({id: 0});
+				lista.current.value = 0;
+			})
 			.catch(error => alert('no se pudo editar el robot: ' + error.message));
-
-		referenciaForms.current.reset();
 	};
 
 	return (
 		<div>
-			<form ref={referenciaForms} className="form">
+			<form className="form">
 				<h3 className="titulo">Agregar producto</h3>
 				<div className="InputContainer">
 					<div className="inpt">
@@ -88,8 +119,9 @@ export default function ProductFormFunction() {
 						</label>
 						<input
 							className="NameIn"
-							name="name"
 							type="text"
+							name="name"
+							value={state.name}
 							placeholder="Nombre del Producto"
 							onChange={handleInputChange}
 						/>
@@ -101,6 +133,7 @@ export default function ProductFormFunction() {
 						<input
 							className="CantIn"
 							name="stock"
+							value={state.stock}
 							type="text"
 							placeholder="Cantidad"
 							onChange={handleInputChange}
@@ -113,6 +146,7 @@ export default function ProductFormFunction() {
 						<input
 							className="Precio"
 							name="price"
+							value={state.price}
 							type="text"
 							placeholder="Precio"
 							onChange={handleInputChange}
@@ -125,6 +159,7 @@ export default function ProductFormFunction() {
 						<input
 							className="ImgIn"
 							name="image"
+							value={state.image}
 							type="text"
 							placeholder="URL de la imagen"
 							onChange={handleInputChange}
@@ -136,13 +171,14 @@ export default function ProductFormFunction() {
 					<textarea
 						className="description"
 						name="description"
+						value={state.description}
 						placeholder="Agregue descripción del producto"
 						onChange={handleInputChange}
 					/>
 				</div>
 
 				<div className="inpt">
-				<label className="CatLab">Categoría: </label>
+					<label className="CatLab">Categorías: </label>
 					{categories.map((categoria, i) => {
 						return (
 							<label className="checkLab">
@@ -165,9 +201,12 @@ export default function ProductFormFunction() {
 
 			<div className="adit">
 				<div className={'botonOpcion'}>
-					<h4 className="titulo">Eitar / Eliminar producto</h4>
+					<h4 className="titulo">Editar / Eliminar producto</h4>
 
-					<select id="select" onChange={handleSelectChange}>
+					<select ref={lista} id="select" onChange={handleSelectChange}>
+						<option selected value="0">
+							Robots...
+						</option>
 						{robots.map(robot => {
 							return <option value={robot.id}>{robot.name}</option>;
 						})}
@@ -175,13 +214,17 @@ export default function ProductFormFunction() {
 					<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
 						Editar
 					</button>
-					<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
+					<button
+						type="submit"
+						type="reset"
+						className="deleteBtn"
+						value="Eliminar"
+						onClick={handleDelete}
+					>
 						Eliminar
 					</button>
-
 				</div>
 			</div>
-
 		</div>
 	);
 }

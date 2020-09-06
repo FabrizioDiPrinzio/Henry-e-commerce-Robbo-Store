@@ -9,17 +9,18 @@
 }
 
 .cardContainer {
-	width: 700px;
-	height: 150px;
-	display: flex;
-	flex-direction: row;
-	position: relative;
-	justify-content: space-evenly;
-	align-items: center;
+	max-width: 700px;
+	width: 100vw;
+	height: 125px;
+	overflow: hidden;
+	margin: 0px;
+	display: grid;
+	grid-template-columns: 145px 4fr 1fr;
+	align-items: left;
+	vertical-align: baseline;
 	background-color: var(--glaucous);
 	border-radius: 10px;
-	overflow: hidden;
-    box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2);
+    box-shadow: 0px 0px 9px 3px rgb(0,0,0,0.3);
     user-select: none;
     text-decoration: none;
     font-family: 'Titillium Web', sans-serif;
@@ -27,32 +28,30 @@
 }
 
 .imageContainer {
-	width: 25%;
-	height: 100%;
 	background-color: var(--glaucous);
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	width: 140px;
+
 }
 
 .image {
-	width: 90%;
-	height: 90%;
+	object-fit: cover;
+	width: 140px;
+	height: 140px;
+	box-shadow: 0px 0px 15px 2px rgb(0,0,0,0.3);
+
 }
 
 .infoContainer {
-	width: 75%;
 	height: 100%;
 	padding: 20px;
-	display: flex;
+	display: inline-flex;
 	flex-direction: column;
 }
 
-
 .title {
+	text-align: left;
 	color: white;
 	border-bottom: 3px solid rgb(240,240,240,0.3);
-	width: 80%;
 	text-transform: uppercase;
 }
 
@@ -62,43 +61,39 @@
 }
 
 .body {
-	display: flex;
-	flex-direction: row;
-	margin: 30px 0 0 70px;
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+	margin: 0;
+	text-align: right;
 }
 
 .price {
 	color: white;
-	width: 300px;
 	font-size: 19px;
+	display: inline-block;
 }
 
 .stock{
 	color: white;
-	width: 300px;
+	display: inline-block;
+	
 }
 
 .control{
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	margin-right: 20px;
-	margin-left: -100px;
-
+	display: block;
+	padding: 10px;
 }
 
 .carrito {
-	margin-top: 10px;
-	margin-bottom: -15px;
+	margin: 0px;
 	color: white;
 	font-size: 18px;
-	width: 100px;
 	text-align: center;
 	background-color: var(--glaucous);
 }
 
 .cant {
+	display: inline-block;
 	margin-top: 3px;
 	width: 30px;
 	text-align: center;
@@ -107,9 +102,15 @@
 }
 
 .botones {
-	margin-top: 30px;
-	display: flex;
-	flex-direction: row;
+	margin-top: 10px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.butonContainer {
+	text-align: center;
+	align-items: center;
+	align-content: center;
 }
 
 .boton {
@@ -122,6 +123,7 @@
 	background-color: white;
 	box-shadow:  3px 3px 2px 0 rgb(0,0,0,0.2),
 						 	 inset 3px 3px 2px 0 rgb(240,240,240,0.3);
+	display: inline-block; 
 }
 
 .control .boton:active{

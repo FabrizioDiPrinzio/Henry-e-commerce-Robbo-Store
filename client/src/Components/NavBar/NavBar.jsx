@@ -6,10 +6,10 @@ import Menu from './Menu/Menu.jsx';
 
 document.addEventListener('scroll', e => {
 	const searchBar = document.querySelector(".SearchBarContainer")
-	if (window.scrollY > 50) {
+	if (window.scrollY > 55) {
 			searchBar.style.top = '0'
 		} else {
-			searchBar.style.top = (48 - window.scrollY ) + 'px'
+			searchBar.style.top = (55 - window.scrollY ) + 'px' //55 definido por position de searchbar en css (deben valer lo mismo)
 		}
 
 	
@@ -22,6 +22,8 @@ export default function NavBar(props) {
 				<Link to="/">
 					<span className="Title">Robbo Store</span>
 				</Link>
+				<img src="../favicon.svg" alt="logo" className="logo" />
+				<span className="espacioBlanco"> </span>
 				<div>
 					<button className="UserBtn">
 						<svg

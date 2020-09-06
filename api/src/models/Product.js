@@ -40,9 +40,7 @@ module.exports = sequelize => {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				isString(value) {
-					if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
-				}
+				isUrl: true
 			}
 		},
 

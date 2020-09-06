@@ -51,14 +51,13 @@ export default function ProductFormFunction() {
 	useEffect(
 		() => {
 			axios.get(`${urlBack}/products/${selected.id}`).then(res => {
-				const data = res.data[0];
-				categories.map(c => {
-					c.add = false;
-					c.modified = false;
-				});
 
-				// If the product has a category, it is checked, else it is unchecked
-				if (res.data[0]) {
+				const data = res.data
+				console.log(res)
+				categories.map(c => (c.add = false));
+
+				if (res.data) {
+					// If the product has a category, it is checked, else it is unchecked
 					data.categories.map(d => {
 						categories.map(c => {
 							if (c.id === d.id) c.add = true;
@@ -94,6 +93,7 @@ export default function ProductFormFunction() {
 	// Sets which product is currently being selected
 	const handleSelectChange = event => setSelected({id: event.target.value});
 
+
 	// Sets which categories are being checked
 	const handleChecks = event => {
 		const check = event.target;
@@ -107,9 +107,20 @@ export default function ProductFormFunction() {
 	const handleAdd = event => {
 		event.preventDefault();
 
+		/*
+		the image wrap is a temporary fix. the form should be able
+		to send multiple images in an array and the first one will be
+		the main image of the product. The other images will be stored
+		in the asosiated to the product and sotred in the model named Pics.
+		*/
+		const wrapedImage = [state.image]
+		const changedState = {...state, image: wrapedImage}
+		// console.log('Now state.image should be an array with the img')
+		// console.log(changedState)
+
 		// Creates the product
 		axios
-			.post(`${urlBack}/products`, state)
+			.post(`${urlBack}/products`, changedState)
 			.then(res => {
 				alert(res.statusText);
 				setUpdate(!update);
@@ -147,9 +158,20 @@ export default function ProductFormFunction() {
 	const handleEdit = event => {
 		event.preventDefault();
 
+		/*
+		the image wrap is a temporary fix. The form should be able
+		to send multiple images in an array and the first one will be
+		the main image of the product. The other images will be stored
+		in the asosiated to the product and sotred in the model named Pics.
+		*/
+		const wrapedImage = [state.image]
+		const changedState = {...state, image: wrapedImage}
+		// console.log('Now state.image should be an array with the img')
+		// console.log(changedState)
+
 		// Edits the product
 		axios
-			.put(`${urlBack}/products/${selected.id}`, state)
+			.put(`${urlBack}/products/${selected.id}`, changedState)
 			.then(response => {
 				alert(response.statusText);
 				setUpdate(!update);

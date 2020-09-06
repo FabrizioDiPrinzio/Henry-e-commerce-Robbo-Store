@@ -42,11 +42,12 @@ export default function Menu() {
 			</div>
 
 			<div className={stateMenu.menu}>
-				<ul className="list">
+				<ul className="menuList">
 					{categories.map(categoria => {
 						return (
 							<li className="categoria">
 								<Link to={`/categories/${categoria}`}> {categoria}</Link>
+								<div></div>
 							</li>
 						);
 					})}

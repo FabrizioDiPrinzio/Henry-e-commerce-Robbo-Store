@@ -9,108 +9,149 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function FormularioCategoria() {
 	const [state, setState] = useState({name: '', description: ''});
 	const [categories, setCategories] = useState([]);
-	const [selected, setSelected] = useState({id: null});
-	const referenciaForms = useRef(null);
+	const [update, setUpdate] = useState(false);
+	const [selected, setSelected] = useState({id: null, name: null});
+	const lista = useRef(0);
 
-	useEffect(() => {
-		axios.get(`${urlBack}/products/category/names`).then(res => {
-			const categoryTypes = res.data.map(c => ({
-				name: c.name,
-				id: c.id
-			}));
-			setCategories(categoryTypes);
-			setSelected({id: categoryTypes[0] ? categoryTypes[0].id : null});
-		});
-	}, []);
+	// Updates the category list whenever there's a change
+	useEffect(
+		() => {
+			axios.get(`${urlBack}/products/category/names`).then(res => {
+				const categoryTypes = res.data.map(c => ({
+					name: c.name,
+					id: c.id
+				}));
+				setCategories(categoryTypes);
+			});
+		},
+		[update]
+	);
 
+	// When a category is selected, it fills all the forms with the data of said category
+	useEffect(
+		() => {
+			axios.get(`${urlBack}/products/category/${selected.name}`).then(res => {
+				setState({
+					name: res.data ? res.data.name : '',
+					description: res.data ? res.data.description : ''
+				});
+			});
+		},
+		[selected]
+	);
+
+	// Updates the state when something is written in the forms
 	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
 
-	const handleSelectChange = event => setSelected({id: event.target.value});
+	// Sets which category is currently being selected
+	const handleSelectChange = event => {
+		setSelected({
+			id: event.target.value,
+			name: event.target.options[event.target.selectedIndex].text
+		});
+	};
 
+	// Creates a new category
 	const handleAdd = event => {
 		event.preventDefault();
 
 		axios
 			.post(`${urlBack}/products/category`, state)
-			.then(response => alert(response.statusText))
+			.then(response => {
+				alert(response.statusText);
+				setUpdate(!update);
+				setSelected({id: null, name: null});
+				lista.current.value = 0;
+			})
 			.catch(error => alert('no se pudo agregar la categoria: ' + error));
-
-		referenciaForms.current.reset();
 	};
 
+	// Deletes the selected category
 	const handleDelete = event => {
 		event.preventDefault();
 
 		axios
 			.delete(`${urlBack}/products/category/${selected.id}`)
-			.then(response => alert(response.statusText))
+			.then(response => {
+				alert(response.statusText);
+				setUpdate(!update);
+				setSelected({id: null, name: null});
+				lista.current.value = 0;
+			})
 			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message));
 	};
 
+	// Edits the selected category
 	const handleEdit = event => {
 		event.preventDefault();
 
 		axios
 			.put(`${urlBack}/products/category/${selected.id}`, state)
-			.then(response => alert(response.statusText))
+			.then(response => {
+				alert(response.statusText);
+				setUpdate(!update);
+				setSelected({id: null, name: null});
+				lista.current.value = 0;
+			})
 			.catch(error => alert('no se pudo editar la categoria: ' + error.message));
-
-		referenciaForms.current.reset();
 	};
 
 	return (
-		<form ref={referenciaForms} className="form" onSubmit={handleAdd}>
+		<form className="form" onSubmit={handleAdd}>
 			<div className="container">
 				<h3 className="titulo">Agregar Categorías</h3>
-				<label htmlFor="nombre" className="">
-					Nombre
-				</label>
+				<br />
+				<label htmlFor="nombre">Nombre:</label>
 				<input
 					className="form-control"
 					type="text"
 					name="name"
+					value={state.name}
 					placeholder="Categoria"
 					onChange={handleInputChange}
 				/>
-
+				<br />
 				<label htmlFor="descripcion" className="">
-					Descripción
+					Descripción:
 				</label>
 				<textarea
 					className="form-control"
 					name="description"
-					placeholder="Ingrese una Descripción de la Categoria"
+					value={state.description}
+					placeholder="Ingrese una descripción de la categoría"
 					onChange={handleInputChange}
 				/>
-				<br />
-
-				<button type="submit" className="" value="Enviar" onClick={handleAdd}>
-					Enviar
+				<button type="submit" className="addBtn" value="Enviar" onClick={handleAdd}>
+					Agregar
 				</button>
 
 				<div>
 					<br />
-					<h3>Editar y eliminar Categorías</h3>
-					<br />
-
+					<h4>Editar / Eliminar Categorías</h4>
 					<div className={'botonOpcion'}>
-						<select id="select" onChange={handleSelectChange}>
+						<select ref={lista} id="select" onChange={handleSelectChange}>
+							<option selected value="0">
+								Categorías...
+							</option>
 							{categories.map(categoria => {
 								return <option value={categoria.id}>{categoria.name}</option>;
 							})}
 						</select>
-
-						<button type="submit" className="" value="Editar" onClick={handleEdit}>
+						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
 							Editar
 						</button>
 
-						<button type="submit" className="" value="Eliminar" onClick={handleDelete}>
+						<button
+							type="submit"
+							className="deleteBtn"
+							value="Eliminar"
+							onClick={handleDelete}
+						>
 							Eliminar
 						</button>
 					</div>
 				</div>
 			</div>
-			<div />
 		</form>
 	);
 }

@@ -1,8 +1,10 @@
 
 :root {
+  --max-width: 700px;
   --beau-blue: #d2e3f9ff;
   --baby-blue-eyes: #98b7f0ff;
   --glaucous: #617cc7ff;
+  --glaucous-transparent: rgba(66, 135, 245, 0.66);
   --ksu-purple: #563488ff;
   --razzmatazz: #d53467ff
 }
@@ -10,6 +12,8 @@
 .container {
 	display: inline-block;
 	flex-direction: row;
+	padding: 0px;
+	margin: 0px;
 }
 
 .botonMenu {
@@ -21,8 +25,6 @@
 	align-items: center;
 	justify-content: space-evenly;
 	border-radius: 3px;
-	margin-left: -5px;
-	margin-top: 4px;
 	z-index: 100;
 	cursor: pointer;
 }
@@ -77,48 +79,81 @@
 .menuOpen {
 	transition: 0.3s;
 	background-color: var(--ksu-purple);
-	padding-bottom: 20px;
-	width: 200px;
-	display: flex;
-	justify-content: flex-end;
-	position: absolute;
-	margin-left: -15px;
-	border-radius: 0 3px 3px 0;
+	background-image: url("../../../multimedia/backgroundPattern.jpg");
+	background-size: 1500px 900px;
+	margin-top: 6px; /*esto es para alinearlo con el searchbar*/
+	align-items: center;
+	border-radius: 0 0px 3px 3px;
 	box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2),
-							inset 0 0 1px 0 var(--beau-blue);
+							inset 0 0 1px 0 var(--beau-blue),
+							inset 0px 10px 10px 0 rgb(0,0,0,0.2);
+	position: absolute;
+	overflow: hidden;
+	width: 350px
+	/*  ↑ arriba tiene que ser igual a open ↑  ↓ abajo tiene las props que cambian al cerrarse ↓ */
+
+
 }
 
 .menuClose {
 	transition: 0.3s;
-	overflow: hidden;
 	background-color: var(--ksu-purple);
-	width: 0;
-	display: flex;
-	margin-left: -15px;
-	justify-content: flex-end;
-	padding-bottom: 20px;
+	background-image: url("../../../multimedia/backgroundPattern.jpg");
+	background-size: 1500px 900px;
+	margin-top: 6px;  /*esto es para alinearlo con el searchbar*/
+	align-items: center;
+	border-radius: 0 0px 3px 3px;
+	box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2),
+							inset 0 0 1px 0 var(--beau-blue),
+							inset 0px 10px 10px 0 rgb(0,0,0,0.2);
 	position: absolute;
+	overflow: hidden;
+
+	/*  ↑ arriba tiene que ser igual a open ↑  ↓ abajo tiene las props que cambian al cerrarse ↓ */
+
+	width: 0px;
 }
 
-.list {
-	margin: 30px 30px 0 20px;
+.menuList {
+	padding: 0px;
+	margin: 0px;
+	padding-top: 30px;
+	padding-left: 20px;
+	padding-bottom: 30px;
+	width: 350px;
 	list-style: none;
-	padding: 10px;
 }
 
 .categoria {
 	color: white;
+	font-weight: 400;
+	font-size: 1.2em;
 	padding: 4px 8px 4px 8px;
 	border-radius: 3px;
+	max-width: 300px;
+
 }
 
-.categoria:hover {
-	background-color: var( --glaucous);
-	padding: 4px;
-	border-radius: 3px;
+.categoria:hover > a {
+	transition: 0.2s;
+	text-decoration: none;
+	text-shadow: 0px 0px 3px white;
+}
+
+.categoria > div {
+	transition: 0.2s;
+	height: 2px;
+	width: 0px;
+	background: white;
+}
+
+.categoria:hover > div {
+	transition: 0.2s;
+	width: 270px;
 }
 
 .categoria a {
 	color: white;
 	text-decoration: none;
 }
+

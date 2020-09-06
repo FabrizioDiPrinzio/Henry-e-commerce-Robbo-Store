@@ -63,7 +63,7 @@ export default function FormularioCategoria() {
 				setSelected({id: null, name: null});
 				lista.current.value = 0;
 			})
-			.catch(error => alert('no se pudo agregar la categoria: ' + error));
+			.catch(error => alert('no se pudo agregar la categoria: ' + error.message));
 	};
 
 	// Deletes the selected category

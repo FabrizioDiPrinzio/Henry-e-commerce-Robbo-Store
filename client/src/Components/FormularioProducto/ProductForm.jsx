@@ -26,7 +26,8 @@ export default function ProductFormFunction() {
 			const categoryTypes = res.data.map(c => ({
 				name: c.name,
 				id: c.id,
-				add: false
+				add: false,
+				modified: false
 			}));
 			setCategories(categoryTypes);
 		});
@@ -50,6 +51,7 @@ export default function ProductFormFunction() {
 	useEffect(
 		() => {
 			axios.get(`${urlBack}/products/${selected.id}`).then(res => {
+
 				const data = res.data
 				console.log(res)
 				categories.map(c => (c.add = false));
@@ -89,15 +91,15 @@ export default function ProductFormFunction() {
 	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
 
 	// Sets which product is currently being selected
-	const handleSelectChange = event => {
-		setSelected({id: event.target.value});
-		//console.log(categories);
-	};
+	const handleSelectChange = event => setSelected({id: event.target.value});
+
 
 	// Sets which categories are being checked
 	const handleChecks = event => {
+		const check = event.target;
 		const modifyCategories = [...categories];
-		modifyCategories[event.target.value].add = event.target.checked;
+		modifyCategories[check.value].add = check.checked;
+		modifyCategories[check.value].modified = !modifyCategories[check.value].modified;
 		setCategories(modifyCategories);
 	};
 
@@ -134,7 +136,7 @@ export default function ProductFormFunction() {
 					if (cat.add) axios.post(`${urlBack}/products/${productId}/category/${cat.id}`);
 				});
 			})
-			.catch(error => alert('no se pudo agregar el producto: ' + error));
+			.catch(error => alert('no se pudo agregar el producto: ' + error.message));
 	};
 
 	// Deletes the selected product
@@ -176,11 +178,15 @@ export default function ProductFormFunction() {
 				setSelected({id: 0});
 				lista.current.value = 0;
 			})
-			// Adds all checked categories, removes all unchecked categories
+			// Adds checked categories and removes unchecked categories if they've been modified
 			.then(() => {
 				categories.map(cat => {
-					if (cat.add) axios.post(`${urlBack}/products/${selected.id}/category/${cat.id}`);
-					else axios.delete(`${urlBack}/products/${selected.id}/category/${cat.id}`);
+					if (cat.add && cat.modified) {
+						axios.post(`${urlBack}/products/${selected.id}/category/${cat.id}`);
+					}
+					else if (!cat.add && cat.modified) {
+						axios.delete(`${urlBack}/products/${selected.id}/category/${cat.id}`);
+					}
 				});
 			})
 			.catch(error => alert('no se pudo editar el robot: ' + error.message));

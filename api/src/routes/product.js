@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
 router.get('/:id', (req, res) => {
 	const {id} = req.params;
 
-	Product.findAll({where: {id}, include: [Categories, Pics]}).then(robot => res.send(robot));
+	Product.findOne({where: {id}, include: [Categories, Pics]}).then(robot => res.send(robot));
 });
 
 router.delete('/:id', (req, res) => {
@@ -48,45 +48,48 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-	const {name, price, stock, image, description} = req.body;
-	const {id} = req.params;
 
 	/*
-	formulario editar Producto:
-		cambiar la image principal con findOrCrete y asociar esa imagen al producto (en la tabla pics)
-	formulario CRUD de Pics 
-		CRUD pics Y asociarlas SIEMPRE a un producto	
-  */
+	Esta ruta SOLO cambia la image principal del producto,
+	NO agrega nuevas fotos asociadas al producto.
+
+	Esto es así porque debemos crear un formulario CRUD de Pics
+	donde se puedan guardar nuevas fotos, editarlas y eliminarlas.
+
+	Hacer todo eso en esta ruta sería muy complejo y lo único que
+	permitiremos es cambiar la image del producto (la image principal).
+
+	Las rutas de products reciben en image un array por convención, ya que
+	en algúnas es posible o necesario manejar más de una imágen.
+	*/
+
+	const {name, price, stock, description} = req.body;
+	const image = req.body.image[0]
+	const {id} = req.params;
 
 	if (!name && !price && !stock && !image && !description)
-		return res.status(400).send('faltan parametros');
-	else {
-		await Product.findByPk(id) 
-			.then(robot => {
-				if (!robot) return res.status(400).send('No se encontró el robot :(');
+		return res.status(400).send('Debes enviar al menos un parametro para editar');
 
-				robot.name = name ? name : robot.name;
-				robot.save();
-				robot.description = description ? description : robot.description;
-				robot.save();
-				robot.price = price ? price : robot.price;
-				robot.save();
-				robot.stock = stock ? stock : robot.stock;
-				robot.save();
-				if (image) {
-					Pics.findOrCreate({
-						where: {imageUrl: image, productId: robot.id}
-					}).then(() => {
-						robot.image = image;
-						robot.save();
-					});
-					robot.save()
-				}
-				robot.save()
-      }).catch(err => res.status(400).send(err.message));
-      let respuestaFinal = await Product.findByPk(id);
-		return res.send(respuestaFinal);
-	}
+	const robot = await Product.findByPk(id);
+	if (!robot) return res.status(400).send('No se encontró el robot :(');
+
+	try {
+		robot.name = name ? name : robot.name;
+		robot.description = description ? description : robot.description;
+		robot.price = price ? price : robot.price;
+		robot.stock = stock ? stock : robot.stock;
+		if (image) {
+			await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}})
+			robot.image = image;
+		}
+		await robot.save();
+	} catch (error) {
+  		res.status(400).send(error.message);
+	} finally {
+		const savedRobot = await robot.reload()
+  		res.status(200).send(savedRobot);
+  	}
+
 });
 
 router.post('/:idProducto/category/:idCategoria', async (req, res) => {

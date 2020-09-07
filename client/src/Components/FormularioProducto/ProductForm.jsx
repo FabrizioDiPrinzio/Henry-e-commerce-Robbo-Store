@@ -77,8 +77,8 @@ export default function ProductFormFunction() {
 					// Empties all the forms if they select the default option
 					setState({
 						name: '',
-						price: '',
-						stock: '',
+						price: 0,
+						stock: 0,
 						image: '',
 						description: ''
 					});
@@ -218,7 +218,7 @@ export default function ProductFormFunction() {
 							className="CantIn"
 							name="stock"
 							value={state.stock}
-							type="text"
+							type="number"
 							placeholder="Cantidad"
 							onChange={handleInputChange}
 						/>
@@ -231,7 +231,7 @@ export default function ProductFormFunction() {
 							className="Precio"
 							name="price"
 							value={state.price}
-							type="text"
+							type="number"
 							placeholder="Precio"
 							onChange={handleInputChange}
 						/>

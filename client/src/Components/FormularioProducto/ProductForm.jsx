@@ -51,10 +51,11 @@ export default function ProductFormFunction() {
 	useEffect(
 		() => {
 			axios.get(`${urlBack}/products/${selected.id}`).then(res => {
-
-				const data = res.data
-				console.log(res)
-				categories.map(c => (c.add = false));
+				const data = res.data;
+				categories.map(c => {
+					c.add = false;
+					c.modified = false;
+				});
 
 				if (res.data) {
 					// If the product has a category, it is checked, else it is unchecked
@@ -93,7 +94,6 @@ export default function ProductFormFunction() {
 	// Sets which product is currently being selected
 	const handleSelectChange = event => setSelected({id: event.target.value});
 
-
 	// Sets which categories are being checked
 	const handleChecks = event => {
 		const check = event.target;
@@ -113,8 +113,8 @@ export default function ProductFormFunction() {
 		the main image of the product. The other images will be stored
 		in the asosiated to the product and sotred in the model named Pics.
 		*/
-		const wrapedImage = [state.image]
-		const changedState = {...state, image: wrapedImage}
+		const wrapedImage = [state.image];
+		const changedState = {...state, image: wrapedImage};
 		// console.log('Now state.image should be an array with the img')
 		// console.log(changedState)
 
@@ -164,8 +164,8 @@ export default function ProductFormFunction() {
 		the main image of the product. The other images will be stored
 		in the asosiated to the product and sotred in the model named Pics.
 		*/
-		const wrapedImage = [state.image]
-		const changedState = {...state, image: wrapedImage}
+		const wrapedImage = [state.image];
+		const changedState = {...state, image: wrapedImage};
 		// console.log('Now state.image should be an array with the img')
 		// console.log(changedState)
 

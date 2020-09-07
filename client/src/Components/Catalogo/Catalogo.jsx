@@ -9,13 +9,12 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function Catalogo(props) {
 	const [robots, setRobots] = useState([]);
 	const {categoria} = useParams();
-	const search = props.location.search;
-	const params = new URLSearchParams(search);
+	const params = new URLSearchParams(props.location.search).get('query');
 
 	useEffect(
 		() => {
 			// Main page, returns ALL products
-			if (!categoria && !search) {
+			if (!categoria && !params) {
 				axios.get(`${urlBack}/products`).then(res => setRobots(res.data));
 			}
 			else if (categoria) {
@@ -28,10 +27,10 @@ export default function Catalogo(props) {
 						console.log(err.message);
 					});
 			}
-			else if (search) {
+			else if (params) {
 				// Search by query
 				axios
-					.get(`${urlBack}/search?query=${params.get('query')}`)
+					.get(`${urlBack}/search?query=${params}`)
 					.then(res => setRobots(res.data))
 					.catch(err => {
 						setRobots(null);
@@ -39,7 +38,7 @@ export default function Catalogo(props) {
 					});
 			}
 		},
-		[categoria, search]
+		[categoria, params]
 	);
 
 	return (

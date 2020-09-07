@@ -1,21 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
+import Menu from './Menu/Menu.jsx';
 import './navBar.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import Menu from './Menu/Menu.jsx';
+
+const urlBack = process.env.REACT_APP_API_URL;
 
 document.addEventListener('scroll', e => {
-	const searchBar = document.querySelector(".SearchBarContainer")
+	const searchBar = document.querySelector('.SearchBarContainer');
 	if (window.scrollY > 55) {
-			searchBar.style.top = '0'
-		} else {
-			searchBar.style.top = (55 - window.scrollY ) + 'px' //55 definido por position de searchbar en css (deben valer lo mismo)
-		}
+		searchBar.style.top = '0';
+	}
+	else {
+		searchBar.style.top = 55 - window.scrollY + 'px'; //55 definido por position de searchbar en css (deben valer lo mismo)
+	}
+});
 
-	
-})
+export default function NavBar() {
+	const [search, setSearch] = useState({query: ''});
 
-export default function NavBar(props) {
+	const handleInputChange = event =>
+		setSearch({...search, [event.target.name]: event.target.value});
+
 	return (
 		<div className="navBarContainer">
 			<nav className="NavBar">
@@ -59,29 +65,37 @@ export default function NavBar(props) {
 				</div>
 			</nav>
 
-			<div className="SearchBarContainer" >
+			<div className="SearchBarContainer">
 				<div className="SearchBar">
 					<Menu />
-					<input className="SearchInput" type="text" placeholder="Buscar..." />
-					<button className="SearchBtn" onClick={() => props.onSearch('Buscando robot...')}>
-						<svg
-							width="1.5em"
-							height="1.5em"
-							viewBox="0 0 16 16"
-							class="bi bi-search"
-							fill="currentColor"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								fill-rule="evenodd"
-								d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"
-							/>
-							<path
-								fill-rule="evenodd"
-								d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"
-							/>
-						</svg>
-					</button>
+					<input
+						className="SearchInput"
+						name="query"
+						type="text"
+						placeholder="Buscar..."
+						onChange={handleInputChange}
+					/>
+					<Link to={`/search?query=${search.query}`}>
+						<button className="SearchBtn">
+							<svg
+								width="1.5em"
+								height="1.5em"
+								viewBox="0 0 16 16"
+								class="bi bi-search"
+								fill="currentColor"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									fill-rule="evenodd"
+									d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"
+								/>
+								<path
+									fill-rule="evenodd"
+									d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"
+								/>
+							</svg>
+						</button>
+					</Link>
 				</div>
 			</div>
 		</div>

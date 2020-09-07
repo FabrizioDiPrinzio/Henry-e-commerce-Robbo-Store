@@ -88,11 +88,15 @@ export default function ProductFormFunction() {
 				}
 			});
 		},
-		[selected, categories]
+		[selected]
 	);
 
 	// Updates the state when something is written in the forms
 	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
+
+	// Updates the state when something is written in the numbers
+	const handleNumberChange = event =>
+		setState({...state, [event.target.name]: parseInt(event.target.value)});
 
 	// Sets which product is currently being selected
 	const handleSelectChange = event => setSelected({id: event.target.value});
@@ -141,6 +145,8 @@ export default function ProductFormFunction() {
 				});
 			})
 			.catch(error => alert('no se pudo agregar el producto: ' + error.message));
+
+		console.log(state);
 	};
 
 	// Deletes the selected product
@@ -225,7 +231,7 @@ export default function ProductFormFunction() {
 							value={state.stock}
 							type="number"
 							placeholder="Cantidad"
-							onChange={handleInputChange}
+							onChange={handleNumberChange}
 						/>
 					</div>
 					<div className="inpt">
@@ -238,7 +244,7 @@ export default function ProductFormFunction() {
 							value={state.price}
 							type="number"
 							placeholder="Precio"
-							onChange={handleInputChange}
+							onChange={handleNumberChange}
 						/>
 					</div>
 					<div className="inpt">
@@ -270,7 +276,7 @@ export default function ProductFormFunction() {
 					<label className="CatLab">Categorías: </label>
 					{categories.map((categoria, i) => {
 						return (
-							<label className="checkLab">
+							<label key={categoria.id} className="checkLab">
 								<input
 									type="checkbox"
 									className="checks"

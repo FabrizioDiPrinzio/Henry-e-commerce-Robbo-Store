@@ -45,7 +45,7 @@ export default function Menu() {
 				<ul className="menuList">
 					{categories.map(categoria => {
 						return (
-							<li key={categoria.id} className="categoria">
+							<li className="categoria" key={categoria}>
 								<Link to={`/categories/${categoria}`}> {categoria}</Link>
 								<div />
 							</li>

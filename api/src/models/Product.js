@@ -30,7 +30,6 @@ module.exports = sequelize => {
 
 		stock: {
 			type: DataTypes.INTEGER,
-			allowNull: false,
 			validate: {
 				isNumeric: true
 			}

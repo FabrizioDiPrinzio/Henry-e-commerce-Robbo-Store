@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/', async (req, res) => {
 	const {name, price, stock, image, description} = req.body;
-	if (!name || !price || !stock || !image || !description) return res.sendStatus(400);
+	if (!name || !price || typeof stock !== "number" || !image || !description) return res.status(400).send('Falta algún parámetro o stock typeof incorrecto');
 
 	const newBody = {
 		...req.body,

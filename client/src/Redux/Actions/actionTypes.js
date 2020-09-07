@@ -1,0 +1,9 @@
+export const GET_ALL_CATEGORIES = 'GET_ALL_CATEGORIES';
+
+export const GET_CATEGORY = 'GET_CATEGORY';
+
+export const POST_CATEGORY = 'POST_CATEGORY';
+
+export const DELETE_CATEGORY = 'DELETE_CATEGORY';
+
+export const PUT_CATEGORY = 'PUT_CATEGORY';

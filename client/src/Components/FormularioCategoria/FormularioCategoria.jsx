@@ -1,5 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
+import {useSelector, useDispatch} from 'react-redux';
+import * as action from '../../Redux/Actions/actions.js';
 import './FormularioCategoria.css';
 import 'bootstrap/dist/css/bootstrap.css';
 //------ Fin de imports -----
@@ -12,17 +14,20 @@ export default function FormularioCategoria() {
 	const [update, setUpdate] = useState(false);
 	const [selected, setSelected] = useState({id: null, name: null});
 	const lista = useRef(0);
+	const categorySelector = useSelector(state => state.categories);
+	const dispatch = useDispatch();
 
 	// Updates the category list whenever there's a change
 	useEffect(
 		() => {
-			axios.get(`${urlBack}/products/category/names`).then(res => {
-				const categoryTypes = res.data.map(c => ({
-					name: c.name,
-					id: c.id
-				}));
-				setCategories(categoryTypes);
-			});
+			// axios.get(`${urlBack}/products/category/names`).then(res => {
+			// 	const categoryTypes = res.data.map(c => ({
+			// 		name: c.name,
+			// 		id: c.id
+			// 	}));
+			// 	setCategories(categoryTypes);
+			// });
+			dispatch(action.getAllCategories());
 		},
 		[update]
 	);
@@ -98,6 +103,7 @@ export default function FormularioCategoria() {
 
 	return (
 		<form className="form" onSubmit={handleAdd}>
+			{console.log(categorySelector)}
 			<div className="container">
 				<h3 className="titulo">Agregar Categorías</h3>
 				<br />
@@ -133,7 +139,7 @@ export default function FormularioCategoria() {
 							<option selected value="0">
 								Categorías...
 							</option>
-							{categories.map(categoria => {
+							{categorySelector.categories.map(categoria => {
 								return <option value={categoria.id}>{categoria.name}</option>;
 							})}
 						</select>

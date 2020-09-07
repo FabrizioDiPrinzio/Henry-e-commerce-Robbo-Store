@@ -8,11 +8,11 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductFormFunction() {
 	const [state, setState] = useState({
-		name: null,
-		price: null,
-		stock: null,
-		image: null,
-		description: null
+		name: '',
+		price: '',
+		stock: '',
+		image: '',
+		description: ''
 	});
 	const [categories, setCategories] = useState([]);
 	const [robots, setRobots] = useState([]);
@@ -55,6 +55,7 @@ export default function ProductFormFunction() {
 				categories.map(c => {
 					c.add = false;
 					c.modified = false;
+					return c;
 				});
 
 				if (res.data) {
@@ -62,7 +63,9 @@ export default function ProductFormFunction() {
 					data.categories.map(d => {
 						categories.map(c => {
 							if (c.id === d.id) c.add = true;
+							return c;
 						});
+						return d;
 					});
 					// Sets all the forms to the data of the selected product if said product exists
 					setState({
@@ -85,7 +88,7 @@ export default function ProductFormFunction() {
 				}
 			});
 		},
-		[selected]
+		[selected, categories]
 	);
 
 	// Updates the state when something is written in the forms
@@ -134,6 +137,7 @@ export default function ProductFormFunction() {
 			.then(productId => {
 				categories.map(cat => {
 					if (cat.add) axios.post(`${urlBack}/products/${productId}/category/${cat.id}`);
+					return cat;
 				});
 			})
 			.catch(error => alert('no se pudo agregar el producto: ' + error.message));
@@ -187,6 +191,7 @@ export default function ProductFormFunction() {
 					else if (!cat.add && cat.modified) {
 						axios.delete(`${urlBack}/products/${selected.id}/category/${cat.id}`);
 					}
+					return cat;
 				});
 			})
 			.catch(error => alert('no se pudo editar el robot: ' + error.message));
@@ -288,24 +293,20 @@ export default function ProductFormFunction() {
 				<div className={'botonOpcion'}>
 					<h4 className="titulo">Editar / Eliminar producto</h4>
 
-					<select ref={lista} id="select" onChange={handleSelectChange}>
-						<option selected value="0">
-							Robots...
-						</option>
+					<select ref={lista} id="select" defaultValue="0" onChange={handleSelectChange}>
+						<option value="0">Robots...</option>
 						{robots.map(robot => {
-							return <option value={robot.id}>{robot.name}</option>;
+							return (
+								<option value={robot.id} key={robot.id}>
+									{robot.name}
+								</option>
+							);
 						})}
 					</select>
 					<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
 						Editar
 					</button>
-					<button
-						type="submit"
-						type="reset"
-						className="deleteBtn"
-						value="Eliminar"
-						onClick={handleDelete}
-					>
+					<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
 						Eliminar
 					</button>
 				</div>

@@ -6,20 +6,40 @@ import './Catalogo.css';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export default function Catalogo() {
+export default function Catalogo(props) {
 	const [robots, setRobots] = useState([]);
 	const {categoria} = useParams();
+	const search = props.location.search;
+	const params = new URLSearchParams(search);
 
 	useEffect(
 		() => {
-			if (!categoria) axios.get(`${urlBack}/products`).then(res => setRobots(res.data));
-			else {
+			// Main page, returns ALL products
+			if (!categoria && !search) {
+				axios.get(`${urlBack}/products`).then(res => setRobots(res.data));
+			}
+			else if (categoria) {
+				// Filter by category
 				axios
 					.get(`${urlBack}/products/category/${categoria}`)
-					.then(res => setRobots(res.data.products));
+					.then(res => setRobots(res.data.products))
+					.catch(err => {
+						setRobots(null);
+						console.log(err.message);
+					});
+			}
+			else if (search) {
+				// Search by query
+				axios
+					.get(`${urlBack}/search?query=${params.get('query')}`)
+					.then(res => setRobots(res.data))
+					.catch(err => {
+						setRobots(null);
+						console.log(err.message);
+					});
 			}
 		},
-		[categoria]
+		[categoria, search]
 	);
 
 	return (

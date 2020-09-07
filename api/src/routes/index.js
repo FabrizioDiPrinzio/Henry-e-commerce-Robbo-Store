@@ -14,19 +14,15 @@ const app = express();
 app.use('/products', productRouter);
 app.use('/products/category', category);
 
-
 app.get('/', (req, res) => {
 	res.send('Hola');
 });
 
 app.get('/search', (req, res) => {
-	const {name, description} = req.query;
+	const {query} = req.query;
 	Product.findAll({
 		where: {
-			[Op.or]: [
-				{name: {[Op.iLike]: `%${name}%`}},
-				{description: {[Op.iLike]: `%${description}%`}}
-			]
+			[Op.or]: [{name: {[Op.iLike]: `%${query}%`}}, {description: {[Op.iLike]: `%${query}%`}}]
 		}
 	})
 		.then(response => {

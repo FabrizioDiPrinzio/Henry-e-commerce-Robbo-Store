@@ -16,15 +16,6 @@ function Home() {
 				<h3>Category Form</h3>
 			</Link>
 
-			<p>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet ex eu sapien
-				faucibus molestie. In pulvinar dictum libero eu lacinia. Aenean aliquam sem sed
-				tellus dignissim venenatis. Vivamus et aliquet enim. Nam consectetur et lacus quis
-				malesuada. Phasellus sit amet lorem suscipit sem convallis malesuada. Ut eget justo
-				eleifend nisi facilisis imperdiet. Morbi scelerisque tristique ipsum eget tincidunt.
-				Nam ultricies eu velit et imperdiet. Etiam ullamcorper odio risus, eu malesuada ex
-				bibendum pretium.
-			</p>
 		</div>
 	);
 }

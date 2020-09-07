@@ -12,7 +12,7 @@ export default function Producto() {
 
 	useEffect(
 		() => {
-			Axios.get(`${urlBack}/products/${id}`).then(res => setRobot(res.data[0]));
+			Axios.get(`${urlBack}/products/${id}`).then(res => setRobot(res.data));
 		},
 		[id]
 	);

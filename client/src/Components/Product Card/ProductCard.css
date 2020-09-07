@@ -10,6 +10,7 @@
 
 .cardContainer {
 	max-width: 700px;
+	min-width: 300px;
 	width: 100vw;
 	height: 125px;
 	overflow: hidden;
@@ -53,6 +54,7 @@
 	color: white;
 	border-bottom: 3px solid rgb(240,240,240,0.3);
 	text-transform: uppercase;
+	font-size: 80%;
 }
 
 .title:hover {
@@ -69,13 +71,14 @@
 
 .price {
 	color: white;
-	font-size: 19px;
+	font-size: 90%;
 	display: inline-block;
 }
 
 .stock{
 	color: white;
 	display: inline-block;
+	font-size: 80%;
 	
 }
 
@@ -87,7 +90,7 @@
 .carrito {
 	margin: 0px;
 	color: white;
-	font-size: 18px;
+	font-size: 90%;
 	text-align: center;
 	background-color: var(--glaucous);
 }
@@ -144,3 +147,4 @@
 .iconButtom {
 	margin-top: -11px;
 }
+

@@ -3,10 +3,12 @@ import * as actionTypes from '../Actions/actionTypes';
 const urlBack = process.env.REACT_APP_API_URL;
 
 const initialState = {
-	allCategories:[]
+  allCategories:[],
+  lastResponse: {},
+  lastError: '',
 };
 
-// const state = { categories: { allCategories: [] } }
+// const state = { categories: { allCategories: [], errors:'' } }
 
 export default function categoryReducer(state = initialState, action) {
 	switch (action.type) {
@@ -24,9 +26,13 @@ export default function categoryReducer(state = initialState, action) {
 		case actionTypes.PUT_CATEGORY:
 			return {
 				...state,
-				response: action.payload 
-			}
-			return;
+				lastResponse: action.payload
+      }
+    case actionTypes.CATEGORIES_ERROR:
+      return {
+        ...state,
+        lastError: action.payload
+      }
 		default:
 			return state;
 	}

@@ -14,15 +14,15 @@ export default function FormularioCategoria() {
   
 	const [inputValues, setInputValues] = useState({id: 0, name: '', description: ''});
  	const [selectedCategoryId, setSelectedCategoryId] = useState(0);
- 	const [update, setUpdate] = useState(false);
 	const lista = useRef(0);
 
 	// Updates the category list whenever there's a change
 	useEffect(
 		() => {
-			dispatch(allActions.categoryActions.getAllCategories());
+      dispatch(allActions.categoryActions.getAllCategories());
+      //console.log(categories)
 		},
-		[update]
+		[]
 	);
 
 	// Updates the state when something is written in the forms
@@ -35,17 +35,13 @@ export default function FormularioCategoria() {
     let selectedId = parseInt(event.target.value)
     setSelectedCategoryId(selectedId);
 
-
     if (selectedId !== 0) {
       let currentCategory =  categories.find(c => c.id === selectedId)
       setInputValues(currentCategory)
 
     } else {
-      setSelectedCategoryId(0)
-
       setInputValues({id: 0, name: '', description: ''})
     }
-
 	};
 
 	// Creates a new category
@@ -56,7 +52,6 @@ export default function FormularioCategoria() {
 			.post(`${urlBack}/products/category`, inputValues)
 			.then(response => {
 				alert(response.statusText);
-				setUpdate(!update);
 				setSelectedCategoryId(0);
 				lista.current.value = 0;
 			})
@@ -71,7 +66,6 @@ export default function FormularioCategoria() {
 			.delete(`${urlBack}/products/category/${selectedCategoryId.id}`)
 			.then(response => {
 				alert(response.statusText);
-				setUpdate(!update);
 				setSelectedCategoryId({id: null, name: null});
 				lista.current.value = 0;
 			})
@@ -85,11 +79,9 @@ export default function FormularioCategoria() {
 		console.log('Input Values when edit is submited')
 		console.log(inputValues)
 
-		dispatch(allActions.categoryActions.putCategory(parseInt(selectedCategoryId.id), inputValues));
-		setUpdate(!update);
+		dispatch(allActions.categoryActions.putCategory(parseInt(selectedCategoryId), inputValues));
 		setSelectedCategoryId({id: 0, name: null, description: null});
 		lista.current.value = 0;
-		dispatch(allActions.categoryActions.getAllCategories());
 
 	};
 

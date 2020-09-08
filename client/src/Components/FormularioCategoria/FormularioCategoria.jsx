@@ -9,28 +9,23 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioCategoria() {
-	const [state, setState] = useState({name: '', description: ''});
-	const [categories, setCategories] = useState([]); // [{id: 1 , name: "category 1", description: "something" }]
-	const [update, setUpdate] = useState(false);
-	const [selected, setSelected] = useState({id: null, name: null});
+  const categories = useSelector(state => state.categories.categories);
+  
+	const [InputValues, setInputValues] = useState({name: '', description: ''});
+  const [selected, setSelected] = useState({id: null, name: null});
+  const [update, setUpdate] = useState(false);
 	const lista = useRef(0);
 
-	const categorySelector = useSelector(state => state.categories.categories);
-	console.log(categorySelector); // es
+
+  
+	console.log(categories); // trae del store de redux el array con categorias.
 	const dispatch = useDispatch();
 
 	// Updates the category list whenever there's a change
 	useEffect(
 		() => {
-			// axios.get(`${urlBack}/products/category/names`).then(res => {
-			// 	const categoryTypes = res.data.map(c => ({
-			// 		name: c.name,
-			// 		id: c.id
-			// 	}));
-			// 	setCategories(categoryTypes);
-			// });
-			dispatch(allActions.categoryActions.getAllCategories());
-			// setCategories(categorySelector)
+      dispatch(allActions.categoryActions.getAllCategories());
+      console.log(categories)
 		},
 		[update]
 	);
@@ -38,22 +33,35 @@ export default function FormularioCategoria() {
 	// When a category is selected, it fills all the forms with the data of said category
 	useEffect(
 		() => {
-			axios.get(`${urlBack}/products/category/${selected.name}`).then(res => {
-				setState({
-					name: res.data ? res.data.name : '',
-					description: res.data ? res.data.description : ''
-				});
-			});
+			// axios.get(`${urlBack}/products/category/${selected.name}`).then(res => {
+			// 	setInputValues({
+			// 		name: res.data ? res.data.name : '',
+			// 		description: res.data ? res.data.description : ''
+			// 	});
+      // });
+
+      /*======================================================*/
+
+      console.log(categories)
+
+      // const cat = categories.find(c => c.id === selected.id)
+      // setInputValues({
+      //   name: cat ? cat.name : '',
+      //   description: cat ? cat.description : ''
+      // })
+
 		},
 		[selected]
 	);
 
 	// Updates the state when something is written in the forms
-	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
+	const handleInputChange = event => setInputValues({...InputValues, [event.target.name]: event.target.value});
 
 	// Sets which category is currently being selected
 	const handleSelectChange = event => {
-		setSelected({
+    console.log('handle Select Change')
+    console.log(categories)
+    setSelected({
 			id: event.target.value,
 			name: event.target.options[event.target.selectedIndex].text
 		});
@@ -64,7 +72,7 @@ export default function FormularioCategoria() {
 		event.preventDefault();
 
 		axios
-			.post(`${urlBack}/products/category`, state)
+			.post(`${urlBack}/products/category`, InputValues)
 			.then(response => {
 				alert(response.statusText);
 				setUpdate(!update);
@@ -94,7 +102,7 @@ export default function FormularioCategoria() {
 		event.preventDefault();
 
 		axios
-			.put(`${urlBack}/products/category/${selected.id}`, state)
+			.put(`${urlBack}/products/category/${selected.id}`, InputValues)
 			.then(response => {
 				alert(response.statusText);
 				setUpdate(!update);
@@ -105,7 +113,8 @@ export default function FormularioCategoria() {
 	};
 
 	return (
-		<form className="form" onSubmit={handleAdd}>			<div className="container">
+		<form className="form" onSubmit={handleAdd}>
+			<div className="container">
 				<h3 className="titulo">Agregar Categorías</h3>
 				<br />
 				<label htmlFor="nombre">Nombre:</label>
@@ -113,7 +122,7 @@ export default function FormularioCategoria() {
 					className="form-control"
 					type="text"
 					name="name"
-					value={state.name}
+					value={InputValues.name}
 					placeholder="Categoria"
 					onChange={handleInputChange}
 				/>
@@ -124,7 +133,7 @@ export default function FormularioCategoria() {
 				<textarea
 					className="form-control"
 					name="description"
-					value={state.description}
+					value={InputValues.description}
 					placeholder="Ingrese una descripción de la categoría"
 					onChange={handleInputChange}
 				/>
@@ -140,9 +149,9 @@ export default function FormularioCategoria() {
 							<option selected value="0">
 								Categorías...
 							</option>
-							{/* {categorySelector.map(categoria => {
+							{categories && categories.map(categoria => {
 								return <option value={categoria.id}>{categoria.name}</option>;
-							})} */}
+							})}
 						</select>
 						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
 							Editar

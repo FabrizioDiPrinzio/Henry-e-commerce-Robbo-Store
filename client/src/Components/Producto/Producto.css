@@ -1,1 +1,49 @@
 /** CSS de Producto **/
+:root {
+  --max-width: 700px;
+  --beau-blue: #d2e3f9ff;
+  --baby-blue-eyes: #98b7f0ff;
+  --glaucous: #617cc7ff;
+  --ksu-purple: #563488ff;
+  --razzmatazz: #d53467ff
+}
+
+.productContainer {
+  max-width: var(--max-width);
+  margin: auto;
+  margin-top: 80px;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+}
+
+.productTitle {
+  color: var(--ksu-purple);
+  font-size: 225%;
+}
+
+.productImg {
+  border: solid lightgray;
+  border-width: thin;
+  border-radius: 15px;
+  max-width: 400px;
+  max-height: 400px;
+  margin-bottom: 10px;
+}
+
+.productCont2 {
+  margin-bottom: 50px;
+  border-radius: 15px;
+}
+
+.infoCard {
+  background-color: var(--glaucous);
+  color: white;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2);
+}
+
+.infoCardData {
+  font-weight: bold;
+}

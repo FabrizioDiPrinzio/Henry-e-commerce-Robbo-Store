@@ -2,9 +2,7 @@ import * as actionTypes from '../Actions/actionTypes';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-let initialState;
-axios.get(`${urlBack}/products/category/names`).then(res => {initialState = res.data})
-
+const initialState = axios.get(url);
 
 // const state = { categories: { categories: [] } }
 

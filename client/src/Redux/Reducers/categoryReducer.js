@@ -1,6 +1,6 @@
 import * as actionTypes from '../Actions/actionTypes';
 
-const initialState = {categories: []};
+const initialState = [];
 
 // const state = { categories: { categories: [] } }
 

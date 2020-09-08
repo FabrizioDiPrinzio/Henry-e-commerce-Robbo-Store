@@ -1,20 +1,22 @@
-import React, {useState, useEffect, useRef} from 'react';
-import axios from 'axios';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
+import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import * as action from '../../Redux/Actions/actions.js';
 import './FormularioCategoria.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import axios from 'axios';
 //------ Fin de imports -----
 
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioCategoria() {
 	const [state, setState] = useState({name: '', description: ''});
-	const [categories, setCategories] = useState([]);
+	const [categories, setCategories] = useState([]); // [{id: 1 , name: "category 1", description: "something" }]
 	const [update, setUpdate] = useState(false);
 	const [selected, setSelected] = useState({id: null, name: null});
 	const lista = useRef(0);
-	const categorySelector = useSelector(state => state.categories);
+
+	const categorySelector = useSelector(state => state.categories.categories);
+	console.log(categorySelector); // es
 	const dispatch = useDispatch();
 
 	// Updates the category list whenever there's a change
@@ -27,7 +29,8 @@ export default function FormularioCategoria() {
 			// 	}));
 			// 	setCategories(categoryTypes);
 			// });
-			dispatch(action.getAllCategories());
+			dispatch(allActions.categoryActions.getAllCategories());
+			// setCategories(categorySelector)
 		},
 		[update]
 	);
@@ -102,9 +105,7 @@ export default function FormularioCategoria() {
 	};
 
 	return (
-		<form className="form" onSubmit={handleAdd}>
-			{console.log(categorySelector)}
-			<div className="container">
+		<form className="form" onSubmit={handleAdd}>			<div className="container">
 				<h3 className="titulo">Agregar Categorías</h3>
 				<br />
 				<label htmlFor="nombre">Nombre:</label>
@@ -139,9 +140,9 @@ export default function FormularioCategoria() {
 							<option selected value="0">
 								Categorías...
 							</option>
-							{categorySelector.categories.map(categoria => {
+							{/* {categorySelector.map(categoria => {
 								return <option value={categoria.id}>{categoria.name}</option>;
-							})}
+							})} */}
 						</select>
 						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
 							Editar

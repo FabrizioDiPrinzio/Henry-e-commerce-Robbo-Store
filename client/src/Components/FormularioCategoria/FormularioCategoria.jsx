@@ -9,17 +9,13 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioCategoria() {
-	const categories = useSelector(state => state.categories.allCategories);
+  const categories = useSelector(state => state.categories.allCategories);
+  const dispatch = useDispatch();
   
-	const [InputValues, setInputValues] = useState({name: '', description: ''});
- 	const [selected, setSelected] = useState({id: null, name: null});
+	const [inputValues, setInputValues] = useState({id: 0, name: '', description: ''});
+ 	const [selectedCategoryId, setSelectedCategoryId] = useState(0);
  	const [update, setUpdate] = useState(false);
 	const lista = useRef(0);
-
-
-  
-	console.log(categories); // trae del store de redux el array con categorias.
-	const dispatch = useDispatch();
 
 	// Updates the category list whenever there's a change
 	useEffect(
@@ -29,41 +25,27 @@ export default function FormularioCategoria() {
 		[update]
 	);
 
-	// When a category is selected, it fills all the forms with the data of said category
-	useEffect(
-		() => {
-			// axios.get(`${urlBack}/products/category/${selected.name}`).then(res => {
-			// 	setInputValues({
-			// 		name: res.data ? res.data.name : '',
-			// 		description: res.data ? res.data.description : ''
-			// 	});
-      // });
-
-      /*======================================================*/
-
-      // console.log(categories)
-
-      const cat = categories.find(c => c.id === parseInt(selected.id))
-      console.log('selected when selected')
-      console.log(selected)
-      setInputValues({
-        name: cat ? cat.name : '',
-        description: cat ? cat.description : ''
-      })
-
-		},
-		[selected]
-	);
-
 	// Updates the state when something is written in the forms
-	const handleInputChange = event => setInputValues({...InputValues, [event.target.name]: event.target.value});
+	const handleInputChange = event => {
+    setInputValues({...inputValues, [event.target.name]: event.target.value});
+  }
 
 	// Sets which category is currently being selected
 	const handleSelectChange = event => {
-    setSelected({
-			id: event.target.value,
-			name: event.target.options[event.target.selectedIndex].text
-		});
+    let selectedId = parseInt(event.target.value)
+    setSelectedCategoryId(selectedId);
+
+
+    if (selectedId !== 0) {
+      let currentCategory =  categories.find(c => c.id === selectedId)
+      setInputValues(currentCategory)
+
+    } else {
+      setSelectedCategoryId(0)
+
+      setInputValues({id: 0, name: '', description: ''})
+    }
+
 	};
 
 	// Creates a new category
@@ -71,11 +53,11 @@ export default function FormularioCategoria() {
 		event.preventDefault();
 
 		axios
-			.post(`${urlBack}/products/category`, InputValues)
+			.post(`${urlBack}/products/category`, inputValues)
 			.then(response => {
 				alert(response.statusText);
 				setUpdate(!update);
-				setSelected({id: null, name: null});
+				setSelectedCategoryId(0);
 				lista.current.value = 0;
 			})
 			.catch(error => alert('no se pudo agregar la categoria: ' + error.message));
@@ -86,11 +68,11 @@ export default function FormularioCategoria() {
 		event.preventDefault();
 
 		axios
-			.delete(`${urlBack}/products/category/${selected.id}`)
+			.delete(`${urlBack}/products/category/${selectedCategoryId.id}`)
 			.then(response => {
 				alert(response.statusText);
 				setUpdate(!update);
-				setSelected({id: null, name: null});
+				setSelectedCategoryId({id: null, name: null});
 				lista.current.value = 0;
 			})
 			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message));
@@ -100,12 +82,12 @@ export default function FormularioCategoria() {
 	const handleEdit = event => {
 		event.preventDefault();
 
-		console.log('Input Values when edited')
-		console.log(InputValues)
+		console.log('Input Values when edit is submited')
+		console.log(inputValues)
 
-		dispatch(allActions.categoryActions.putCategory(parseInt(selected.id), InputValues));
+		dispatch(allActions.categoryActions.putCategory(parseInt(selectedCategoryId.id), inputValues));
 		setUpdate(!update);
-		setSelected({id: null, name: null});
+		setSelectedCategoryId({id: 0, name: null, description: null});
 		lista.current.value = 0;
 		dispatch(allActions.categoryActions.getAllCategories());
 
@@ -121,7 +103,7 @@ export default function FormularioCategoria() {
 					className="form-control"
 					type="text"
 					name="name"
-					value={InputValues.name}
+					value={inputValues.name}
 					placeholder="Categoria"
 					onChange={handleInputChange}
 				/>
@@ -132,7 +114,7 @@ export default function FormularioCategoria() {
 				<textarea
 					className="form-control"
 					name="description"
-					value={InputValues.description}
+					value={inputValues.description}
 					placeholder="Ingrese una descripción de la categoría"
 					onChange={handleInputChange}
 				/>

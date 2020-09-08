@@ -9,11 +9,11 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioCategoria() {
-  const categories = useSelector(state => state.categories.categories);
+	const categories = useSelector(state => state.categories.allCategories);
   
 	const [InputValues, setInputValues] = useState({name: '', description: ''});
-  const [selected, setSelected] = useState({id: null, name: null});
-  const [update, setUpdate] = useState(false);
+ 	const [selected, setSelected] = useState({id: null, name: null});
+ 	const [update, setUpdate] = useState(false);
 	const lista = useRef(0);
 
 
@@ -24,8 +24,7 @@ export default function FormularioCategoria() {
 	// Updates the category list whenever there's a change
 	useEffect(
 		() => {
-      dispatch(allActions.categoryActions.getAllCategories());
-      console.log(categories)
+			dispatch(allActions.categoryActions.getAllCategories());
 		},
 		[update]
 	);
@@ -42,13 +41,15 @@ export default function FormularioCategoria() {
 
       /*======================================================*/
 
-      console.log(categories)
+      // console.log(categories)
 
-      // const cat = categories.find(c => c.id === selected.id)
-      // setInputValues({
-      //   name: cat ? cat.name : '',
-      //   description: cat ? cat.description : ''
-      // })
+      const cat = categories.find(c => c.id === parseInt(selected.id))
+      console.log('selected when selected')
+      console.log(selected)
+      setInputValues({
+        name: cat ? cat.name : '',
+        description: cat ? cat.description : ''
+      })
 
 		},
 		[selected]
@@ -59,8 +60,6 @@ export default function FormularioCategoria() {
 
 	// Sets which category is currently being selected
 	const handleSelectChange = event => {
-    console.log('handle Select Change')
-    console.log(categories)
     setSelected({
 			id: event.target.value,
 			name: event.target.options[event.target.selectedIndex].text
@@ -101,15 +100,15 @@ export default function FormularioCategoria() {
 	const handleEdit = event => {
 		event.preventDefault();
 
-		axios
-			.put(`${urlBack}/products/category/${selected.id}`, InputValues)
-			.then(response => {
-				alert(response.statusText);
-				setUpdate(!update);
-				setSelected({id: null, name: null});
-				lista.current.value = 0;
-			})
-			.catch(error => alert('no se pudo editar la categoria: ' + error.message));
+		console.log('Input Values when edited')
+		console.log(InputValues)
+
+		dispatch(allActions.categoryActions.putCategory(parseInt(selected.id), InputValues));
+		setUpdate(!update);
+		setSelected({id: null, name: null});
+		lista.current.value = 0;
+		dispatch(allActions.categoryActions.getAllCategories());
+
 	};
 
 	return (
@@ -149,7 +148,8 @@ export default function FormularioCategoria() {
 							<option selected value="0">
 								Categorías...
 							</option>
-							{categories && categories.map(categoria => {
+              {/* categories en el primer render está vacío porque el useEffect es el que hace el dispatch del get*/}
+							{categories.map(categoria => {
 								return <option value={categoria.id}>{categoria.name}</option>;
 							})}
 						</select>

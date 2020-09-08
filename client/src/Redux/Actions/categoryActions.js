@@ -16,8 +16,8 @@ export const getAllCategories = () => dispatch => {
 		.then(res => {
 			const categories = res.data.map(cat => ({
 				name: cat.name,
-        id: cat.id,
-        description: cat.description
+        		id: cat.id,
+        		description: cat.description
 			}));
 			return categories;
 		})
@@ -44,9 +44,20 @@ export const deleteCategory = () => dispatch => {
 	});
 };
 
-export const putCategory = category => dispatch => {
-	dispatch({
-		type: actionTypes.PUT_CATEGORY,
-		payload: category
-	});
+export const putCategory = (id, body) => dispatch => {
+	axios
+		.put(`${urlBack}/products/category/${id}`, body)
+		.then(response => {
+			dispatch({
+				type: actionTypes.PUT_CATEGORY,
+				payload: response
+			})
+		})
+		.catch(error => {
+			dispatch({
+				type: actionTypes.PUT_CATEGORY,
+				payload: error
+			})
+		});
+
 };

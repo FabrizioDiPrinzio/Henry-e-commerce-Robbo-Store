@@ -5,6 +5,7 @@ import categoryReducer from './categoryReducer';
 
 export default combineReducers({
 	categories: categoryReducer
+	// carrito: carritoReducer
 	// products: productReducer,
 	// users: userReducer
 });

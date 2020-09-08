@@ -2,16 +2,18 @@ import * as actionTypes from '../Actions/actionTypes';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-const initialState = axios.get(url);
+const initialState = {
+	allCategories:[]
+};
 
-// const state = { categories: { categories: [] } }
+// const state = { categories: { allCategories: [] } }
 
 export default function categoryReducer(state = initialState, action) {
 	switch (action.type) {
 		case actionTypes.GET_ALL_CATEGORIES:
 			return {
 				...state,
-				categories: action.payload
+				allCategories: action.payload
 			};
 		case actionTypes.GET_CATEGORY:
 			return;
@@ -20,6 +22,10 @@ export default function categoryReducer(state = initialState, action) {
 		case actionTypes.DELETE_CATEGORY:
 			return;
 		case actionTypes.PUT_CATEGORY:
+			return {
+				...state,
+				response: action.payload 
+			}
 			return;
 		default:
 			return state;

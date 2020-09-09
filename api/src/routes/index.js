@@ -1,10 +1,10 @@
 const express = require('express');
 // import all routers;
 const productRouter = require('./product.js');
+const user = require('./user.js');
+const category = require('./category.js');
 const {Product} = require('../db.js');
 const {Op} = require('sequelize');
-
-const category = require('./category.js');
 
 const app = express();
 
@@ -13,6 +13,7 @@ const app = express();
 // app.use('/auth', authRouter);
 app.use('/products', productRouter);
 app.use('/products/category', category);
+app.use('/user', user);
 
 app.get('/', (req, res) => {
 	res.send('Hola');

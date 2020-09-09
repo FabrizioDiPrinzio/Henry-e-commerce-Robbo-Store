@@ -1,0 +1,46 @@
+:root {
+	--beau-blue: #d2e3f9ff;
+	--baby-blue-eyes: #98b7f0ff;
+	--glaucous: #617cc7ff;
+	--ksu-purple: #563488ff;
+	--razzmatazz: #d53467ff;
+}
+.containerCarrito{
+    margin: auto;
+    margin-top: 80px;
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+}
+
+.containerComprar{
+    width: 300px;
+    height: 200px;
+    padding: 10px;
+    margin-top: 20px;
+    align-self: flex-end;
+    background-color: var(--baby-blue-eyes);
+    border-radius: 10% 10% 0% 0%;
+    margin-right: 15px;
+    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2)
+}
+
+.btnComprar{
+    width: 300px;
+    height: 50px;
+    padding: 10px;
+    align-self: flex-end;
+    background-color: var(--razzmatazz);
+    border-radius: 0% 0% 20% 20%;
+    margin-right: 15px;
+    font-size: 25px;
+    margin-bottom: 50px;
+    border: none;
+    box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2)
+    
+
+}

@@ -18,8 +18,10 @@ export const getAllProducts = () => dispatch => {
 			}));
 
 			dispatch({type: actionTypes.GET_ALL_PRODUCTS, payload: products});
+
+			dispatch({type: actionTypes.CLEAN_MESSAGES});
 		})
-		.catch(err => dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.message}));
+		.catch(err => dispatch(catchError(err)));
 };
 
 // export const getProduct = () => dispatch => {
@@ -37,7 +39,7 @@ export const postProduct = (product, categories) => dispatch => {
 			if (categories.length) dispatch(modifyProductCategories(res.data.id, categories));
 			else dispatch(getAllProducts());
 		})
-		.catch(err => dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.message}));
+		.catch(err => dispatch(catchError(err)));
 };
 
 export const deleteProduct = productId => dispatch => {
@@ -48,7 +50,7 @@ export const deleteProduct = productId => dispatch => {
 
 			dispatch(getAllProducts());
 		})
-		.catch(err => dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.message}));
+		.catch(err => dispatch(catchError(err)));
 };
 
 export const putProduct = (productId, body, categories) => dispatch => {
@@ -57,12 +59,10 @@ export const putProduct = (productId, body, categories) => dispatch => {
 		.then(res => {
 			dispatch({type: actionTypes.PUT_PRODUCT, payload: res.data}); // dispacha una action que es un objeto y en el payload está la respuesta.
 
-			if (categories.length) dispatch(modifyProductCategories(productId, categories));
+			if (categories.length > 0) dispatch(modifyProductCategories(productId, categories));
 			else dispatch(getAllProducts());
 		})
-		.catch(error => {
-			dispatch({type: actionTypes.PRODUCTS_ERROR, payload: error.message}); // dispacha una action que es un objeto y en el payload está el error.
-		});
+		.catch(err => dispatch(catchError(err)));
 };
 
 export const modifyProductCategories = (productId, categories) => dispatch => {
@@ -74,7 +74,7 @@ export const modifyProductCategories = (productId, categories) => dispatch => {
 				.then(() => {
 					if (i === categories.length - 1) dispatch(getAllProducts());
 				})
-				.catch(err => dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.message}));
+				.catch(err => dispatch(catchError(err)));
 		}
 		else if (!cat.add) {
 			axios
@@ -83,7 +83,12 @@ export const modifyProductCategories = (productId, categories) => dispatch => {
 				.then(() => {
 					if (i === categories.length - 1) dispatch(getAllProducts());
 				})
-				.catch(err => dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.message}));
+				.catch(err => dispatch(catchError(err)));
 		}
 	});
+};
+
+export const catchError = err => dispatch => {
+	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.message});
+	dispatch({type: actionTypes.CLEAN_MESSAGES});
 };

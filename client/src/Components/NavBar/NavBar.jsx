@@ -29,6 +29,7 @@ export default function NavBar() {
 				<img src="../favicon.svg" alt="logo" className="logo" />
 				<span className="espacioBlanco"> </span>
 				<div>
+          
           <Link to="/userRegistration">
             <button className="UserBtn">
               <svg
@@ -46,7 +47,8 @@ export default function NavBar() {
               </svg>
             </button>
           </Link>
-
+        
+					<Link to='/carrito'>
 					<button className="CartBtn">
 						<svg
 							width="2em"
@@ -62,6 +64,7 @@ export default function NavBar() {
 							/>
 						</svg>
 					</button>
+					</Link>
 				</div>
 			</nav>
 

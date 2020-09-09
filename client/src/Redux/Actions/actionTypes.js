@@ -1,3 +1,7 @@
+// -------------------- All -------------------------
+
+export const CLEAN_MESSAGES = 'CLEAN_MESSAGES';
+
 // ----------- Category Actions ---------------------
 
 export const GET_ALL_CATEGORIES = 'GET_ALL_CATEGORIES';

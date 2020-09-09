@@ -9,39 +9,41 @@ export const getCategory = () => dispatch => {
 		payload: null
 	});
 };
-
+// ============================================================================ The function bellow is maybe the only usefull function
 export const getAllCategories = () => dispatch => {
 	axios
-		.get(`${urlBack}/products/category/names`)  // hace la petición al back
+		.get(`${urlBack}/products/category/names`)
 		.then(response => {
 
-      const categories = response.data.map(category => {
-        return {
-          id: category.id,
-          name: category.name,
-          description: category.description
-        }
-      }) // guarda en la constante la respuesta de la petición (mapenado lo que necesita)
-      
+      const categories = response.data
+
       dispatch({
 				type: actionTypes.GET_ALL_CATEGORIES,
-				payload: categories                    // dispacha una action que es un objeto y en el payload está la respuesta.
+				payload: categories
       })
       
 		}).catch(error => {
-      const errorMsg = error.message // si hubo un error guarda el mensaje
-      dispatch({
-        type: actionTypes.CATEGORIES_ERROR,
-        payload: errorMsg  // dispacha una action que es un objeto y en el payload está el error.
-      })
-    });
+      const errorMsg = error.message
+      dispatch(errorActionCreator(errorMsg))
+    })
 };
-
+// ============================================================================ The function above is maybe the only usefull function
 export const postCategory = category => dispatch => {
-	dispatch({
-		type: actionTypes.POST_CATEGORY,
-		payload: category
-	});
+  axios
+  	.post(`${urlBack}/products/category`, category)
+  	.then(response => {
+      
+      dispatch({
+        type: actionTypes.POST_CATEGORY,
+        payload: response.data
+      })
+  
+      dispatch(getAllCategories())
+    }).catch(error => {
+      const errorMsg = error.message
+      dispatch(errorActionCreator(errorMsg))
+    });
+
 };
 
 export const deleteCategory = () => dispatch => {
@@ -52,23 +54,28 @@ export const deleteCategory = () => dispatch => {
 };
 
 export const putCategory = (id, body) => dispatch => {
-  axios.put(`${urlBack}/products/category/${id}`, body) // hace la petición con los parametros pasados
+  axios.put(`${urlBack}/products/category/${id}`, body)
   .then(response => {
     const editedCategory = response.data
     
     dispatch({
       type: actionTypes.PUT_CATEGORY,
-      payload: editedCategory         // dispacha una action que es un objeto y en el payload está la respuesta.
+      payload: editedCategory
     })
 
     dispatch(getAllCategories())
     
   }).catch(error => {
     const errorMsg = error.message
-    dispatch({
-      type: actionTypes.CATEGORIES_ERROR,
-      payload: errorMsg  // dispacha una action que es un objeto y en el payload está el error.
-    })
+    dispatch(errorActionCreator(errorMsg))
   });
 
 };
+// ============================================================================ The function bellow is maybe the only usefull function 
+const errorActionCreator = errorMessage => {
+  return {
+      type: actionTypes.CATEGORIES_ERROR,
+      payload: errorMessage
+    }
+}
+// ============================================================================ The function above is maybe the only usefull function

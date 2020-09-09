@@ -1,25 +1,21 @@
 import React, {useState, useEffect} from 'react';
+import {allActions} from '../../../Redux/Actions/actions';
+import {useSelector, useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
 import './menu.css';
-import axios from 'axios';
-
-const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Menu() {
+	const categories = useSelector(state => state.categories.allCategories);
+	const dispatch = useDispatch();
+
 	const [stateMenu, setStateMenu] = useState({
 		line: 'line',
 		menu: 'menuClose',
 		cross: 'crossHide'
 	});
-	const [categories, setCategories] = useState([]);
 
 	useEffect(() => {
-		axios.get(`${urlBack}/products/category/names`).then(res => {
-			const resp = res.data.map(e => {
-				return e.name;
-			});
-			setCategories(resp);
-		});
+		dispatch(allActions.categoryActions.getAllCategories());
 	}, []);
 
 	const clickHandle = event => {
@@ -45,8 +41,8 @@ export default function Menu() {
 				<ul className="menuList">
 					{categories.map(categoria => {
 						return (
-							<li className="categoria" key={categoria}>
-								<Link to={`/categories/${categoria}`}> {categoria}</Link>
+							<li className="categoria" key={categoria.name}>
+								<Link to={`/categories/${categoria.name}`}> {categoria.name}</Link>
 								<div />
 							</li>
 						);

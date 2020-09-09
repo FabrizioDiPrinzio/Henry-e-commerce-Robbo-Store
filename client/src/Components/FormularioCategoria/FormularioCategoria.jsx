@@ -13,24 +13,20 @@ export default function FormularioCategoria() {
   const dispatch = useDispatch();
   
 	const [inputValues, setInputValues] = useState({id: 0, name: '', description: ''});
- 	const [selectedCategoryId, setSelectedCategoryId] = useState(0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(0);
 	const lista = useRef(0);
 
-	// Updates the category list whenever there's a change
 	useEffect(
 		() => {
       dispatch(allActions.categoryActions.getAllCategories());
-      //console.log(categories)
 		},
 		[]
 	);
 
-	// Updates the state when something is written in the forms
 	const handleInputChange = event => {
     setInputValues({...inputValues, [event.target.name]: event.target.value});
   }
 
-	// Sets which category is currently being selected
 	const handleSelectChange = event => {
     let selectedId = parseInt(event.target.value)
     setSelectedCategoryId(selectedId);
@@ -49,13 +45,19 @@ export default function FormularioCategoria() {
 		event.preventDefault();
 
 		axios
-			.post(`${urlBack}/products/category`, inputValues)
+			.post(`${urlBack}/products/category`, {...inputValues, id: null})
 			.then(response => {
 				alert(response.statusText);
 				setSelectedCategoryId(0);
-				lista.current.value = 0;
-			})
-			.catch(error => alert('no se pudo agregar la categoria: ' + error.message));
+        lista.current.value = 0;
+        setInputValues({ id: 0, name: '', description: '' })
+			}).then(() => {
+        dispatch(allActions.categoryActions.getAllCategories());
+      })
+      .catch(error => alert('no se pudo agregar la categoria: ' + error.message));
+    
+      // dispatch(allActions.categoryActions.postCategory(inputValues));
+    
 	};
 
 	// Deletes the selected category
@@ -63,12 +65,15 @@ export default function FormularioCategoria() {
 		event.preventDefault();
 
 		axios
-			.delete(`${urlBack}/products/category/${selectedCategoryId.id}`)
+			.delete(`${urlBack}/products/category/${selectedCategoryId}`)
 			.then(response => {
 				alert(response.statusText);
-				setSelectedCategoryId({id: null, name: null});
-				lista.current.value = 0;
-			})
+				setSelectedCategoryId(0);
+        lista.current.value = 0;
+        setInputValues({ id: 0, name: '', description: '' })
+			}).then(() => {
+        dispatch(allActions.categoryActions.getAllCategories());
+      })
 			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message));
 	};
 
@@ -76,13 +81,19 @@ export default function FormularioCategoria() {
 	const handleEdit = event => {
 		event.preventDefault();
 
-		console.log('Input Values when edit is submited')
-		console.log(inputValues)
-
-		dispatch(allActions.categoryActions.putCategory(parseInt(selectedCategoryId), inputValues));
-		setSelectedCategoryId({id: 0, name: null, description: null});
-		lista.current.value = 0;
-
+    // dispatch(allActions.categoryActions.putCategory(parseInt(selectedCategoryId), inputValues));
+    
+    axios.put(`${urlBack}/products/category/${selectedCategoryId}`, inputValues)
+    .then(response => {
+      alert(response.data)
+      setSelectedCategoryId(0);
+      lista.current.value = 0;
+      setInputValues({ id: 0, name: '', description: '' })
+    }).then(() => {
+      dispatch(allActions.categoryActions.getAllCategories());
+    })
+    .catch(error => alert('no se pudo eliminar la categoria: ' + error.message));
+    
 	};
 
 	return (

@@ -40,7 +40,7 @@ Purchase_order.belongsTo(User, {as: 'buyer'});
 Purchase_order.hasMany(Orderline);
 
 Reviews.belongsTo(User, {as: 'creator'});
-Reviews.belongsTo(Product); 
+Reviews.belongsTo(Product);
 
 User.hasMany(Reviews);
 Product.hasMany(Reviews);

@@ -9,40 +9,40 @@ module.exports = (sequelize) => {
       //idReviews
 
     name: {
-            type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isString(value) {
-                if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
-            }
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isString(value) {
+            if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
         }
+      }
     },
-        rol:{
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isString(value) {
-                if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
-            }
+    rol:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isString(value) {
+            if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
         }
+      }
     },
         
-        email:{
-        type:DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-            isEmail: true,
-           }
-        },
-        password:{
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-            isString(value) {
-                if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
-                }
-            },
+    email:{
+      type:DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+          isEmail: true,
+      }
+    },
+    password:{
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isString(value) {
+          if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
         }
-    });
+      },
+    }
+  });
 };

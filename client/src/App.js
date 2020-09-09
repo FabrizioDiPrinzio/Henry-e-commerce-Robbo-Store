@@ -6,6 +6,7 @@ import Home from './Components/Home/Home.jsx';
 import Producto from './Components/Producto/Producto.jsx';
 import FormularioProducto from './Components/FormularioProducto/ProductForm.jsx';
 import FormularioCategoria from './Components/FormularioCategoria/FormularioCategoria.jsx';
+import UserForm from './Components/FormularioUsuario/UserForm.jsx'
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
 
@@ -22,6 +23,7 @@ function App() {
 				<Route exact path="/product_form" component={FormularioProducto} />
 				<Route exact path="/category_form" component={FormularioCategoria} />
 				<Route exact path="/producto/:id" component={Producto} />
+        <Route exact path="/userRegistration" component={UserForm} />
 			</Router>
 		</div>
 	);

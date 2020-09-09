@@ -10,10 +10,11 @@ const {productActions} = allActions;
 export default function ProductFormFunction() {
 	// Redux
 	const categories = useSelector(state => state.categories.allCategories);
-	const products = useSelector(state => state.products.allProducts);
+	const productStore = useSelector(state => state.products);
+	const {allProducts: products, lastResponse, lastError} = productStore;
 	const dispatch = useDispatch();
 
-	// Hooks
+	// React Hooks
 	const [inputValues, setInputValues] = useState({
 		name: '',
 		price: '',
@@ -35,6 +36,15 @@ export default function ProductFormFunction() {
 			stock: '',
 			image: '',
 			description: ''
+		});
+		resetCheckboxes();
+	}
+
+	function resetCheckboxes() {
+		checkboxes.map(c => {
+			c.add = false;
+			c.modified = false;
+			return c;
 		});
 	}
 
@@ -61,24 +71,43 @@ export default function ProductFormFunction() {
 		dispatch(productActions.getAllProducts());
 	}, []);
 
+	// Creates an alert after each successful or failed operation
+	useEffect(
+		() => {
+			if (lastResponse) alert(lastResponse.message);
+			if (lastError) alert(lastError);
+
+			// Resets all fields after getting a response from the server
+			resetFields();
+		},
+		[products, lastError]
+	);
+
 	// Updates the state when something is written in the forms
-	const handleInputChange = event =>
+	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
+
+		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
+		checkboxes.map(c => {
+			if (c.add) c.modified = true;
+		});
+	};
 
 	// Updates the state when something is written in the numbers. Can't be a negative number.
 	const handleNumberChange = event => {
 		const value = parseInt(event.target.value);
 		setInputValues({...inputValues, [event.target.name]: value >= 0 ? value : 0});
+
+		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
+		checkboxes.map(c => {
+			if (c.add) c.modified = true;
+		});
 	};
 
 	// Sets which product is currently being selected
 	const handleSelectChange = event => {
 		// Unchecks all categories
-		checkboxes.map(c => {
-			c.add = false;
-			c.modified = false;
-			return c;
-		});
+		resetCheckboxes();
 
 		const selectedId = parseInt(event.target.value);
 		setSelected(selectedId);
@@ -132,8 +161,6 @@ export default function ProductFormFunction() {
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
 		dispatch(productActions.postProduct(changedState, modifiedCategories));
-
-		resetFields();
 	};
 
 	// Deletes the selected product
@@ -141,8 +168,6 @@ export default function ProductFormFunction() {
 		event.preventDefault();
 
 		dispatch(productActions.deleteProduct(selected));
-
-		resetFields();
 	};
 
 	// Edits the selected product
@@ -161,8 +186,6 @@ export default function ProductFormFunction() {
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
 		dispatch(productActions.putProduct(selected, changedState, modifiedCategories));
-
-		resetFields();
 	};
 
 	return (

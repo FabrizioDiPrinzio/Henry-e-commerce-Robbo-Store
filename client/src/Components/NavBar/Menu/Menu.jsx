@@ -42,7 +42,7 @@ export default function Menu() {
 					{categories.map(categoria => {
 						return (
 							<li className="categoria" key={categoria.name}>
-								<Link to={`/categories/${categoria.name}`}> {categoria.name}</Link>
+								<Link to={`/search?category=${categoria.name}`}> {categoria.name}</Link>
 								<div />
 							</li>
 						);

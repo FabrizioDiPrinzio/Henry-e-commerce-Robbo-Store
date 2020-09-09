@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
 import ProductCard from '../Product Card/ProductCard.jsx';
 import axios from 'axios';
 import './Catalogo.css';
@@ -7,30 +7,37 @@ import './Catalogo.css';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Catalogo(props) {
+	// Redux
+	const products = useSelector(state => state.products.allProducts);
+	const dispatch = useDispatch();
+
+	// Hooks
 	const [robots, setRobots] = useState([]);
-	const {categoria} = useParams();
-	const params = new URLSearchParams(props.location.search).get('query');
+	const query = new URLSearchParams(props.location.search).get('query');
+	const category = new URLSearchParams(props.location.search).get('category');
+
+	useEffect(
+		() => {
+			dispatch(productActions.getAllProducts());
+		},
+		[products]
+	);
 
 	useEffect(
 		() => {
 			// Main page, returns ALL products
-			if (!categoria && !params) {
-				axios.get(`${urlBack}/products`).then(res => setRobots(res.data));
+			if (!category && !query) {
+				setRobots(products);
 			}
-			else if (categoria) {
+			if (category) {
 				// Filter by category
-				axios
-					.get(`${urlBack}/products/category/${categoria}`)
-					.then(res => setRobots(res.data.products))
-					.catch(err => {
-						setRobots(null);
-						console.log(err.message);
-					});
+				const filteredByCategory = robots.filter(r => r.categories.includes(category));
+				setRobots(filteredByCategory);
 			}
-			else if (params) {
+			else if (query) {
 				// Search by query
 				axios
-					.get(`${urlBack}/search?query=${params}`)
+					.get(`${urlBack}/search?query=${query}`)
 					.then(res => setRobots(res.data))
 					.catch(err => {
 						setRobots(null);
@@ -38,7 +45,7 @@ export default function Catalogo(props) {
 					});
 			}
 		},
-		[categoria, params]
+		[category, query]
 	);
 
 	return (

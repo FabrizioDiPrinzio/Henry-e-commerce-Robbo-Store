@@ -86,22 +86,12 @@ export default function ProductFormFunction() {
 	// Updates the state when something is written in the forms
 	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
-
-		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
-		checkboxes.map(c => {
-			if (c.add) c.modified = true;
-		});
 	};
 
 	// Updates the state when something is written in the numbers. Can't be a negative number.
 	const handleNumberChange = event => {
 		const value = parseInt(event.target.value);
 		setInputValues({...inputValues, [event.target.name]: value >= 0 ? value : 0});
-
-		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
-		checkboxes.map(c => {
-			if (c.add) c.modified = true;
-		});
 	};
 
 	// Sets which product is currently being selected
@@ -158,7 +148,13 @@ export default function ProductFormFunction() {
 		const wrappedImage = [inputValues.image];
 		const changedState = {...inputValues, image: wrappedImage, id: null};
 
-		const modifiedCategories = checkboxes.filter(cat => cat.modified);
+		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
+		const checkedCategories = checkboxes.map(c => {
+			if (c.add) c.modified = true;
+			return c;
+		});
+
+		const modifiedCategories = checkedCategories.filter(cat => cat.modified);
 
 		dispatch(productActions.postProduct(changedState, modifiedCategories));
 	};

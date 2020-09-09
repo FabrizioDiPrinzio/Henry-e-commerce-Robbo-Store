@@ -16,7 +16,7 @@ router.get('/:id', (req, res) => {
 });
 
 //Ruta para crear Usuario
-router.post('/singup', (req, res) => {
+router.post('/signup', (req, res) => {
 	const {name, rol, email, password} = req.body;
 	if (!name && !rol && !email && !password) {
     return res.status(400).send('Falta algún parámetro');
@@ -67,5 +67,8 @@ router.delete('/:id', (req, res) => {
 		else return res.sendStatus(200);
 	});
 });
+
+
+//rutas de cart 
 
 module.exports = router;

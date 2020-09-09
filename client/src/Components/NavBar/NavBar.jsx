@@ -30,7 +30,7 @@ export default function NavBar() {
 				<span className="espacioBlanco"> </span>
 				<div>
           
-          <Link to="/userRegistration">
+          <Link to="/signup">
             <button className="UserBtn">
               <svg
                 width="2em"

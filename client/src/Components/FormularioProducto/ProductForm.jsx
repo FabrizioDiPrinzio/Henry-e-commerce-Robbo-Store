@@ -8,10 +8,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 const {productActions} = allActions;
 
 export default function ProductFormFunction() {
+	// Redux
 	const categories = useSelector(state => state.categories.allCategories);
 	const products = useSelector(state => state.products.allProducts);
 	const dispatch = useDispatch();
 
+	// Hooks
 	const [inputValues, setInputValues] = useState({
 		name: '',
 		price: '',
@@ -22,6 +24,21 @@ export default function ProductFormFunction() {
 	const [checkboxes, setCheckboxes] = useState([]);
 	const [selected, setSelected] = useState(0);
 	const lista = useRef(0);
+
+	// Auxiliary functions
+	function resetFields() {
+		setSelected(0);
+		lista.current.value = 0;
+		setInputValues({
+			name: '',
+			price: '',
+			stock: '',
+			image: '',
+			description: ''
+		});
+	}
+
+	// ------------  Functionality ----------------------
 
 	// Gets all the categories from the server when the page loads.
 	// Refreshes with [categoriesState] in case the user opens this URL first, because then it would be empty.
@@ -115,6 +132,8 @@ export default function ProductFormFunction() {
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
 		dispatch(productActions.postProduct(changedState, modifiedCategories));
+
+		resetFields();
 	};
 
 	// Deletes the selected product
@@ -122,6 +141,8 @@ export default function ProductFormFunction() {
 		event.preventDefault();
 
 		dispatch(productActions.deleteProduct(selected));
+
+		resetFields();
 	};
 
 	// Edits the selected product
@@ -140,15 +161,8 @@ export default function ProductFormFunction() {
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
 		dispatch(productActions.putProduct(selected, changedState, modifiedCategories));
-		setSelected(0);
-		lista.current.value = 0;
-		setInputValues({
-			name: '',
-			price: '',
-			stock: '',
-			image: '',
-			description: ''
-		});
+
+		resetFields();
 	};
 
 	return (

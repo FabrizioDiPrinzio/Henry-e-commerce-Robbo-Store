@@ -4,7 +4,7 @@ const category = require('./category'); // rutas
 const {Product, Categories, product_categories, Pics} = require('../db.js'); //database
 
 router.get('/', (req, res, next) => {
-	Product.findAll()
+	Product.findAll({include: [Categories, Pics]})
 		.then(products => {
 			res.send(products);
 		})
@@ -13,7 +13,8 @@ router.get('/', (req, res, next) => {
 
 router.post('/', async (req, res) => {
 	const {name, price, stock, image, description} = req.body;
-	if (!name || !price || typeof stock !== "number" || !image || !description) return res.status(400).send('Falta algún parámetro o stock typeof incorrecto');
+	if (!name || !price || typeof stock !== 'number' || !image || !description)
+		return res.status(400).send('Falta algún parámetro o stock typeof incorrecto');
 
 	const newBody = {
 		...req.body,
@@ -48,7 +49,6 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-
 	/*
 	Esta ruta SOLO cambia la image principal del producto,
 	NO agrega nuevas fotos asociadas al producto.
@@ -64,7 +64,7 @@ router.put('/:id', async (req, res) => {
 	*/
 
 	const {name, price, stock, description} = req.body;
-	const image = req.body.image[0]
+	const image = req.body.image[0];
 	const {id} = req.params;
 
 	if (!name && !price && !stock && !image && !description)
@@ -77,19 +77,18 @@ router.put('/:id', async (req, res) => {
 		robot.name = name ? name : robot.name;
 		robot.description = description ? description : robot.description;
 		robot.price = price ? price : robot.price;
-		robot.stock = stock ? stock : robot.stock;
+		robot.stock = stock ? stock : 0;
 		if (image) {
-			await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}})
+			await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
 			robot.image = image;
 		}
 		await robot.save();
 	} catch (error) {
-  		res.status(400).send(error.message);
+		res.status(400).send(error.message);
 	} finally {
-		const savedRobot = await robot.reload()
-  		res.status(200).send(savedRobot);
-  	}
-
+		const savedRobot = await robot.reload();
+		res.status(200).send(savedRobot);
+	}
 });
 
 router.post('/:idProducto/category/:idCategoria', async (req, res) => {

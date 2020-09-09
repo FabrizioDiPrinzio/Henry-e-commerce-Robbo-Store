@@ -1,115 +1,102 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
+import {allActions} from '../../Redux/Actions/actions';
+import {useSelector, useDispatch} from 'react-redux';
 import './ProductForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import axios from 'axios';
-import allActions from '../../Redux/Actions/actions';
-import {useSelector, useDispatch} from 'react-redux';
 //------ Fin de imports -----
 
-const urlBack = process.env.REACT_APP_API_URL;
+const {productActions} = allActions;
 
 export default function ProductFormFunction() {
-	const [state, setState] = useState({
+	const categories = useSelector(state => state.categories.allCategories);
+	const products = useSelector(state => state.products.allProducts);
+	const dispatch = useDispatch();
+
+	const [inputValues, setInputValues] = useState({
 		name: '',
 		price: '',
 		stock: '',
 		image: '',
 		description: ''
 	});
-	const [categories, setCategories] = useState([]);
-	const [robots, setRobots] = useState([]);
-	const [update, setUpdate] = useState(false);
-	const [selected, setSelected] = useState({id: 0});
+	const [checkboxes, setCheckboxes] = useState([]);
+	const [selected, setSelected] = useState(0);
 	const lista = useRef(0);
 
-	// Gets all the existing categories and creates checkmarks of each one
-	useEffect(() => {
-		axios.get(`${urlBack}/products/category/names`).then(res => {
-			const categoryTypes = res.data.map(c => ({
+	// Gets all the categories from the server when the page loads.
+	// Refreshes with [categoriesState] in case the user opens this URL first, because then it would be empty.
+	useEffect(
+		() => {
+			const categoryTypes = categories.map(c => ({
 				name: c.name,
 				id: c.id,
 				add: false,
 				modified: false
 			}));
-			setCategories(categoryTypes);
-		});
+
+			setCheckboxes(categoryTypes);
+		},
+		[categories]
+	);
+
+	// Gets all the robots from the server when the page loads
+	useEffect(() => {
+		dispatch(productActions.getAllProducts());
 	}, []);
 
-	// Updates the robot list whenever there's a change
-	useEffect(
-		() => {
-			axios.get(`${urlBack}/products`).then(res => {
-				const robotTypes = res.data.map(c => ({
-					name: c.name,
-					id: c.id
-				}));
-				setRobots(robotTypes);
-			});
-		},
-		[update]
-	);
-
-	// When a product is selected, it fills all the forms with the data of said product
-	useEffect(
-		() => {
-			axios.get(`${urlBack}/products/${selected.id}`).then(res => {
-				const data = res.data;
-				categories.map(c => {
-					c.add = false;
-					c.modified = false;
-					return c;
-				});
-
-				if (res.data) {
-					// If the product has a category, it is checked, else it is unchecked
-					data.categories.map(d => {
-						categories.map(c => {
-							if (c.id === d.id) c.add = true;
-							return c;
-						});
-						return d;
-					});
-					// Sets all the forms to the data of the selected product if said product exists
-					setState({
-						name: data.name,
-						price: data.price,
-						stock: data.stock,
-						image: data.image,
-						description: data.description
-					});
-				}
-				else {
-					// Empties all the forms if they select the default option
-					setState({
-						name: '',
-						price: 0,
-						stock: 0,
-						image: '',
-						description: ''
-					});
-				}
-			});
-		},
-		[selected]
-	);
-
 	// Updates the state when something is written in the forms
-	const handleInputChange = event => setState({...state, [event.target.name]: event.target.value});
+	const handleInputChange = event =>
+		setInputValues({...inputValues, [event.target.name]: event.target.value});
 
-	// Updates the state when something is written in the numbers
-	const handleNumberChange = event =>
-		setState({...state, [event.target.name]: parseInt(event.target.value)});
+	// Updates the state when something is written in the numbers. Can't be a negative number.
+	const handleNumberChange = event => {
+		const value = parseInt(event.target.value);
+		setInputValues({...inputValues, [event.target.name]: value >= 0 ? value : 0});
+	};
 
 	// Sets which product is currently being selected
-	const handleSelectChange = event => setSelected({id: event.target.value});
+	const handleSelectChange = event => {
+		// Unchecks all categories
+		checkboxes.map(c => {
+			c.add = false;
+			c.modified = false;
+			return c;
+		});
+
+		const selectedId = parseInt(event.target.value);
+		setSelected(selectedId);
+
+		if (selectedId > 0) {
+			const currentProduct = products.find(p => p.id === selectedId);
+			setInputValues(currentProduct);
+
+			// If the product has a category, it is checked, else it is unchecked
+			currentProduct.categories.map(productCategory => {
+				checkboxes.map(category => {
+					if (category.id === productCategory.id) category.add = true;
+					return category;
+				});
+				return productCategory;
+			});
+		}
+		else {
+			setInputValues({
+				name: '',
+				price: '',
+				stock: '',
+				image: '',
+				description: ''
+			});
+		}
+	};
 
 	// Sets which categories are being checked
 	const handleChecks = event => {
-		const check = event.target;
-		const modifyCategories = [...categories];
-		modifyCategories[check.value].add = check.checked;
-		modifyCategories[check.value].modified = !modifyCategories[check.value].modified;
-		setCategories(modifyCategories);
+		const checkbox = event.target;
+		const modifiedCategories = [...checkboxes];
+		modifiedCategories[checkbox.value].add = checkbox.checked;
+		modifiedCategories[checkbox.value].modified = !modifiedCategories[checkbox.value].modified;
+		setCheckboxes(modifiedCategories);
 	};
 
 	// Creates products
@@ -120,50 +107,21 @@ export default function ProductFormFunction() {
 		the image wrap is a temporary fix. the form should be able
 		to send multiple images in an array and the first one will be
 		the main image of the product. The other images will be stored
-		in the asosiated to the product and sotred in the model named Pics.
+		in the associated to the product and stored in the model named Pics.
 		*/
-		const wrapedImage = [state.image];
-		const changedState = {...state, image: wrapedImage};
-		// console.log('Now state.image should be an array with the img')
-		// console.log(changedState)
+		const wrappedImage = [inputValues.image];
+		const changedState = {...inputValues, image: wrappedImage, id: null};
 
-		// Creates the product
-		axios
-			.post(`${urlBack}/products`, changedState)
-			.then(res => {
-				alert(res.statusText);
-				setUpdate(!update);
-				setSelected({id: 0});
-				lista.current.value = 0;
+		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
-				const productId = res.data.id;
-				return productId;
-			})
-			// Adds all checked categories to the product
-			.then(productId => {
-				categories.map(cat => {
-					if (cat.add) axios.post(`${urlBack}/products/${productId}/category/${cat.id}`);
-					return cat;
-				});
-			})
-			.catch(error => alert('no se pudo agregar el producto: ' + error.message));
-
-		console.log(state);
+		dispatch(productActions.postProduct(changedState, modifiedCategories));
 	};
 
 	// Deletes the selected product
 	const handleDelete = event => {
 		event.preventDefault();
 
-		axios
-			.delete(`${urlBack}/products/${selected.id}`)
-			.then(response => {
-				alert(response.statusText);
-				setUpdate(!update);
-				setSelected({id: 0});
-				lista.current.value = 0;
-			})
-			.catch(error => alert('no se pudo eliminar el robot: ' + error.message));
+		dispatch(productActions.deleteProduct(selected));
 	};
 
 	// Edits the selected product
@@ -176,33 +134,21 @@ export default function ProductFormFunction() {
 		the main image of the product. The other images will be stored
 		in the asosiated to the product and sotred in the model named Pics.
 		*/
-		const wrapedImage = [state.image];
-		const changedState = {...state, image: wrapedImage};
-		// console.log('Now state.image should be an array with the img')
-		// console.log(changedState)
+		const wrappedImage = [inputValues.image];
+		const changedState = {...inputValues, image: wrappedImage};
 
-		// Edits the product
-		axios
-			.put(`${urlBack}/products/${selected.id}`, changedState)
-			.then(response => {
-				alert(response.statusText);
-				setUpdate(!update);
-				setSelected({id: 0});
-				lista.current.value = 0;
-			})
-			// Adds checked categories and removes unchecked categories if they've been modified
-			.then(() => {
-				categories.map(cat => {
-					if (cat.add && cat.modified) {
-						axios.post(`${urlBack}/products/${selected.id}/category/${cat.id}`);
-					}
-					else if (!cat.add && cat.modified) {
-						axios.delete(`${urlBack}/products/${selected.id}/category/${cat.id}`);
-					}
-					return cat;
-				});
-			})
-			.catch(error => alert('no se pudo editar el robot: ' + error.message));
+		const modifiedCategories = checkboxes.filter(cat => cat.modified);
+
+		dispatch(productActions.putProduct(selected, changedState, modifiedCategories));
+		setSelected(0);
+		lista.current.value = 0;
+		setInputValues({
+			name: '',
+			price: '',
+			stock: '',
+			image: '',
+			description: ''
+		});
 	};
 
 	return (
@@ -218,7 +164,7 @@ export default function ProductFormFunction() {
 							className="NameIn"
 							type="text"
 							name="name"
-							value={state.name}
+							value={inputValues.name}
 							placeholder="Nombre del Producto"
 							onChange={handleInputChange}
 						/>
@@ -230,7 +176,7 @@ export default function ProductFormFunction() {
 						<input
 							className="CantIn"
 							name="stock"
-							value={state.stock}
+							value={inputValues.stock}
 							type="number"
 							placeholder="Cantidad"
 							onChange={handleNumberChange}
@@ -243,7 +189,7 @@ export default function ProductFormFunction() {
 						<input
 							className="Precio"
 							name="price"
-							value={state.price}
+							value={inputValues.price}
 							type="number"
 							placeholder="Precio"
 							onChange={handleNumberChange}
@@ -256,7 +202,7 @@ export default function ProductFormFunction() {
 						<input
 							className="ImgIn"
 							name="image"
-							value={state.image}
+							value={inputValues.image}
 							type="text"
 							placeholder="URL de la imagen"
 							onChange={handleInputChange}
@@ -268,7 +214,7 @@ export default function ProductFormFunction() {
 					<textarea
 						className="description"
 						name="description"
-						value={state.description}
+						value={inputValues.description}
 						placeholder="Agregue descripción del producto"
 						onChange={handleInputChange}
 					/>
@@ -276,7 +222,7 @@ export default function ProductFormFunction() {
 
 				<div className="inpt">
 					<label className="CatLab">Categorías: </label>
-					{categories.map((categoria, i) => {
+					{checkboxes.map((categoria, i) => {
 						return (
 							<label key={categoria.id} className="checkLab">
 								<input
@@ -303,10 +249,10 @@ export default function ProductFormFunction() {
 
 					<select ref={lista} id="select" defaultValue="0" onChange={handleSelectChange}>
 						<option value="0">Robots...</option>
-						{robots.map(robot => {
+						{products.map(product => {
 							return (
-								<option value={robot.id} key={robot.id}>
-									{robot.name}
+								<option value={product.id} key={product.id}>
+									{product.name}
 								</option>
 							);
 						})}

@@ -44,7 +44,7 @@ export default function NavBar() {
 							/>
 						</svg>
 					</button>
-
+					<Link to='/carrito'>
 					<button className="CartBtn">
 						<svg
 							width="2em"
@@ -60,6 +60,7 @@ export default function NavBar() {
 							/>
 						</svg>
 					</button>
+					</Link>
 				</div>
 			</nav>
 

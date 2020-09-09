@@ -43,10 +43,10 @@ export default function FormularioCategoria() {
 	// Creates a new category
 	const handleAdd = event => {
 		event.preventDefault();
-
+    
 		axios
 			.post(`${urlBack}/products/category`, {...inputValues, id: null})
-			.then(response => {
+			.then(response => { // <--------------------------< desde el .then hasta el catch hago lo mismo
 				alert(response.statusText);
 				setSelectedCategoryId(0);
         lista.current.value = 0;
@@ -54,7 +54,7 @@ export default function FormularioCategoria() {
 			}).then(() => {
         dispatch(allActions.categoryActions.getAllCategories());
       })
-      .catch(error => alert('no se pudo agregar la categoria: ' + error.message));
+      .catch(error => alert('no se pudo agregar la categoria: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
     
       // dispatch(allActions.categoryActions.postCategory(inputValues));
     
@@ -66,7 +66,7 @@ export default function FormularioCategoria() {
 
 		axios
 			.delete(`${urlBack}/products/category/${selectedCategoryId}`)
-			.then(response => {
+			.then(response => { // <--------------------------< desde el .then hasta el catch hago lo mismo
 				alert(response.statusText);
 				setSelectedCategoryId(0);
         lista.current.value = 0;
@@ -74,7 +74,7 @@ export default function FormularioCategoria() {
 			}).then(() => {
         dispatch(allActions.categoryActions.getAllCategories());
       })
-			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message));
+			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
 	};
 
 	// Edits the selected category
@@ -84,7 +84,7 @@ export default function FormularioCategoria() {
     // dispatch(allActions.categoryActions.putCategory(parseInt(selectedCategoryId), inputValues));
     
     axios.put(`${urlBack}/products/category/${selectedCategoryId}`, inputValues)
-    .then(response => {
+    .then(response => { // <--------------------------< desde el .then hasta el catch hago lo mismo
       alert(response.data)
       setSelectedCategoryId(0);
       lista.current.value = 0;
@@ -92,7 +92,7 @@ export default function FormularioCategoria() {
     }).then(() => {
       dispatch(allActions.categoryActions.getAllCategories());
     })
-    .catch(error => alert('no se pudo eliminar la categoria: ' + error.message));
+    .catch(error => alert('no se pudo eliminar la categoria: ' + error.message));// < ---- Limpiar todo y hacer un getCategories de redux
     
 	};
 

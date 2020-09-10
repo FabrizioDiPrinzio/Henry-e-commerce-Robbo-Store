@@ -12,56 +12,57 @@ module.exports = sequelize => {
 		status: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			defaultValue: 'enCarrito',
 			validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('Status must be a string!!!!');
+					if (value && typeof value !== 'string') throw new Error('Status must be a string!!!!');
 				}
 			}
 		},
 
 		recipient_name: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('Name must be a string!!!!');
+					if (value && typeof value !== 'string') throw new Error('Name must be a string!!!!');
 				}
 			}
 		},
 
 		recipient_lastname: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('Last name must be a string!!!!');
+					if (value && typeof value !== 'string') throw new Error('Last name must be a string!!!!');
 				}
 			}
 		},
 
 		country: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('Country must be a string!!!!');
+					if (value && typeof value !== 'string') throw new Error('Country must be a string!!!!');
 				}
 			}
 		},
 
 		city: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('City must be a string!!!!');
+					if (value && typeof value !== 'string') throw new Error('City must be a string!!!!');
 				}
 			}
 		},
 
 		address: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			validate: {
 				isString(value) {
 					if (typeof value !== 'string') throw new Error('Adress must be a string!!!!');
@@ -71,7 +72,7 @@ module.exports = sequelize => {
 
 		postal_code: {
 			type: DataTypes.INTEGER,
-			allowNull: false,
+			allowNull: true,
 			validate: {
 				isNumeric: true
 			}
@@ -79,7 +80,7 @@ module.exports = sequelize => {
 
 		phone_number: {
 			type: DataTypes.INTEGER,
-			allowNull: false,
+			allowNull: true,
 			validate: {
 				isNumeric: true
 			}
@@ -87,10 +88,10 @@ module.exports = sequelize => {
 
 		shipping_type: {
 			type: DataTypes.STRING,
-			allowNull: false,
+			allowNull: true,
 			validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('Shipping type must be a string!!!!');
+					if (value && typeof value !== 'string') throw new Error('Shipping type must be a string!!!!');
 				}
 			}
 		}

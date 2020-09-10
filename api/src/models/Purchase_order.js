@@ -60,10 +60,12 @@ module.exports = sequelize => {
 		},
 
 		address: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				isNumeric: true
+				isString(value) {
+					if (typeof value !== 'string') throw new Error('Adress must be a string!!!!');
+				}
 			}
 		},
 

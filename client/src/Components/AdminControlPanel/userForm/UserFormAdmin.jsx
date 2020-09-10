@@ -5,13 +5,13 @@ import './userFormAdmin.css';
 
 
 export default function userFormAdmin() {
-  const userList = useSelector(state => state.users)
+  // const userList = useSelector(state => state.users)
 	return (
 		<div className="userFormAdmin">
       <h1> Panel de Control de Usuarios </h1>
         <ul>
           <li>
-          <UserFormLine user={user} />
+          <UserFormLine /*user={user}*//>
           </li>
         </ul>
 		</div>

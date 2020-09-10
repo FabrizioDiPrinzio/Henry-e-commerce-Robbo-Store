@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {User} = require('../db.js'); //database
+const {User, Purchase_order, Product, Orderline} = require('../db.js'); //database
 
 router.get('/', async (req, res) => {
   const userList = await User.findAll()
@@ -69,6 +69,39 @@ router.delete('/:id', (req, res) => {
 });
 
 
-//rutas de cart 
+//Rutas de cart 
+//Ruta para agregar Item al Carrito
+
+router.post('/:UserId/cart', async (req,res) => {
+   let {UserId} = req.params;
+   const {ProductId, quantity, price} = req.body;
+
+   try {
+
+		let [carritoAwait, created] = await  Purchase_order.findOrCreate({ include: Orderline, where: {buyerId : UserId}});
+		let tieneOrderline = carritoAwait.orderlines.find(e =>  e.productId ===  ProductId) || undefined
+  		let orderLineAwait;
+
+		if (!tieneOrderline) {
+	 		orderLineAwait = await Orderline.create({productId : ProductId, purchaseOrderId : carritoAwait.id, quantity: quantity, price: price})
+		} else {
+			orderLineAwait = await Orderline.findOne({where: {productId : ProductId, purchaseOrderId : carritoAwait.id}})
+			orderLineAwait.quantity = quantity 
+		}
+
+		await orderLineAwait.save()
+		await orderLineAwait.reload()
+        await carritoAwait.save()
+        await carritoAwait.reload()
+
+   	    res.send(carritoAwait)
+
+   } catch(error) {
+   	    res.status(400).send(error.message);
+   } 
+})
+
+
+
 
 module.exports = router;

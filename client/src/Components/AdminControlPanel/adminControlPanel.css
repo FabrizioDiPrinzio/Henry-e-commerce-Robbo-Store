@@ -1,0 +1,15 @@
+.controlPanel {
+  margin: 0px;
+  margin-top: 60px;
+  text-align: center;
+  align-content: center;
+  align-items: center;
+  width: 100%;
+}
+.centerColumn {
+  display: inline-block;
+  text-align: left;
+  max-width: 700px;
+  min-width: 300px;
+  width: 100%;
+}

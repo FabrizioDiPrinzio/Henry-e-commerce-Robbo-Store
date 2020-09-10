@@ -1,7 +1,27 @@
 .userFormLine {
+  max-width: 700px;
   display: grid;
   grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
   overflow: hidden;
+  margin-left: 10px;
+  height: 35px;
+}
+
+.editOpen {
+  transition: 0.3s;
+  max-width: 700px;
+  display: grid;
+  grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
+  height: 30px;
+}
+
+.editClose {
+  transition: 0.3s;
+  max-width: 700px;
+  display: grid;
+  grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
+  overflow: hidden;
+  height: 0px;
 }
 
 .userActionContainer {
@@ -9,6 +29,24 @@
   grid-template-columns: 1fr 1fr;
 }
 
-span {
-  padding-left: 7px;
+.inputTag {
+  width: 120px;
+}
+
+.editBtn {
+  background: #617CC7;
+  border-radius: 4px;
+  border: solid #617CC7;
+  color:white;
+  justify-content: center;
+  align-items: center;
+}
+
+.deleteBtn {
+  background: #D53467;
+  border-radius: 4px;
+  border: solid #D53467;
+  color:white;
+  justify-content: center;
+  align-items: center;
 }

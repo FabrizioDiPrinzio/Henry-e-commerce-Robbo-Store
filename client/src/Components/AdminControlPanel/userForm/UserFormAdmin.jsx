@@ -25,8 +25,7 @@ export default function UserFormAdmin() {
     },
       []
   );
-
-export default function userFormAdmin() {
+  
   // const userList = useSelector(state => state.users)
 	return (
 		<div className="userFormAdmin">

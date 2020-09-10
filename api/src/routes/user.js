@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {User} = require('../db.js'); //database
+const {User, Purchase-order, OrderLine} = require('../db.js'); //database
 
 router.get('/', async (req, res) => {
   const userList = await User.findAll()
@@ -67,5 +67,31 @@ router.delete('/:id', (req, res) => {
 		else return res.sendStatus(200);
 	});
 });
+
+
+//Ruta para agregar Item al Carrito
+
+router.post('/:id', async (req,res) => {
+   let {UserId} = parseInt(req.params);
+   const {ProductId, quantity, price} = req.body;
+
+   try {
+		let userAwait = await User.findByPk(UserId);
+		let productAwait = await User.findByPk(ProductId);
+		let carritoAwait = await Purchase-order.findOne({where: {buyerId : UserId}});
+		carritoAwait.addProduct(productAwait, { through: {OrderLine}});
+		let orderLineAwait = await OrderLine.findOne({where : {productId : ProductId, purchaseOrderId : carritoAwait.id }});
+		orderLineAwait.price = price;
+		orderLineAwait.quantity = quantity;
+		Purchase-order.save()
+   } catch(error) {
+   	    res.status(400).send(error.message);
+   } finally {
+   	   let carritoNuevo = Purchase-order.reload()
+   	   res.send(carritoNuevo)
+   }
+
+})
+
 
 module.exports = router;

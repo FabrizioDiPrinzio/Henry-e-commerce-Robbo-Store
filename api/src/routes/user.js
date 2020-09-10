@@ -16,7 +16,7 @@ router.get('/:id', (req, res) => {
 });
 
 //Ruta para crear Usuario
-router.post('/singup', (req, res) => {
+router.post('/signup', (req, res) => {
 	const {name, rol, email, password} = req.body;
 	if (!name && !rol && !email && !password) {
     return res.status(400).send('Falta algún parámetro');
@@ -69,6 +69,7 @@ router.delete('/:id', (req, res) => {
 });
 
 
+//Rutas de cart 
 //Ruta para agregar Item al Carrito
 
 router.post('/:UserId/cart', async (req,res) => {
@@ -99,6 +100,8 @@ router.post('/:UserId/cart', async (req,res) => {
    	    res.status(400).send(error.message);
    } 
 })
+
+
 
 
 module.exports = router;

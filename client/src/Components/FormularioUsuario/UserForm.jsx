@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import './UserForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import './UserForm.css';
 import axios from 'axios';
 //------ Fin de imports -----
 
@@ -11,8 +11,8 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function FormularioCategoria() {
   // const users = useSelector(state => state);
   // const dispatch = useDispatch();
-  
 	const [inputValues, setInputValues] = useState({name: null, rol: null, email: null, password: null});
+  const formulario = useRef(0);
 
 	useEffect(
 		() => {
@@ -26,20 +26,23 @@ export default function FormularioCategoria() {
 
 	// Creates a new category
 	const handleAdd = event => {
-		event.preventDefault();
-	};
+    event.preventDefault();
+    
+    const userFix = {...inputValues, rol: 'Client', }
 
-	const handleDelete = event => {
-		event.preventDefault();
-	};
-
-	const handleEdit = event => {
-		event.preventDefault();  
+    axios.post(`${urlBack}/user/signup`, userFix)
+    .then(response => {
+      alert(response.data.name + ' es ahora un nuevo Usuario');
+      setInputValues({name: null, rol: null, email: null, password: null})
+      formulario.current.reset();
+		})
+    .catch(error => alert('no se pudo registrar correctamente: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
+    
 	};
 
 	return (
     <div className="formContainer">
-      <form className="form" onSubmit={handleAdd}>
+      <form className="form" onSubmit={handleAdd} ref={formulario}>
 				<h3 className="titulo">Registrarse</h3>
 				<br />
 
@@ -81,32 +84,6 @@ export default function FormularioCategoria() {
 					Registrarse
 				</button>
 
-				<div>
-					<br />
-					<h4>Editar / Eliminar Usuarios</h4>
-					<div className={'botonOpcion'}>
-
-						<select id="select">
-							<option selected value="0">
-								Usuarios...
-							</option>
-              {/* 
-              {listaUsuarios.map(usuario => {
-								return <option value={usuario.id}>{usuario.name}</option>;
-              })} 
-              */}
-						</select>
-
-						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
-							Editar
-						</button>
-
-						<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete} >
-							Eliminar
-						</button>
-
-					</div>
-				</div>
       </form>
     </div>
 	);

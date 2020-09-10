@@ -6,6 +6,8 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormFormAdmin(props) {
+	// React Hooks
+
 	const {
 		id,
 		status,
@@ -38,6 +40,8 @@ export default function FormFormAdmin(props) {
 		edit: 'editClose'
 	});
 
+	// ----------- Funcionalidad ----------
+
 	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
@@ -50,8 +54,17 @@ export default function FormFormAdmin(props) {
 		});
 	};
 
+	const handleSelectChange = event => {
+		setInputValues({...inputValues, status: event.target.value});
+	};
+
 	const handleEdit = event => {
 		event.preventDefault();
+
+		axios
+			.put(`${urlBack}/orders/${id}`, inputValues)
+			.then(() => alert('Se realizaron los cambios'))
+			.catch(err => alert(err.message));
 	};
 
 	return (
@@ -107,73 +120,73 @@ export default function FormFormAdmin(props) {
 				</div>
 			</ul>
 			<form className={stateEdit.edit}>
+				<select defaultValue={status} onChange={handleSelectChange}>
+					<option value="En carrito">En carrito</option>
+					<option value="Creada">Creada</option>
+					<option value="Pagada">Pagada</option>
+					<option value="Entregada">Entregada</option>
+					<option value="Cancelada">Cancelada</option>
+				</select>
 				<input
 					className="productInputTag"
 					type="text"
-					id={status}
-					value={inputValues.status}
-					onChange={handleInputChange}
-				/>
-				<input
-					className="productInputTag"
-					type="text"
-					id={recipient_name}
+					name="recipient_name"
 					value={inputValues.recipient_name}
 					onChange={handleInputChange}
 				/>
 				<input
 					className="productInputTag"
 					type="text"
-					id={recipient_lastname}
+					name="recipient_lastname"
 					value={inputValues.recipient_lastname}
 					onChange={handleInputChange}
 				/>
 				<input
 					className="productInputTag"
 					type="text"
-					id={country}
+					name="country"
 					value={inputValues.country}
 					onChange={handleInputChange}
 				/>
 				<input
 					className="productInputTag"
 					type="text"
-					id={city}
+					name="city"
 					value={inputValues.city}
 					onChange={handleInputChange}
 				/>
 				<input
 					className="productInputTag"
 					type="text"
-					id={address}
+					name="address"
 					value={inputValues.address}
 					onChange={handleInputChange}
 				/>
 				<input
 					className="productInputTag"
 					type="text"
-					id={postal_code}
+					name="postal_code"
 					value={inputValues.postal_code}
 					onChange={handleInputChange}
 				/>
 				<input
 					className="productInputTag"
 					type="text"
-					id={phone_number}
+					name="phone_number"
 					value={inputValues.phone_number}
 					onChange={handleInputChange}
 				/>
 				<input
 					className="productInputTag"
 					type="text"
-					id={shipping_type}
+					name="shipping_type"
 					value={inputValues.shipping_type}
 					onChange={handleInputChange}
 				/>
 				<input
 					className="productInputTag"
 					type="text"
-					id={buyerId}
+					name="buyerId"
 					value={inputValues.buyerId}
 					onChange={handleInputChange}
 				/>

@@ -7,7 +7,15 @@ export default function userFormAdmin() {
 
 	return (
 		<div className="userFormLine">
-      <h1> Linea de Usuario </h1>
+      <span> Nombre Apellido </span>
+      <span> email@email.com </span>
+      <span> password </span>
+      <span> Cliente </span>
+      <div className='userActionContainer'>
+        <button type="button" class="btn btn-primary btn-sm">Editar</button>
+        <button type="button" class="btn btn-danger btn-sm">Eliminar</button>
+      </div>
+
 		</div>
 	);
 }

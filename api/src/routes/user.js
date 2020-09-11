@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-	User.findByPk(req.params.id).then(user => {
+	User.findByPk(req.params.id, {include: Orderline}).then(user => {
 		if (!user) res.status(404).send('No se encontró el usuario');
 		res.send(user);
 	});

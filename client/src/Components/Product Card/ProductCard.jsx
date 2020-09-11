@@ -21,61 +21,62 @@ export default function ProductCard({robot}) {
 	});
 
 	const handleClickAdd = e => {
-		e.preventDefault();
+	e.preventDefault();
+	e.persist()
     e.target.style.opacity =  '0.1';
-		setCarrito({...carrito, quantity: ++carrito.quantity});
     setLoading(true)
-
-		axios
-			.put(`${urlBack}/user/${userId}/cart`, {
-				orderlineChanges: [
-					{
-						productId: parseInt(carrito.productId),
-						price: parseInt(carrito.price),
-						quantity: parseInt(carrito.quantity)
-					}
-				]
-			})
-			.then(() => {
-        setLoading(false)
-        e.target.style.opacity =  '1'
-				alert('Agregado');
-			})
-			.catch(error => {
-      setLoading(false)
-      console.log(error);
-      e.target.style.opacity =  '1'
-      });
+	axios
+		.put(`${urlBack}/user/${userId}/cart`, {
+			orderlineChanges: [
+				{
+					productId: parseInt(carrito.productId),
+					price: parseInt(carrito.price),
+					quantity: parseInt(carrito.quantity + 1)
+				}
+			]
+		})
+		.then(() => {
+       		setLoading(false)
+       		e.target.style.opacity =  '1'
+       		setCarrito({...carrito, quantity: ++carrito.quantity});
+       		console.log(e.target)
+			alert('Agregado');
+		})
+		.catch(error => {
+      		setLoading(false)
+      		console.log(error);
+      		console.log(e.target)
+      		e.target.style.opacity =  '1'
+      		});
 	};
 
 	const handleClickRest = e => {
 		e.preventDefault();
-		if (carrito.quantity > 0 || loading === false) {
-      e.target.style.opacity =  '0.1';
-			setCarrito({...carrito, quantity: --carrito.quantity});
-      setLoading(true)
-			axios
-				.put(`${urlBack}/user/${userId}/cart`, {
-					orderlineChanges: [
-						{
-							productId: parseInt(carrito.productId),
-							price: parseInt(carrito.price),
-							quantity: parseInt(carrito.quantity)
-						}
-					]
-				})
-				.then(response => {
-        	e.target.style.opacity =  '1';
-          setLoading(false)
-					alert('Quitado');
-					// addEvents();
-					// btnRest.style.backgroundColor = 'var(--razzmatazz)';
-				})
-				.catch(error => {
-          alert(error.message);
-          setLoading(false)
-        	e.target.style.opacity =  '1'
-        });
+		e.persist()
+		
+		if (carrito.quantity > 0 && loading === false) {
+    		e.target.style.opacity =  '0.1';
+      		setLoading(true)
+			axios.put(`${urlBack}/user/${userId}/cart`, {
+				orderlineChanges: [
+					{
+						productId: parseInt(carrito.productId),
+						price: parseInt(carrito.price),
+						quantity: parseInt(carrito.quantity - 1)
+					}
+				]
+			})
+			.then(response => {
+				setCarrito({...carrito, quantity: --carrito.quantity});
+        		e.target.style.opacity =  '1';
+        		setLoading(false)
+				alert('Quitado');
+			})
+			.catch(error => {
+          		alert(error.message);
+        		setLoading(false)
+        		e.target.style.opacity =  '1'
+        	});
 		}
 	};
 

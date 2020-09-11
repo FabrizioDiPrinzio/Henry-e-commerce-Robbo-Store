@@ -9,7 +9,7 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function ProductCard({robot}) {
 	const userId = useSelector(state => state.user.userId);
 	const userType = useSelector(state => state.user.userType);
-  const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(false);
 
 	const [carrito, setCarrito] = useState({
 		quantity: 0,
@@ -21,21 +21,16 @@ export default function ProductCard({robot}) {
 	});
 
 	const handleClickAdd = e => {
-	e.preventDefault();
-	e.persist()
+	  e.preventDefault();
+	  e.persist()
     e.target.style.opacity =  '0.1';
     setLoading(true)
-	axios
-		.put(`${urlBack}/user/${userId}/cart`, {
-			orderlineChanges: [
-				{
-					productId: parseInt(carrito.productId),
-					price: parseInt(carrito.price),
-					quantity: parseInt(carrito.quantity + 1)
-				}
-			]
-		})
-		.then(() => {
+		axios
+			.put(`${urlBack}/user/${userId}/cart`, {
+				productId: parseInt(carrito.productId),
+				price: parseInt(carrito.price),
+				quantity: parseInt(carrito.quantity)
+			}).then(() => {
        		setLoading(false)
        		e.target.style.opacity =  '1'
        		setCarrito({...carrito, quantity: ++carrito.quantity});
@@ -53,20 +48,15 @@ export default function ProductCard({robot}) {
 	const handleClickRest = e => {
 		e.preventDefault();
 		e.persist()
-		
 		if (carrito.quantity > 0 && loading === false) {
-    		e.target.style.opacity =  '0.1';
-      		setLoading(true)
-			axios.put(`${urlBack}/user/${userId}/cart`, {
-				orderlineChanges: [
-					{
-						productId: parseInt(carrito.productId),
-						price: parseInt(carrito.price),
-						quantity: parseInt(carrito.quantity - 1)
-					}
-				]
-			})
-			.then(response => {
+      e.target.style.opacity =  '0.1';
+      setLoading(true)
+			axios
+				.put(`${urlBack}/user/${userId}/cart`, {
+					productId: parseInt(carrito.productId),
+					price: parseInt(carrito.price),
+					quantity: parseInt(carrito.quantity)
+				}).then(response => {
 				setCarrito({...carrito, quantity: --carrito.quantity});
         		e.target.style.opacity =  '1';
         		setLoading(false)
@@ -77,7 +67,7 @@ export default function ProductCard({robot}) {
         		setLoading(false)
         		e.target.style.opacity =  '1'
         	});
-		}
+	  }
 	};
 
 	return (
@@ -120,5 +110,5 @@ export default function ProductCard({robot}) {
 				</div>
 			</div>
 		</div>
-	)
+	);
 }

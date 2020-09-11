@@ -129,32 +129,10 @@ router.post('/:userId/cart', (req, res) => {
 
 router.put('/:userId/cart', async (req, res) => {
 	const {userId} = req.params;
-	const {
-		status,
-		recipient_name,
-		recipient_lastname,
-		country,
-		city,
-		address,
-		postal_code,
-		phone_number,
-		shipping_type,
-		orderlineChanges
-	} = req.body;
+	const {productId, quantity, price} = req.body;
 
-	if (
-		!status &&
-		!recipient_name &&
-		!recipient_lastname &&
-		!country &&
-		!city &&
-		!address &&
-		!postal_code &&
-		!phone_number &&
-		!shipping_type &&
-		!orderlineChanges
-	) {
-		return res.status(400).send('Debes enviar al menos un campo para editar');
+	if (!productId) {
+		return res.status(400).send('Debes indicar el producto a editar');
 	}
 
 	const order = await Purchase_order.findOne({
@@ -165,41 +143,21 @@ router.put('/:userId/cart', async (req, res) => {
 	if (!order) return res.status(404).send('No se encontró el carrito del usuario');
 
 	try {
-		if (orderlineChanges && orderlineChanges.length > 0) {
-			await Promise.all(
-				orderlineChanges.map(async change => {
-					const {productId, quantity, price} = change;
+		const [currentOrder, created] = await Orderline.findOrCreate({
+			where: {productId, purchaseOrderId: order.id},
+			defaults: {quantity, price}
+		});
 
-					const [currentOrder, created] = await Orderline.findOrCreate({
-						where: {productId, purchaseOrderId: order.id},
-						defaults: {quantity, price}
-					});
+		if (!created) {
+			if (quantity === 0) currentOrder.destroy();
+			else {
+				currentOrder.quantity = quantity || currentOrder.quantity;
+				currentOrder.price = price || currentOrder.price;
 
-					if (!created) {
-						if (quantity === 0) currentOrder.destroy();
-						else {
-							currentOrder.quantity = quantity || currentOrder.quantity;
-							currentOrder.price = price || currentOrder.price;
-
-							await currentOrder.save();
-							await currentOrder.reload();
-						}
-					}
-
-					return currentOrder;
-				})
-			);
+				await currentOrder.save();
+				await currentOrder.reload();
+			}
 		}
-
-		order.status = status || order.status;
-		order.recipient_name = recipient_name || order.recipient_name;
-		order.recipient_lastname = recipient_lastname || order.recipient_lastname;
-		order.country = country || order.country;
-		order.city = city || order.city;
-		order.address = address || order.address;
-		order.postal_code = postal_code || order.postal_code;
-		order.phone_number = phone_number || order.phone_number;
-		order.shipping_type = shipping_type || order.shipping_type;
 
 		await order.save();
 		await order.reload();

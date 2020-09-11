@@ -9,13 +9,16 @@ module.exports = sequelize => {
 		// idUser  y mail:{
 		// idOrderLine:{
 
+		// Cart es Purchase_order con status "enCarrito", purchase_orders son las que tienen cualquier otro estado
+
 		status: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			defaultValue: 'enCarrito',
 			validate: {
 				isString(value) {
-					if (value && typeof value !== 'string') throw new Error('Status must be a string!!!!');
+					if (value && typeof value !== 'string')
+						throw new Error('Status must be a string!!!!');
 				}
 			}
 		},
@@ -35,7 +38,8 @@ module.exports = sequelize => {
 			allowNull: true,
 			validate: {
 				isString(value) {
-					if (value && typeof value !== 'string') throw new Error('Last name must be a string!!!!');
+					if (value && typeof value !== 'string')
+						throw new Error('Last name must be a string!!!!');
 				}
 			}
 		},
@@ -45,7 +49,8 @@ module.exports = sequelize => {
 			allowNull: true,
 			validate: {
 				isString(value) {
-					if (value && typeof value !== 'string') throw new Error('Country must be a string!!!!');
+					if (value && typeof value !== 'string')
+						throw new Error('Country must be a string!!!!');
 				}
 			}
 		},
@@ -62,10 +67,9 @@ module.exports = sequelize => {
 
 		address: {
 			type: DataTypes.STRING,
-			allowNull: true,
 			validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('Adress must be a string!!!!');
+					if (typeof value !== 'string') throw new Error('Address must be a string!!!!');
 				}
 			}
 		},
@@ -91,7 +95,8 @@ module.exports = sequelize => {
 			allowNull: true,
 			validate: {
 				isString(value) {
-					if (value && typeof value !== 'string') throw new Error('Shipping type must be a string!!!!');
+					if (value && typeof value !== 'string')
+						throw new Error('Shipping type must be a string!!!!');
 				}
 			}
 		}

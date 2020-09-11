@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {User, Purchase_order, Product, Orderline} = require('../db.js'); //database
+const {User, Purchase_order, Orderline} = require('../db.js'); //database
 
 router.get('/', async (req, res) => {
 	const userList = await User.findAll();
@@ -41,10 +41,10 @@ router.put('/:id', (req, res) => {
 			.then(user => {
 				if (!user) return res.status(400).send('No se encontró el usuario:(');
 
-				user.name = name ? name : user.name;
-				user.rol = rol ? rol : user.rol;
-				user.email = email ? email : user.rol;
-				user.password = password ? password : user.password;
+				user.name = name || user.name;
+				user.rol = rol || user.rol;
+				user.email = email || user.rol;
+				user.password = password || user.password;
 				user.save();
 
 				return user;
@@ -68,36 +68,154 @@ router.delete('/:id', (req, res) => {
 	});
 });
 
-//Rutas de cart 
-//Ruta para agregar Item al Carrito
+// Rutas de cart
+// Cart es Purchase_order con status "enCarrito", purchase_orders son las que tienen cualquier otro estado
+// Ruta para agregar Item al Carrito
 
-router.post('/:UserId/cart', async (req,res) => {
-   let {UserId} = req.params;
-   const {ProductId, quantity, price} = req.body;
+router.get('/:userId/cart', (req, res) => {
+	const {userId} = req.params;
 
-   try {
+	Purchase_order.findOne({
+		where: {buyerId: userId, status: 'enCarrito'},
+		include: Orderline
+	}).then(response => {
+		if (!response) return res.status(404).send('No se encontró el carrito de ese usuario');
+		else return res.send(response);
+	});
+});
 
-		let [carritoAwait, created] = await  Purchase_order.findOrCreate({ include: Orderline, where: {buyerId : UserId}});
-		let tieneOrderline = carritoAwait.orderlines.find(e =>  e.productId ===  ProductId) || undefined
-  		let orderLineAwait;
+router.post('/:userId/cart', (req, res) => {
+	const {userId} = req.params;
+	const {
+		status,
+		recipient_name,
+		recipient_lastname,
+		country,
+		city,
+		address,
+		postal_code,
+		phone_number,
+		shipping_type
+	} = req.body;
 
-		if (!tieneOrderline) {
-	 		orderLineAwait = await Orderline.create({productId : ProductId, purchaseOrderId : carritoAwait.id, quantity: quantity, price: price})
-		} else {
-			orderLineAwait = await Orderline.findOne({where: {productId : ProductId, purchaseOrderId : carritoAwait.id}})
-			orderLineAwait.quantity = quantity 
+	Purchase_order.findOne({where: {buyerId: userId, status: 'enCarrito'}})
+		.then(response => {
+			if (response) return res.status(400).send('El usuario todavía tiene un carrito abierto');
+		})
+		.catch(err => {
+			return res.status(400).send('Algo salió mal: ' + err.message);
+		});
+
+	Purchase_order.create(
+		{
+			buyerId: userId,
+			status,
+			recipient_name,
+			recipient_lastname,
+			country,
+			city,
+			address,
+			postal_code,
+			phone_number,
+			shipping_type
+		},
+		{include: [{model: User, as: 'buyer'}]}
+	)
+		.then(response => {
+			return res.send(response);
+		})
+		.catch(err => res.status(400).send('Algo salió mal: ' + err.message));
+});
+
+router.put('/:userId/cart', async (req, res) => {
+	const {userId} = req.params;
+	const {
+		status,
+		recipient_name,
+		recipient_lastname,
+		country,
+		city,
+		address,
+		postal_code,
+		phone_number,
+		shipping_type,
+		orderlineChanges
+	} = req.body;
+
+	if (
+		!status &&
+		!recipient_name &&
+		!recipient_lastname &&
+		!country &&
+		!city &&
+		!address &&
+		!postal_code &&
+		!phone_number &&
+		!shipping_type &&
+		!orderlineChanges
+	) {
+		return res.status(400).send('Debes enviar al menos un campo para editar');
+	}
+
+	const order = await Purchase_order.findOne({
+		where: {buyerId: userId, status: 'enCarrito'},
+		include: Orderline
+	});
+
+	if (!order) return res.status(404).send('No se encontró el carrito del usuario');
+
+	try {
+		if (orderlineChanges && orderlineChanges.length > 0) {
+			await Promise.all(
+				orderlineChanges.map(async change => {
+					const {productId, quantity, price} = change;
+
+					const [currentOrder, created] = await Orderline.findOrCreate({
+						where: {productId, purchaseOrderId: order.id},
+						defaults: {quantity, price}
+					});
+
+					if (!created) {
+						currentOrder.quantity = quantity || currentOrder.quantity;
+						currentOrder.price = price || currentOrder.price;
+
+						await currentOrder.save();
+						await currentOrder.reload();
+					}
+
+					return currentOrder;
+				})
+			);
 		}
 
-		await orderLineAwait.save()
-		await orderLineAwait.reload()
-        await carritoAwait.save()
-        await carritoAwait.reload()
+		order.status = status || order.status;
+		order.recipient_name = recipient_name || order.recipient_name;
+		order.recipient_lastname = recipient_lastname || order.recipient_lastname;
+		order.country = country || order.country;
+		order.city = city || order.city;
+		order.address = address || order.address;
+		order.postal_code = postal_code || order.postal_code;
+		order.phone_number = phone_number || order.phone_number;
+		order.shipping_type = shipping_type || order.shipping_type;
 
-   	    res.send(carritoAwait)
+		await order.save();
+		await order.reload();
 
-   } catch(error) {
-   	    res.status(400).send(error.message);
-   } 
-})
+		return res.send(order);
+	} catch (error) {
+		return res.status(400).send('Algo salió mal: ' + error.message);
+	}
+});
+
+router.delete('/:userId/cart', (req, res) => {
+	const {userId} = req.params;
+
+	Purchase_order.destroy({where: {buyerId: userId, status: 'enCarrito'}})
+		.then(response => {
+			if (!response) return res.status(404).send('No se encontró el carrito');
+			else return res.send('Carrito eliminado con éxito');
+		})
+		.catch(err => res.status(400).send('Algo salió mal: ' + err.message));
+});
 
 module.exports = router;

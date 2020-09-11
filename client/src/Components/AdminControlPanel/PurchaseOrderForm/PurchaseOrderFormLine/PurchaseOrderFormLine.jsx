@@ -121,11 +121,11 @@ export default function FormFormAdmin(props) {
 			</ul>
 			<form className={stateEdit.edit}>
 				<select defaultValue={status} onChange={handleSelectChange}>
-					<option value="En carrito">En carrito</option>
-					<option value="Creada">Creada</option>
-					<option value="Pagada">Pagada</option>
-					<option value="Entregada">Entregada</option>
-					<option value="Cancelada">Cancelada</option>
+					<option value="enCarrito">En carrito</option>
+					<option value="creada">Creada</option>
+					<option value="pagada">Pagada</option>
+					<option value="entregada">Entregada</option>
+					<option value="cancelada">Cancelada</option>
 				</select>
 				<input
 					className="productInputTag"

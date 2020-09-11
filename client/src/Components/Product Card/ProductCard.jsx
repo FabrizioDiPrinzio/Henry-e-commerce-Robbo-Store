@@ -5,12 +5,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
-// const btnAdd = document.querySelector('.add');
-// const btnRest = document.querySelector('.rest');
 
 export default function ProductCard({robot}) {
 	const userId = useSelector(state => state.user.userId);
 	const userType = useSelector(state => state.user.userType);
+  const [loading, setLoading] = useState(false)
 
 	const [carrito, setCarrito] = useState({
 		quantity: 0,
@@ -18,28 +17,14 @@ export default function ProductCard({robot}) {
 		name: robot.name,
 		price: robot.price,
 		stock: robot.stock,
-		image: robot.image,
-		description: robot.description
+		image: robot.image
 	});
-
-	// const addEvents = () => {
-	// 	btnAdd.addEventListener('click', e => handleClickAdd);
-	// 	btnRest.addEventListener('click', e => handleClickRest);
-	// };
-
-	// const removeEvents = () => {
-	// 	btnAdd.removeEventListener('click', e => handleClickAdd);
-	// 	btnAdd.removeEventListener('click', e => handleClickRest);
-	// };
-
-	// addEvents();
 
 	const handleClickAdd = e => {
 		e.preventDefault();
-		// btnAdd.style.backgroundColor = 'gray';
-		// removeEvents();
-
+    e.target.style.opacity =  '0.1';
 		setCarrito({...carrito, quantity: ++carrito.quantity});
+    setLoading(true)
 
 		axios
 			.put(`${urlBack}/user/${userId}/cart`, {
@@ -52,20 +37,23 @@ export default function ProductCard({robot}) {
 				]
 			})
 			.then(() => {
+        setLoading(false)
+        e.target.style.opacity =  '1'
 				alert('Agregado');
-				// addEvents();
-				// btnAdd.style.backgroundColor = 'lightgreen';
 			})
-			.catch(error => console.log(error));
+			.catch(error => {
+      setLoading(false)
+      console.log(error);
+      e.target.style.opacity =  '1'
+      });
 	};
 
 	const handleClickRest = e => {
 		e.preventDefault();
-		// btnRest.style.backgroundColor = 'gray';
-		// removeEvents();
-		if (carrito.quantity > 0) {
+		if (carrito.quantity > 0 || loading === false) {
+      e.target.style.opacity =  '0.1';
 			setCarrito({...carrito, quantity: --carrito.quantity});
-
+      setLoading(true)
 			axios
 				.put(`${urlBack}/user/${userId}/cart`, {
 					orderlineChanges: [
@@ -77,11 +65,17 @@ export default function ProductCard({robot}) {
 					]
 				})
 				.then(response => {
+        	e.target.style.opacity =  '1';
+          setLoading(false)
 					alert('Quitado');
 					// addEvents();
 					// btnRest.style.backgroundColor = 'var(--razzmatazz)';
 				})
-				.catch(error => alert(error.message));
+				.catch(error => {
+          alert(error.message);
+          setLoading(false)
+        	e.target.style.opacity =  '1'
+        });
 		}
 	};
 
@@ -125,5 +119,5 @@ export default function ProductCard({robot}) {
 				</div>
 			</div>
 		</div>
-	);
+	)
 }

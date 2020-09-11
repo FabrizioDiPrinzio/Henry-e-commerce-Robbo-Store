@@ -1,23 +1,20 @@
 import * as actionTypes from '../Actions/actionTypes';
 
 const initialState = {
-	orderLinesInCurrentCart: [],
+	currentCart: []
 };
 
 export default function purchaseOrderReducer(state = initialState, action) {
 	switch (action.type) {
-
 		// case actionTypes.GET_PREVIOUS_CART:
 		// 	return {
-				
-		// 		SI ES userType: User o Admin 
+
+		// 		SI ES userType: User o Admin
 
 		// 		pedir al back el último carrito. y setearlo en current cart
-				
+
 		// 		axios.get('${urlBack}/user/:idUser/cart')
 		// 		dispachar el carrito obtenido
-
-				
 
 		// 		...state,
 		// 	};
@@ -30,6 +27,6 @@ export default function purchaseOrderReducer(state = initialState, action) {
 		// 	}
 
 		default:
-		return state;
+			return state;
 	}
 }

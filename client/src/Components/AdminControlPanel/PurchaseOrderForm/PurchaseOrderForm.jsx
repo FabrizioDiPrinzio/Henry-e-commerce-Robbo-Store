@@ -13,10 +13,12 @@ export default function PurchaseOrderForm() {
 	const [productOrders, setProductOrders] = useState([]);
 
 	useEffect(() => {
-		axios.get(`${urlBack}/orders`).then(response => {
-			setProductOrders(response.data);
-			console.log(response.data);
-		});
+		axios
+			.get(`${urlBack}/orders`)
+			.then(response => {
+				setProductOrders(response.data);
+			})
+			.catch(err => console.log(err.message));
 	}, []);
 
 	return (

@@ -47,6 +47,20 @@ export default function productReducer(state = initialState, action) {
 				lastError: null
 			};
 
+		case actionTypes.PRODUCTS_ERROR:
+			return {
+				...state,
+				lastResponse: null,
+				lastError: action.payload
+			};
+
+		case actionTypes.CLEAN_MESSAGES:
+			return {
+				...state,
+				lastResponse: null,
+				lastError: null
+			};
+
 		default:
 			return state;
 	}

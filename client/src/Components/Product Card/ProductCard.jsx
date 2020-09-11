@@ -7,7 +7,7 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductCard({robot}) {
-	const userId = useSelector(state => state.user.userId);
+	const userId = useSelector(state => state.user.id);
 	const userType = useSelector(state => state.user.userType);
 	const [loading, setLoading] = useState(false);
 
@@ -53,8 +53,8 @@ export default function ProductCard({robot}) {
 			axios
 				.put(`${urlBack}/user/${userId}/cart`, {
 					productId: parseInt(carrito.productId),
-					price: parseInt(carrito.price),
-					quantity: parseInt(carrito.quantity)
+					quantity: parseInt(carrito.quantity),
+					price: parseInt(carrito.price) * parseInt(carrito.quantity)
 				})
 				.then(() => {
 					// e.target.style.opacity = '1';

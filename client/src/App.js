@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from './Redux/Actions/actions.js';
 import './App.css';
 import Catalogo from './Components/Catalogo/Catalogo.jsx';
@@ -14,13 +14,20 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
 
 function App() {
+	const user = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		dispatch(allActions.categoryActions.getAllCategories());
 		dispatch(allActions.productActions.getAllProducts());
-		//dispatch(allActions.purchaseOrderActions.getCurrentCart())
 	}, []);
+
+	useEffect(
+		() => {
+			dispatch(allActions.cartActions.getUserCart(user.id));
+		},
+		[user]
+	);
 
 	return (
 		<div>

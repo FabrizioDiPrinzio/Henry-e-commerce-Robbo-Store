@@ -33,3 +33,11 @@ export const ADDED_CATEGORY = 'ADDED_CATEGORY';
 export const REMOVED_CATEGORY = 'REMOVED_CATEGORY';
 
 export const PRODUCTS_ERROR = 'PRODUCTS_ERROR';
+
+// ------------------ Cart Actions -------------------
+
+export const GET_CART = 'GET_CART';
+
+export const POST_CART = 'POST_CART';
+
+export const CART_ERROR = 'CART_ERROR';

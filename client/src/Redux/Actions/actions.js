@@ -1,12 +1,12 @@
 import * as categoryActions from './categoryActions';
 import * as productActions from './productActions';
-// import * as purchaseOrderActions from './purchaseOrderActions'
+import * as cartActions from './cartActions';
 // import userActions from './userActions'
 
 const allActions = {
 	categoryActions,
 	productActions,
-	// purchaseOrderActions,
+	cartActions: cartActions
 	// userActions,
 };
 

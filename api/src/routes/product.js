@@ -74,10 +74,10 @@ router.put('/:id', async (req, res) => {
 	if (!robot) return res.status(400).send('No se encontró el robot :(');
 
 	try {
-		robot.name = name ? name : robot.name;
-		robot.description = description ? description : robot.description;
-		robot.price = price ? price : robot.price;
-		robot.stock = stock ? stock : 0;
+		robot.name = name || robot.name;
+		robot.description = description || robot.description;
+		robot.price = price || robot.price;
+		robot.stock = stock || robot.stock;
 		if (image) {
 			await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
 			robot.image = image;

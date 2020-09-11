@@ -29,7 +29,7 @@ export default function Menu() {
 	};
 
 	return (
-		<div className="container">
+		<div className="containerMenu">
 			<div className={'botonMenu'} onClick={clickHandle}>
 				<div className={stateMenu.cross} />
 				<div className={stateMenu.line} />

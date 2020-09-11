@@ -64,11 +64,12 @@ router.put('/:id', async (req, res) => {
 	*/
 
 	const {name, price, stock, description} = req.body;
-	const image = req.body.image[0];
+	const image = req.body.image ? req.body.image[0] : null;
 	const {id} = req.params;
 
-	if (!name && !price && !stock && !image && !description)
+	if (!name && typeof price !== 'number' && typeof stock !== 'number' && !image && !description) {
 		return res.status(400).send('Debes enviar al menos un parametro para editar');
+	}
 
 	const robot = await Product.findByPk(id);
 	if (!robot) return res.status(400).send('No se encontró el robot :(');
@@ -77,17 +78,16 @@ router.put('/:id', async (req, res) => {
 		robot.name = name || robot.name;
 		robot.description = description || robot.description;
 		robot.price = price || robot.price;
-		robot.stock = stock || robot.stock;
+		robot.stock = stock || stock === 0 ? stock : robot.stock;
 		if (image) {
 			await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
 			robot.image = image;
 		}
 		await robot.save();
-	} catch (error) {
-		res.status(400).send(error.message);
-	} finally {
 		const savedRobot = await robot.reload();
 		res.status(200).send(savedRobot);
+	} catch (error) {
+		res.status(400).send(error.message);
 	}
 });
 

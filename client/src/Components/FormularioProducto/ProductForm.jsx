@@ -64,12 +64,7 @@ export default function ProductFormFunction() {
 			setCheckboxes(categoryTypes);
 		},
 		[categories]
-	);
-
-	// Gets all the robots from the server when the page loads
-	useEffect(() => {
-		dispatch(productActions.getAllProducts());
-	}, []);
+	);	
 
 	// Creates an alert after each successful or failed operation
 	useEffect(

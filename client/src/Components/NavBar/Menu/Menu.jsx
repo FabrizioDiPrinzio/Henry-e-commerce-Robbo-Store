@@ -14,10 +14,6 @@ export default function Menu() {
 		cross: 'crossHide'
 	});
 
-	useEffect(() => {
-		dispatch(allActions.categoryActions.getAllCategories());
-	}, []);
-
 	const clickHandle = event => {
 		event.preventDefault();
 		setStateMenu({

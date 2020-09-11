@@ -176,11 +176,14 @@ router.put('/:userId/cart', async (req, res) => {
 					});
 
 					if (!created) {
-						currentOrder.quantity = quantity || currentOrder.quantity;
-						currentOrder.price = price || currentOrder.price;
+						if (quantity === 0) currentOrder.destroy();
+						else {
+							currentOrder.quantity = quantity || currentOrder.quantity;
+							currentOrder.price = price || currentOrder.price;
 
-						await currentOrder.save();
-						await currentOrder.reload();
+							await currentOrder.save();
+							await currentOrder.reload();
+						}
 					}
 
 					return currentOrder;

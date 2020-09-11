@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
- import './PurchaseOrderFormLine.css';
+//import {useSelector, useDispatch} from 'react-redux';
+import './FormularioEnvio.css';
+import './FormularioEnvioUser.jsx'
 import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export default function FormFormAdmin(props) {
-	// React Hooks
-
+export default function UserForm(props) {
+	
 	const {
 		id,
-		status,
 		recipient_name,
 		recipient_lastname,
 		country,
@@ -20,11 +20,10 @@ export default function FormFormAdmin(props) {
 		phone_number,
 		shipping_type,
 		buyerId
-	} = props.info;
+	}= props.info
 
 	const [inputValues, setInputValues] = useState({
 		id,
-		status,
 		recipient_name,
 		recipient_lastname,
 		country,
@@ -37,10 +36,8 @@ export default function FormFormAdmin(props) {
 	});
 
 	const [stateEdit, setStateEdit] = useState({
-		edit: 'editClose'
+		edit: 'editOpen'
 	});
-
-	// ----------- Funcionalidad ----------
 
 	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
@@ -54,10 +51,6 @@ export default function FormFormAdmin(props) {
 		});
 	};
 
-	const handleSelectChange = event => {
-		setInputValues({...inputValues, status: event.target.value});
-	};
-
 	const handleEdit = event => {
 		event.preventDefault();
 
@@ -65,39 +58,36 @@ export default function FormFormAdmin(props) {
 			.put(`${urlBack}/orders/${id}`, inputValues)
 			.then(() => alert('Se realizaron los cambios'))
 			.catch(err => alert(err.message));
-	};
+
+	}
 
 	return (
 		<div>
-			<ul className="ProductFormLine">
-				<div className="productInputTag" id={status}>
-					{status}
-				</div>
-				<div className="productInputTag" id={recipient_name}>
+				<div className="product" id={recipient_name}>
 					{recipient_name}
 				</div>
-				<div className="productInputTag" id={recipient_lastname}>
+				<div className="product" id={recipient_lastname}>
 					{recipient_lastname}
 				</div>
-				<div className="productInputTag" id={country}>
+				<div className="product" id={country}>
 					{country}
 				</div>
-				<div className="productInputTag" id={city}>
+				<div className="product" id={city}>
 					{city}
 				</div>
-				<div className="productInputTag" id={address}>
+				<div className="product" id={address}>
 					{address}
 				</div>
-				<div className="productInputTag" id={postal_code}>
+				<div className="product" id={postal_code}>
 					{postal_code}
 				</div>
-				<div className="productInputTag" id={phone_number}>
+				<div className="product" id={phone_number}>
 					{phone_number}
 				</div>
-				<div className="productInputTag" id={shipping_type}>
+				<div className="product" id={shipping_type}>
 					{shipping_type}
 				</div>
-				<div className="productInputTag" id={buyerId}>
+				<div className="product" id={buyerId}>
 					{buyerId}
 				</div>
 				<div calssName="formActionContainer">
@@ -118,73 +108,69 @@ export default function FormFormAdmin(props) {
 						</svg>
 					</button>
 				</div>
-			</ul>
-			<form className={stateEdit.edit}>
-				<select defaultValue={status} onChange={handleSelectChange}>
-					<option value="En carrito">En carrito</option>
-					<option value="Creada">Creada</option>
-					<option value="Pagada">Pagada</option>
-					<option value="Entregada">Entregada</option>
-					<option value="Cancelada">Cancelada</option>
-				</select>
+			
+			<form className="FormEnvio">
+				<label htmlForm="recipient_name" className="">
+					recipient_name:
+				</label>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="recipient_name"
 					value={inputValues.recipient_name}
 					onChange={handleInputChange}
 				/>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="recipient_lastname"
 					value={inputValues.recipient_lastname}
 					onChange={handleInputChange}
 				/>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="country"
 					value={inputValues.country}
 					onChange={handleInputChange}
 				/>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="city"
 					value={inputValues.city}
 					onChange={handleInputChange}
 				/>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="address"
 					value={inputValues.address}
 					onChange={handleInputChange}
 				/>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="postal_code"
 					value={inputValues.postal_code}
 					onChange={handleInputChange}
 				/>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="phone_number"
 					value={inputValues.phone_number}
 					onChange={handleInputChange}
 				/>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="shipping_type"
 					value={inputValues.shipping_type}
 					onChange={handleInputChange}
 				/>
 				<input
-					className="productInputTag"
+					className="product"
 					type="text"
 					name="buyerId"
 					value={inputValues.buyerId}

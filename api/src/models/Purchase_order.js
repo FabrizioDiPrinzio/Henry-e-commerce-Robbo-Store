@@ -62,10 +62,9 @@ module.exports = sequelize => {
 
 		address: {
 			type: DataTypes.STRING,
-			allowNull: true,
-			validate: {
+				validate: {
 				isString(value) {
-					if (typeof value !== 'string') throw new Error('Adress must be a string!!!!');
+					if (typeof value !== 'string') throw new Error('Address must be a string!!!!');
 				}
 			}
 		},

@@ -47,3 +47,16 @@
 .infoCardData {
   font-weight: bold;
 }
+
+.btnAgregar{
+  width: 200px;
+  height: 50px;
+  padding: 10px;
+  align-self: flex-end;
+  background-color: var(--razzmatazz);
+  border-radius: 10% 10% 10% 10%;
+  margin-right: 10px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  border: none; 
+}

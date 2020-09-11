@@ -6,6 +6,7 @@ const purchase_orders = require('./purchase_orders.js');
 const category = require('./category.js');
 const {Product} = require('../db.js');
 const {Op} = require('sequelize');
+const { default: FormEnvioUser } = require('../../../client/src/Components/FormularioEnvio/FormularioEnvioUser.jsx');
 
 const app = express();
 
@@ -16,6 +17,9 @@ app.use('/products', productRouter);
 app.use('/products/category', category);
 app.use('/user', user);
 app.use('/orders', purchase_orders);
+
+
+
 
 app.get('/', (req, res) => {
 	res.send('Hola');

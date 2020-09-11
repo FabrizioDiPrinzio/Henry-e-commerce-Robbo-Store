@@ -9,6 +9,7 @@ import FormularioCategoria from './Components/FormularioCategoria/FormularioCate
 import UserForm from './Components/FormularioUsuario/UserForm.jsx';
 import AdminControlPanel from './Components/AdminControlPanel/AdminControlPanel.jsx';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
+import FormularioEnvio from './Components/FormularioEnvio/FormularioEnvio.jsx'
 import Carrito from './Components/Carrito/Carrito.jsx';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
 				<Route exact path="/producto/:id" component={Producto} />
 				<Route exact path="/signup" component={UserForm} />
 				<Route exact path="/admin" component={AdminControlPanel} />
+				<Route exact path="/users/orders" component={FormularioEnvio}/>
 			</Router>
 		</div>
 	);

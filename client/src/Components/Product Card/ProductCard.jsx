@@ -1,11 +1,44 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import './ProductCard.css';
+import {useSelector, useDispatch} from 'react-redux';
+import axios from 'axios';
+
+const urlBack = process.env.REACT_APP_API_URL;
+
 
 export default function ProductCard({robot}) {
 	const [en, setCarrito] = useState({
-		carrito: 0
+		userId:  useSelector( state => state.user.userID),
+		userType: useSelector( state => state.user.userType),
+		carrito: 0,
+		name: robot.name,
+		price: robot.price,
+		stock: robot.stock,
+		image: robot.image,
+		description: robot.description
 	});
+
+
+const handleClickAdd = e => {
+e.preventDefault();
+setCarrito({...en, carrito: en.carrito + 1})
+
+  // axios.post(`${urlBack}/:userId/cart`, )
+  //   .then(response => {
+		// })
+  //   .catch(error => alert(error.message)); 
+    
+}
+
+
+
+const handleClickRes = e => {
+e.preventDefault()
+setCarrito({...en, carrito: en.carrito > 0 ? en.carrito - 1 : 0})
+
+}
+
 
 	return (
 		<div className="cardContainer">
@@ -37,7 +70,7 @@ export default function ProductCard({robot}) {
 					<div className="butonContainer">
 						<div
 							className="boton add"
-							onClick={() => setCarrito({...en, carrito: en.carrito + 1})}
+							onClick={handleClickAdd}
 						>
 							<div className="iconButtom">+</div>
 						</div>
@@ -45,8 +78,7 @@ export default function ProductCard({robot}) {
 					<div className="butonContainer">
 						<div
 							className="boton rest"
-							onClick={() =>
-								setCarrito({...en, carrito: en.carrito > 0 ? en.carrito - 1 : 0})}
+							onClick={handleClickRes}
 						>
 							<div className="iconButtom">-</div>
 						</div>

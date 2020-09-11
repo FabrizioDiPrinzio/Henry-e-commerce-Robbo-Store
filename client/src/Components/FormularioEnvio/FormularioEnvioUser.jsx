@@ -1,23 +1,25 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
-import FormularioEnvio from'./FormularioEnvio.jsx';
-//import PurchaseOrderFormLine from '../AdminControlPanel/PurchaseOrderForm/PurchaseOrderFormLine/PurchaseOrderFormLine.jsx';
+import './FormularioEnvioUser.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormEnvioUser() {
-	// const userList = useSelector(state => state.users)
-	// const dispatch = useDispatch()
+		
+		// const {
+		// 	id,
+		// 	recipient_name,
+		// 	recipient_lastname,
+		// 	country,
+		// 	city,
+		// 	address,
+		// 	postal_code,
+		// 	phone_number,
+		// 	shipping_type,	
+		// }
 
 	
-	// useEffect(() => {
-	// 	axios.post(`${urlBack}/orders`).then(response => {
-	// 		setProductOrders(response.data);
-	// 		console.log(response.data);
-	// 	});
-	// }, []);
-
 	const [inputValues, setInputValues] = useState({
 		id: 0,
 		recipient_name: "",
@@ -36,6 +38,11 @@ export default function FormEnvioUser() {
 
 	const handleSend = event => {
 		event.preventDefault();
+
+		axios
+		.put(`${urlBack}/user/:userId/cart`, inputValues)
+		.then(() => alert('Sus datos se han registrado correctamente'))
+		.catch(err => alert(err.message));
 	}
 
 	return (
@@ -133,7 +140,7 @@ export default function FormEnvioUser() {
 					onChange={handleInputChange}
 				/>
 				<div className="formActionContainer">
-					<button type="submit" className="editBtn" value="Edit" onClick={handleSend}>
+					<button type="submit" className="SendBtn" value="Edit" onClick={handleSend}>
 						Aceptar
 					</button>
 				</div>

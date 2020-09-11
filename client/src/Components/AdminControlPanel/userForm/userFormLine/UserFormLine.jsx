@@ -6,29 +6,34 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function UserFormAdmin(props) {
-	const id = props.userInfo.id;
-	const name = props.userInfo.name;
-	const email = props.userInfo.email;
-	const password = props.userInfo.password;
-	const rol = props.userInfo.rol;
+	//React Hooks
+	const {
+		id,
+		name,
+		email,
+		password,
+		rol
+	} = props.userInfo;
 
 	const [inputValues, setInputValues] = useState({
-		id: id,
-		name: name,
-		email: email,
-		password: password,
-		rol: rol
+		id,
+		name,
+		email,
+		password,
+		rol,	
 	});
 
 	const [stateEdit, setStateEdit] = useState({
 		edit: 'editClose',
 	});
 
-	const [selectedId, setSelectedId] = useState(0);
+	//const [selectedId, setSelectedId] = useState(0);
+
+	// ----------- Funcionalidad ----------
 
 	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
-	  }
+	};
 
 	const clickHandle = event => {
 		event.preventDefault();
@@ -38,12 +43,22 @@ export default function UserFormAdmin(props) {
 		});
 	}
 
+	const handleSelectChange = event => {
+		setInputValues({...inputValues, status: event.target.value});
+	};
+
 	const handleEdit = event => {
 		event.preventDefault();
-	}
+
+		axios
+			.put(`${urlBack}/user/${id}`, inputValues)
+			.then(() => alert('Se realizaron los cambios'))
+			.catch(err => alert(err.message));
+	};
 
 	const handleDelete = event => {
 		event.preventDefault();
+		
 		axios
 			.delete(`${urlBack}/user/${id}`)
 			.then(response => {
@@ -51,14 +66,7 @@ export default function UserFormAdmin(props) {
 				})
 				//Algo para que se actualice
 			.catch(error => alert('No se pudo eliminar el usuario: ' + error.message));
-	}
-
-	useEffect(
-		() => {
-
-		},
-		[]
-	);
+	};
 
 	return (
 		<div>
@@ -86,10 +94,14 @@ export default function UserFormAdmin(props) {
 				</div>
 			</ul>
 			<form className={stateEdit.edit}>
-				<input className="inputTag" type="text" id={name} value={inputValues.name} onChange={handleInputChange}></input>
-				<input className="inputTag" type="text" id={email} value={inputValues.email} onChange={handleInputChange}></input>
-				<input className="inputTag" type="text" id={password} value={inputValues.password} onChange={handleInputChange}></input>
-				<input className="inputTag" type="text" id={rol} value={inputValues.rol} onChange={handleInputChange}></input>
+				<input className="inputTag" type="text" name="name" value={inputValues.name} onChange={handleInputChange}></input>
+				<input className="inputTag" type="text" name="email" value={inputValues.email} onChange={handleInputChange}></input>
+				<input className="inputTag" type="text" name="password" value={inputValues.password} onChange={handleInputChange}></input>
+				{/*<input className="inputTag" type="text" id={rol} value={inputValues.rol} onChange={handleInputChange}></input>*/}
+				<select className="inputTag" defaultValue={rol} onChange={handleSelectChange}>
+					<option value="Usuario">Usuario</option>
+					<option value="Admin">Admin</option>
+				</select>
 				<div calssName="userActionContainer">
 					<button type="submit" className="editBtn" value="Edit" onClick={handleEdit}>
 						Aceptar

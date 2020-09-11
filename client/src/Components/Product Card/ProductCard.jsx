@@ -9,7 +9,7 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function ProductCard({robot}) {
 	const userId = useSelector(state => state.user.userId);
 	const userType = useSelector(state => state.user.userType);
-  const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(false);
 
 	const [carrito, setCarrito] = useState({
 		quantity: 0,
@@ -22,60 +22,52 @@ export default function ProductCard({robot}) {
 
 	const handleClickAdd = e => {
 		e.preventDefault();
-    e.target.style.opacity =  '0.1';
+		// e.target.style.opacity = '0.1';
 		setCarrito({...carrito, quantity: ++carrito.quantity});
-    setLoading(true)
+		setLoading(true);
 
 		axios
 			.put(`${urlBack}/user/${userId}/cart`, {
-				orderlineChanges: [
-					{
-						productId: parseInt(carrito.productId),
-						price: parseInt(carrito.price),
-						quantity: parseInt(carrito.quantity)
-					}
-				]
+				productId: parseInt(carrito.productId),
+				price: parseInt(carrito.price),
+				quantity: parseInt(carrito.quantity)
 			})
 			.then(() => {
-        setLoading(false)
-        e.target.style.opacity =  '1'
+				setLoading(false);
+				// e.target.style.opacity = '1';
 				alert('Agregado');
 			})
 			.catch(error => {
-      setLoading(false)
-      console.log(error);
-      e.target.style.opacity =  '1'
-      });
+				setLoading(false);
+				console.log(error);
+				// e.target.style.opacity = '1';
+			});
 	};
 
 	const handleClickRest = e => {
 		e.preventDefault();
 		if (carrito.quantity > 0 || loading === false) {
-      e.target.style.opacity =  '0.1';
+			// e.target.style.opacity = '0.1';
 			setCarrito({...carrito, quantity: --carrito.quantity});
-      setLoading(true)
+			setLoading(true);
 			axios
 				.put(`${urlBack}/user/${userId}/cart`, {
-					orderlineChanges: [
-						{
-							productId: parseInt(carrito.productId),
-							price: parseInt(carrito.price),
-							quantity: parseInt(carrito.quantity)
-						}
-					]
+					productId: parseInt(carrito.productId),
+					price: parseInt(carrito.price),
+					quantity: parseInt(carrito.quantity)
 				})
-				.then(response => {
-        	e.target.style.opacity =  '1';
-          setLoading(false)
+				.then(() => {
+					// e.target.style.opacity = '1';
+					setLoading(false);
 					alert('Quitado');
 					// addEvents();
 					// btnRest.style.backgroundColor = 'var(--razzmatazz)';
 				})
 				.catch(error => {
-          alert(error.message);
-          setLoading(false)
-        	e.target.style.opacity =  '1'
-        });
+					alert(error.message);
+					setLoading(false);
+					// e.target.style.opacity = '1';
+				});
 		}
 	};
 
@@ -119,5 +111,5 @@ export default function ProductCard({robot}) {
 				</div>
 			</div>
 		</div>
-	)
+	);
 }

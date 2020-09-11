@@ -97,7 +97,6 @@ if (en.carrito > 0){
 					<div className="butonContainer">
 						<div
 							className="boton add"
-							onClick={handleClickAdd}
 						>
 							<div className="iconButtom">+</div>
 						</div>
@@ -105,7 +104,6 @@ if (en.carrito > 0){
 					<div className="butonContainer">
 						<div
 							className="boton rest"
-							onClick={handleClickRest}
 						>
 							<div className="iconButtom">-</div>
 						</div>

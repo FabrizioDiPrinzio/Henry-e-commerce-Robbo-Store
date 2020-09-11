@@ -1,30 +1,90 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
 import './ProductCard.css';
+import {useSelector, useDispatch} from 'react-redux';
+import axios from 'axios';
+
+const urlBack = process.env.REACT_APP_API_URL;
+const btnAdd = document.querySelector('.add')
+const btnRest = document.querySelector('.rest')
+
+
+
 
 export default function ProductCard({robot}) {
 	const [en, setCarrito] = useState({
-		carrito: 0
+		userId:  useSelector( state => state.user.userID),
+		userType: useSelector( state => state.user.userType),
+		carrito: 0,
+		productId: robot.productId,
+		name: robot.name,
+		price: robot.price,
+		stock: robot.stock,
+		image: robot.image,
+		description: robot.description
 	});
+}
+
+const addEvents = () => {
+	btnAdd.addEventListener('click',e => handleClickAdd)
+	btnRest.addEventListener('click',e => handleClickRest)
+}  
+
+const removeEvents = () => {
+	btnAdd.removeEventListener('click',e => handleClickAdd)
+	btnAdd.removeEventListener('click',e => handleClickRest)
+}  
+
+
+addEvents()
+
+const handleClickAdd = e => {
+e.preventDefault();
+btnAdd.style.backgroundColor = 'gray';
+	removeEvents()
+  axios.post(`${urlBack}/${en.userId}/cart`,  {productId: en.productId, quantity: en.carrito + 1, price: en.price})
+    .then(response => {
+  		setCarrito({...en, carrito: en.carrito + 1});
+  		addEvents()
+  		btnAdd.style.backgroundColor = 'lightgreen'
+	}).catch(error => alert(error.message)); 
+}
+
+
+
+const handleClickRest = e => {
+e.preventDefault()
+btnRest.style.backgroundColor = 'gray';
+removeEvents()
+if (en.carrito > 0){
+  	axios.post(`${urlBack}/${en.userId}/cart`,  {productId: en.productId, quantity: en.carrito - 1, price: en.price})
+	    .then(response => {
+				setCarrito({...en, carrito: en.carrito - 1});
+				addEvents()
+				btnRest.style.backgroundColor =  'var(--razzmatazz)';
+		}).catch(error => alert(error.message)); 
+	}
+}
+
 
 	return (
 		<div className="cardContainer">
 			<div className="imageContainer">
-				<img className="image" src={robot.image} alt={robot.name} />
+				<img className="image" src={en.image} alt={en.name} />
 			</div>
 			<div className="infoContainer">
-				<Link to={`/producto/${robot.id}`}>
+				<Link to={`/producto/${en.id}`}>
 					<div className="title">
-						<h3>{robot.name}</h3>
+						<h3>{en.name}</h3>
 					</div>
 				</Link>
 				<div className="body">
 					<div className="price">
-						<b> Precio : </b> U$S {robot.price}
+						<b> Precio : </b> U$S {en.price}
 					</div>
 					<div className="stock">
 						<b> Stock : </b>
-						{robot.stock <= 0 ? 'Out of stock!' : robot.stock}
+						{en.stock <= 0 ? 'Out of stock!' : en.stock}
 					</div>
 				</div>
 			</div>
@@ -37,7 +97,7 @@ export default function ProductCard({robot}) {
 					<div className="butonContainer">
 						<div
 							className="boton add"
-							onClick={() => setCarrito({...en, carrito: en.carrito + 1})}
+							onClick={handleClickAdd}
 						>
 							<div className="iconButtom">+</div>
 						</div>
@@ -45,8 +105,7 @@ export default function ProductCard({robot}) {
 					<div className="butonContainer">
 						<div
 							className="boton rest"
-							onClick={() =>
-								setCarrito({...en, carrito: en.carrito > 0 ? en.carrito - 1 : 0})}
+							onClick={handleClickRest}
 						>
 							<div className="iconButtom">-</div>
 						</div>

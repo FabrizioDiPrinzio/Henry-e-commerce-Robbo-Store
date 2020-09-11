@@ -5,65 +5,44 @@ import {useSelector, useDispatch} from 'react-redux';
 import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
-const btnAdd = document.querySelector('.add')
-const btnRest = document.querySelector('.rest')
-
-
-
 
 export default function ProductCard({robot}) {
 	const [en, setCarrito] = useState({
-		userId:  useSelector( state => state.user.userID),
-		userType: useSelector( state => state.user.userType),
+		userId:  1,//useSelector( state => state.user.userID),
+		userType: 1, //useSelector( state => state.user.userType),
 		carrito: 0,
-		productId: robot.productId,
+		productId: robot.id,
 		name: robot.name,
 		price: robot.price,
 		stock: robot.stock,
-		image: robot.image,
-		description: robot.description
+		image: robot.image
 	});
-}
-
-const addEvents = () => {
-	btnAdd.addEventListener('click',e => handleClickAdd)
-	btnRest.addEventListener('click',e => handleClickRest)
-}  
-
-const removeEvents = () => {
-	btnAdd.removeEventListener('click',e => handleClickAdd)
-	btnAdd.removeEventListener('click',e => handleClickRest)
-}  
 
 
-addEvents()
-
-const handleClickAdd = e => {
-e.preventDefault();
-btnAdd.style.backgroundColor = 'gray';
-	removeEvents()
-  axios.post(`${urlBack}/${en.userId}/cart`,  {productId: en.productId, quantity: en.carrito + 1, price: en.price})
-    .then(response => {
-  		setCarrito({...en, carrito: en.carrito + 1});
-  		addEvents()
-  		btnAdd.style.backgroundColor = 'lightgreen'
-	}).catch(error => alert(error.message)); 
-}
-
-
-
-const handleClickRest = e => {
-e.preventDefault()
-btnRest.style.backgroundColor = 'gray';
-removeEvents()
-if (en.carrito > 0){
-  	axios.post(`${urlBack}/${en.userId}/cart`,  {productId: en.productId, quantity: en.carrito - 1, price: en.price})
+ const handleClickAdd = e => {
+	e.preventDefault();
+	e.target.style.opacity =  '0.1';
+ 	axios.post(`${urlBack}/${en.userId}/cart`,  {productId: en.id, quantity: en.carrito + 1, price: en.price})
 	    .then(response => {
+	  		setCarrito({...en, carrito: en.carrito + 1});
+	  		e.target.style.opacity =  '1';
+		}).catch(error => alert(error.message))
+		.catch(	e.target.style.opacity =  '1') ; 
+}
+
+
+
+ const handleClickRest = e => {
+	e.preventDefault()
+	if (en.carrito > 0){
+		e.target.style.opacity =  '0.1';
+	  	axios.post(`${urlBack}/${en.userId}/cart`,  {productId: en.id, quantity: en.carrito - 1, price: en.price})
+		    .then(response => {
 				setCarrito({...en, carrito: en.carrito - 1});
-				addEvents()
-				btnRest.style.backgroundColor =  'var(--razzmatazz)';
-		}).catch(error => alert(error.message)); 
-	}
+				e.target.style.opacity =  '1';
+			}).catch(error => alert(error.message))
+			.catch(	e.target.style.opacity =  '1') ;  
+		}
 }
 
 
@@ -95,21 +74,17 @@ if (en.carrito > 0){
 				</div>
 				<div className="botones">
 					<div className="butonContainer">
-						<div
-							className="boton add"
-						>
+						<div className="boton add" onClick={handleClickAdd}>
 							<div className="iconButtom">+</div>
 						</div>
 					</div>
 					<div className="butonContainer">
-						<div
-							className="boton rest"
-						>
+						<div className="boton rest" onClick={handleClickRest}>
 							<div className="iconButtom">-</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	);
+	)
 }

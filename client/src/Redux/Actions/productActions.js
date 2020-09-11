@@ -16,10 +16,10 @@ export const getAllProducts = () => dispatch => {
 				description: product.description,
 				categories: product.categories
 			}));
-
+			return products
+		}).then(products => {
 			dispatch({type: actionTypes.GET_ALL_PRODUCTS, payload: products});
 
-			dispatch({type: actionTypes.CLEAN_MESSAGES});
 		})
 		.catch(err => dispatch(catchError(err)));
 };
@@ -29,6 +29,11 @@ export const getAllProducts = () => dispatch => {
 // 		type: actionTypes.GET_PRODUCT
 // 	});
 // };
+
+
+//===================================================================================//
+
+
 
 export const postProduct = (product, categories) => dispatch => {
 	axios
@@ -90,5 +95,4 @@ export const modifyProductCategories = (productId, categories) => dispatch => {
 
 export const catchError = err => dispatch => {
 	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.message});
-	dispatch({type: actionTypes.CLEAN_MESSAGES});
 };

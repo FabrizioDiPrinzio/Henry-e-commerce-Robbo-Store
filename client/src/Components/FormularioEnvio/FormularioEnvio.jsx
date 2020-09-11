@@ -18,8 +18,7 @@ export default function UserForm(props) {
 		address,
 		postal_code,
 		phone_number,
-		shipping_type,
-		buyerId
+		shipping_type,	
 	}= props.info
 
 	const [inputValues, setInputValues] = useState({
@@ -32,7 +31,6 @@ export default function UserForm(props) {
 		postal_code,
 		phone_number,
 		shipping_type,
-		buyerId
 	});
 
 	const [stateEdit, setStateEdit] = useState({
@@ -63,34 +61,32 @@ export default function UserForm(props) {
 
 	return (
 		<div>
-				<div className="product" id={recipient_name}>
-					{recipient_name}
-				</div>
-				<div className="product" id={recipient_lastname}>
-					{recipient_lastname}
-				</div>
-				<div className="product" id={country}>
-					{country}
-				</div>
-				<div className="product" id={city}>
-					{city}
-				</div>
-				<div className="product" id={address}>
-					{address}
-				</div>
-				<div className="product" id={postal_code}>
-					{postal_code}
-				</div>
-				<div className="product" id={phone_number}>
-					{phone_number}
-				</div>
-				<div className="product" id={shipping_type}>
-					{shipping_type}
-				</div>
-				<div className="product" id={buyerId}>
-					{buyerId}
-				</div>
-				<div calssName="formActionContainer">
+		{/* // 		<div className="product" id={recipient_name}>
+		// 			{recipient_name}
+		// 		</div>
+		// 		<div className="product" id={recipient_lastname}>
+		// 			{recipient_lastname}
+		// 		</div>
+		// 		<div className="product" id={country}>
+		// 			{country}
+		// 		</div>
+		// 		<div className="product" id={city}>
+		// 			{city}
+		// 		</div>
+		// 		<div className="product" id={address}>
+		// 			{address}
+		// 		</div>
+		// 		<div className="product" id={postal_code}>
+		// 			{postal_code}
+		// 		</div>
+		// 		<div className="product" id={phone_number}>
+		// 			{phone_number}
+		// 		</div>
+		// 		<div className="product" id={shipping_type}>
+		// 			{shipping_type}
+		// 		</div> */}
+				
+				{/* <div calssName="formActionContainer">
 					<button type="submit" className="editBtn" value="Edit" onClick={clickHandle}>
 						<svg
 							width="1em"
@@ -107,17 +103,15 @@ export default function UserForm(props) {
 							/>
 						</svg>
 					</button>
-				</div>
+				</div> */}
 			
 			<form className="FormEnvio">
-				<label htmlForm="recipient_name" className="">
-					recipient_name:
-				</label>
 				<input
 					className="product"
 					type="text"
 					name="recipient_name"
 					value={inputValues.recipient_name}
+					placeholder="Nombre"
 					onChange={handleInputChange}
 				/>
 				<input
@@ -125,6 +119,7 @@ export default function UserForm(props) {
 					type="text"
 					name="recipient_lastname"
 					value={inputValues.recipient_lastname}
+					placeholder="Apellido"
 					onChange={handleInputChange}
 				/>
 				<input
@@ -132,6 +127,7 @@ export default function UserForm(props) {
 					type="text"
 					name="country"
 					value={inputValues.country}
+					placeholder="Pais"
 					onChange={handleInputChange}
 				/>
 				<input
@@ -139,6 +135,7 @@ export default function UserForm(props) {
 					type="text"
 					name="city"
 					value={inputValues.city}
+					placeholder="Ciudad"
 					onChange={handleInputChange}
 				/>
 				<input
@@ -146,6 +143,7 @@ export default function UserForm(props) {
 					type="text"
 					name="address"
 					value={inputValues.address}
+					placeholder="Domicilio"
 					onChange={handleInputChange}
 				/>
 				<input
@@ -153,6 +151,7 @@ export default function UserForm(props) {
 					type="text"
 					name="postal_code"
 					value={inputValues.postal_code}
+					placeholder="Código Postal"
 					onChange={handleInputChange}
 				/>
 				<input
@@ -160,20 +159,15 @@ export default function UserForm(props) {
 					type="text"
 					name="phone_number"
 					value={inputValues.phone_number}
+					placeholder="Telefono"
 					onChange={handleInputChange}
 				/>
 				<input
 					className="product"
 					type="text"
 					name="shipping_type"
+					placeholder="Tipo de Envio"
 					value={inputValues.shipping_type}
-					onChange={handleInputChange}
-				/>
-				<input
-					className="product"
-					type="text"
-					name="buyerId"
-					value={inputValues.buyerId}
 					onChange={handleInputChange}
 				/>
 				<div className="formActionContainer">
@@ -183,5 +177,5 @@ export default function UserForm(props) {
 				</div>
 			</form>
 		</div>
-	);
+	)
 }

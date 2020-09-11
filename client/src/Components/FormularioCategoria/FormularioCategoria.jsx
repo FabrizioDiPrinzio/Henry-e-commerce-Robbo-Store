@@ -16,10 +16,6 @@ export default function FormularioCategoria() {
 	const [selectedCategoryId, setSelectedCategoryId] = useState(0);
 	const lista = useRef(0);
 
-	useEffect(() => {
-		dispatch(allActions.categoryActions.getAllCategories());
-	}, []);
-
 	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};

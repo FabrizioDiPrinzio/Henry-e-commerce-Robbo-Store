@@ -1,18 +1,27 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import './ProductCard.css';
 import {useSelector, useDispatch} from 'react-redux';
+import {allActions} from '../../Redux/Actions/actions';
 import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductCard({robot}) {
+	// Redux
 	const userId = useSelector(state => state.user.id);
 	const userType = useSelector(state => state.user.userType);
+	const orderlines = useSelector(state => state.cart.orderlines);
+	const dispatch = useDispatch();
+
+	const currentRobot = orderlines.find(item => item.productId === robot.id);
+
+	// React hooks
 	const [loading, setLoading] = useState(false);
+	// const [clickable, setClickable] = useState(false);
 
 	const [carrito, setCarrito] = useState({
-		quantity: 0,
+		quantity: currentRobot ? currentRobot.quantity : 0,
 		productId: robot.id,
 		name: robot.name,
 		price: robot.price,
@@ -20,34 +29,47 @@ export default function ProductCard({robot}) {
 		image: robot.image
 	});
 
+	useEffect(
+		() => {
+			setCarrito({...carrito, quantity: currentRobot ? currentRobot.quantity : 0});
+		},
+		[orderlines]
+	);
+
+	// ------------------- Funcionalidad ----------------
+
 	const handleClickAdd = e => {
 		e.preventDefault();
-		e.persist()
+		e.persist();
 		e.target.style.opacity = '0.1';
 		setLoading(true);
-		axios
-			.put(`${urlBack}/user/${userId}/cart`, {
-				productId: parseInt(carrito.productId),
-				price: parseInt(carrito.price),
-				quantity: parseInt(carrito.quantity + 1)
-			})
-			.then(() => {
-				setLoading(false);
-				e.target.style.opacity = '1';
-				setCarrito({...carrito, quantity: ++carrito.quantity});
-				alert('Agregado');
-			})
-			.catch(error => {
-				setLoading(false)
-      			console.log(error);
-      			console.log(e.target)
-      			e.target.style.opacity =  '1'
-			});
+		if (robot.stock > carrito.quantity) {
+			axios
+				.put(`${urlBack}/user/${userId}/cart`, {
+					productId: parseInt(carrito.productId),
+					price: parseInt(carrito.price),
+					quantity: parseInt(carrito.quantity + 1)
+				})
+				.then(() => {
+					setLoading(false);
+					e.target.style.opacity = '1';
+					setCarrito({...carrito, quantity: ++carrito.quantity});
+					alert('Agregado');
+					dispatch(allActions.cartActions.getUserCart(userId));
+				})
+				.catch(error => {
+					setLoading(false);
+					console.log(error);
+					console.log(e.target);
+					e.target.style.opacity = '1';
+				});
+		}
+		else alert('Sin stock!');
 	};
 
 	const handleClickRest = e => {
 		e.preventDefault();
-		e.persist()
+		e.persist();
 		e.target.style.opacity = '0.1';
 		if (carrito.quantity > 0 || loading === false) {
 			e.target.style.opacity = '0.1';
@@ -60,14 +82,14 @@ export default function ProductCard({robot}) {
 				})
 				.then(response => {
 					setCarrito({...carrito, quantity: --carrito.quantity});
-        			e.target.style.opacity =  '1';
-        			setLoading(false)
+					e.target.style.opacity = '1';
+					setLoading(false);
 					alert('Quitado');
 				})
 				.catch(error => {
-          			alert(error.message);
-        			setLoading(false)
-        			e.target.style.opacity =  '1'
+					alert(error.message);
+					setLoading(false);
+					e.target.style.opacity = '1';
 				});
 		}
 	};
@@ -78,7 +100,7 @@ export default function ProductCard({robot}) {
 				<img className="image" src={carrito.image} alt={carrito.name} />
 			</div>
 			<div className="infoContainer">
-				<Link to={`/producto/${carrito.id}`}>
+				<Link to={`/producto/${robot.id}`}>
 					<div className="title">
 						<h3>{carrito.name}</h3>
 					</div>

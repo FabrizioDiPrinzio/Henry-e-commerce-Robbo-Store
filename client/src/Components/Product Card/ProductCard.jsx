@@ -43,17 +43,17 @@ export default function ProductCard({robot}) {
 		e.persist();
 		e.target.style.opacity = '0.1';
 		setLoading(true);
+		const changes = {
+			productId: carrito.productId,
+			quantity: carrito.quantity + 1,
+			price: (carrito.quantity + 1) * carrito.price
+		};
 		if (robot.stock > carrito.quantity) {
 			axios
-				.put(`${urlBack}/user/${userId}/cart`, {
-					productId: parseInt(carrito.productId),
-					price: parseInt(carrito.price),
-					quantity: parseInt(carrito.quantity + 1)
-				})
+				.put(`${urlBack}/user/${userId}/cart`, changes)
 				.then(() => {
 					setLoading(false);
 					e.target.style.opacity = '1';
-					setCarrito({...carrito, quantity: ++carrito.quantity});
 					alert('Agregado');
 					dispatch(allActions.cartActions.getUserCart(userId));
 				})
@@ -71,20 +71,21 @@ export default function ProductCard({robot}) {
 		e.preventDefault();
 		e.persist();
 		e.target.style.opacity = '0.1';
-		if (carrito.quantity > 0 || loading === false) {
+		const changes = {
+			productId: carrito.productId,
+			quantity: carrito.quantity - 1,
+			price: (carrito.quantity - 1) * carrito.price
+		};
+		if (carrito.quantity > 0 && loading === false) {
 			e.target.style.opacity = '0.1';
 			setLoading(true);
 			axios
-				.put(`${urlBack}/user/${userId}/cart`, {
-					productId: parseInt(carrito.productId),
-					quantity: parseInt(carrito.quantity - 1),
-					price: parseInt(carrito.price) //   * parseInt(carrito.quantity)
-				})
+				.put(`${urlBack}/user/${userId}/cart`, changes)
 				.then(response => {
-					setCarrito({...carrito, quantity: --carrito.quantity});
 					e.target.style.opacity = '1';
 					setLoading(false);
 					alert('Quitado');
+					dispatch(allActions.cartActions.getUserCart(userId));
 				})
 				.catch(error => {
 					alert(error.message);

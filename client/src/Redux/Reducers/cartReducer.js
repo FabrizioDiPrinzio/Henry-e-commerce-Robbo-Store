@@ -1,8 +1,10 @@
 import * as actionTypes from '../Actions/actionTypes';
 
 const initialState = {
-	currentCart: {},
-	orderlines: [],
+	currentCart: {
+		orderlines: [],
+		products: [],
+	},
 	lastError: null
 };
 
@@ -12,13 +14,11 @@ export default function cartReducer(state = initialState, action) {
 			return {
 				...state,
 				currentCart: action.payload,
-				orderlines: action.payload.orderlines
 			};
 		case actionTypes.POST_CART:
 			return {
 				...state,
 				currentCart: action.payload,
-				orderlines: []
 			};
 		case actionTypes.CART_ERROR:
 			return {

@@ -1,29 +1,19 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {allActions} from '../../Redux/Actions/actions.js'
 import {Link} from 'react-router-dom';
 import './Carrito.css';
 import ProductCard from '../Product Card/ProductCard.jsx';
 import FormularioDatosEnvio from './formularioDatosEnvio/FormularioDatosEnvio.jsx'
 
 export default function Carrito() {
-    const [product, setProduct] = useState([{
-        name: 'robot1', 
-        image:"https://www.cellshop.com/329023-large_default/boneco-hasbro-transformer-optimus-prime-e1897.jpg",
-        price: 35,
-        stock:10 
-    },
-{
-    name: 'robot2', 
-        image:"https://www.cellshop.com/329023-large_default/boneco-hasbro-transformer-optimus-prime-e1897.jpg",
-        price: 40,
-        stock:5 
-},
-{
-    name: 'robot1', 
-        image:"https://www.cellshop.com/329023-large_default/boneco-hasbro-transformer-optimus-prime-e1897.jpg",
-        price: 305,
-        stock:1 
-}
-]);
+    const productsInCart = useSelector(state => state.cart.currentCart.products);
+    const cartId = useSelector(state => state.cart.currentCart.id);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(allActions.cartActions.getUserCart())
+    }, [cartId])
     
 
     return(
@@ -33,8 +23,8 @@ export default function Carrito() {
                     <h1>Carrito de compras</h1>
                 </div>
                 <ul className="list">
-    				{product &&
-    					product.map(bot => (
+    				{productsInCart &&
+    					productsInCart.map(bot => (
     						<li className="listItem" key={bot.id}>
     							<ProductCard robot={bot} />
     						</li>

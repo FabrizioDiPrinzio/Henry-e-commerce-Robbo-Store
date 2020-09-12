@@ -11,7 +11,7 @@ export default function ProductCard({robot}) {
 	// Redux
 	const userId = useSelector(state => state.user.id);
 	const userType = useSelector(state => state.user.userType);
-	const orderlines = useSelector(state => state.cart.orderlines);
+	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
 
 	// React hooks

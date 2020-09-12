@@ -18,7 +18,7 @@ export default function PurchaseOrderForm() {
 			.then(response => {
 				setProductOrders(response.data);
 			})
-			.catch(err => console.log(err.message));
+			.catch(err => console.log(err.response.data));
 	}, []);
 
 	return (

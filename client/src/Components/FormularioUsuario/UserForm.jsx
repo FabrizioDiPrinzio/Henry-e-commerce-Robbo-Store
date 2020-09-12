@@ -9,40 +9,39 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioCategoria() {
-  // const users = useSelector(state => state);
-  // const dispatch = useDispatch();
-	const [inputValues, setInputValues] = useState({name: null, rol: null, email: null, password: null});
-  const formulario = useRef(0);
+	// const users = useSelector(state => state);
+	// const dispatch = useDispatch();
+	const [inputValues, setInputValues] = useState({
+		name: null,
+		rol: null,
+		email: null,
+		password: null
+	});
+	const formulario = useRef(0);
 
-	useEffect(
-		() => {
-      // dispatch();
-		},
-		[]
-	);
-  const handleInputChange = event => {
-    setInputValues({...inputValues, [event.target.name]: event.target.value});
-  }
+	const handleInputChange = event => {
+		setInputValues({...inputValues, [event.target.name]: event.target.value});
+	};
 
 	// Creates a new category
 	const handleAdd = event => {
-    event.preventDefault();
-    
-    const userFix = {...inputValues, rol: 'Client', }
+		event.preventDefault();
 
-    axios.post(`${urlBack}/user/signup`, userFix)
-    .then(response => {
-      alert(response.data.name + ' es ahora un nuevo Usuario');
-      setInputValues({name: null, rol: null, email: null, password: null})
-      formulario.current.reset();
-		})
-    .catch(error => alert('no se pudo registrar correctamente: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
-    
+		const userFix = {...inputValues, rol: 'Client'};
+
+		axios
+			.post(`${urlBack}/user/signup`, userFix)
+			.then(response => {
+				alert(response.data.name + ' es ahora un nuevo Usuario');
+				setInputValues({name: null, rol: null, email: null, password: null});
+				formulario.current.reset();
+			})
+			.catch(error => alert('no se pudo registrar correctamente: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
 	};
 
 	return (
-    <div className="formContainer">
-      <form className="form" onSubmit={handleAdd} ref={formulario}>
+		<div className="formContainer">
+			<form className="form" onSubmit={handleAdd} ref={formulario}>
 				<h3 className="titulo">Registrarse</h3>
 				<br />
 
@@ -61,16 +60,16 @@ export default function FormularioCategoria() {
 					Email:
 				</label>
 				<input
-          className="form-control"
-          type="text"
+					className="form-control"
+					type="text"
 					name="email"
 					value={inputValues.email}
 					placeholder="Email"
 					onChange={handleInputChange}
 				/>
-        <br />
+				<br />
 
-        <label htmlFor="nombre">Contraseña:</label>
+				<label htmlFor="nombre">Contraseña:</label>
 				<input
 					className="form-control"
 					type="password"
@@ -78,13 +77,12 @@ export default function FormularioCategoria() {
 					value={inputValues.password}
 					onChange={handleInputChange}
 				/>
-        <br />
-				
+				<br />
+
 				<button type="submit" className="addBtn" value="Enviar" onClick={handleAdd}>
 					Registrarse
 				</button>
-
-      </form>
-    </div>
+			</form>
+		</div>
 	);
 }

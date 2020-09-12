@@ -4,7 +4,6 @@ import PurchaseOrderForm from './PurchaseOrderForm/PurchaseOrderForm';
 import 'bootstrap/dist/css/bootstrap.css';
 import './adminControlPanel.css';
 import {Link} from 'react-router-dom';
-
 // =========== FIN DE IMPORTS ============
 
 export default function controlPanel() {

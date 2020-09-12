@@ -49,7 +49,7 @@ export default function FormularioCategoria() {
 			.then(() => {
 				dispatch(allActions.categoryActions.getAllCategories());
 			})
-			.catch(error => alert('no se pudo agregar la categoria: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
+			.catch(error => alert('No se pudo agregar la categoria: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
 
 		// dispatch(allActions.categoryActions.postCategory(inputValues));
 	};
@@ -70,7 +70,7 @@ export default function FormularioCategoria() {
 			.then(() => {
 				dispatch(allActions.categoryActions.getAllCategories());
 			})
-			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
+			.catch(error => alert('no se pudo eliminar la categoria: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
 	};
 
 	// Edits the selected category
@@ -91,7 +91,7 @@ export default function FormularioCategoria() {
 			.then(() => {
 				dispatch(allActions.categoryActions.getAllCategories());
 			})
-			.catch(error => alert('no se pudo eliminar la categoria: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
+			.catch(error => alert('no se pudo eliminar la categoria: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
 	};
 
 	return (

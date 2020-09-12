@@ -17,7 +17,7 @@ router.get('/names', (req, res) => {
 router.post('/', (req, res) => {
 	const {name, description} = req.body;
 	if (!name || !description) {
-		return res.status(400).send('parametros incompletos');
+		return res.status(400).send('Parámetros incompletos');
 	}
 	else {
 		Categories.create(req.body)
@@ -44,7 +44,7 @@ router.put('/:id', (req, res) => {
 	const {name, description} = req.body;
 	const {id} = req.params;
 
-	if (!name && !description) return res.status(400).send('faltan parametros');
+	if (!name && !description) return res.status(400).send('Faltan parámetros');
 	else {
 		Categories.findByPk(id)
 			.then(category => {

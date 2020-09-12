@@ -24,7 +24,7 @@ export const postUserCart = userId => dispatch => {
 				payload: res.data
 			})
 		)
-		.catch(err => dispatch(onError(err.message)));
+		.catch(err => dispatch(onError(err.response.data)));
 };
 
 const onError = errorMessage => {

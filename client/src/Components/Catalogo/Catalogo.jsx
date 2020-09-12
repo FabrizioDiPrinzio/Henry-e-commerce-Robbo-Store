@@ -15,7 +15,10 @@ export default function Catalogo(props) {
 		() => {
 			// Main page, returns ALL products
 			if (!categoria && !params) {
-				axios.get(`${urlBack}/products`).then(res => setRobots(res.data));
+				axios
+					.get(`${urlBack}/products`)
+					.then(res => setRobots(res.data))
+					.catch(err => console.log(err.message));
 			}
 			else if (categoria) {
 				// Filter by category

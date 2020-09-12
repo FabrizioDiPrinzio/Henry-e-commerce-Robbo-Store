@@ -1,73 +1,87 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import './ProductCard.css';
 import {useSelector, useDispatch} from 'react-redux';
+import {allActions} from '../../Redux/Actions/actions';
 import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductCard({robot}) {
+	// Redux
 	const userId = useSelector(state => state.user.id);
 	const userType = useSelector(state => state.user.userType);
+	const orderlines = useSelector(state => state.cart.orderlines);
+	const dispatch = useDispatch();
+
+	// React hooks
+	const currentRobot = orderlines.find(item => item.productId === robot.id);
+
+	const [carrito, setCarrito] = useState({quantity: currentRobot ? currentRobot.quantity : 0});
 	const [loading, setLoading] = useState(false);
 
-	const [carrito, setCarrito] = useState({
-		quantity: 0,
-		productId: robot.id,
-		name: robot.name,
-		price: robot.price,
-		stock: robot.stock,
-		image: robot.image
-	});
+	useEffect(
+		() => {
+			setCarrito({...carrito, quantity: currentRobot ? currentRobot.quantity : 0});
+		},
+		[orderlines]
+	);
+
+	// ------------------- Funcionalidad ----------------
 
 	const handleClickAdd = e => {
 		e.preventDefault();
-		e.persist()
+		e.persist();
 		e.target.style.opacity = '0.1';
 		setLoading(true);
-		axios
-			.put(`${urlBack}/user/${userId}/cart`, {
-				productId: parseInt(carrito.productId),
-				price: parseInt(carrito.price),
-				quantity: parseInt(carrito.quantity + 1)
-			})
-			.then(() => {
-				setLoading(false);
-				e.target.style.opacity = '1';
-				setCarrito({...carrito, quantity: ++carrito.quantity});
-				alert('Agregado');
-			})
-			.catch(error => {
-				setLoading(false)
-      			console.log(error);
-      			console.log(e.target)
-      			e.target.style.opacity =  '1'
-			});
+		const changes = {
+			productId: robot.id,
+			quantity: carrito.quantity + 1,
+			price: (carrito.quantity + 1) * robot.price
+		};
+		if (robot.stock > carrito.quantity) {
+			axios
+				.put(`${urlBack}/user/${userId}/cart`, changes)
+				.then(() => {
+					setLoading(false);
+					e.target.style.opacity = '1';
+					alert('Agregado');
+					dispatch(allActions.cartActions.getUserCart(userId));
+				})
+				.catch(error => {
+					setLoading(false);
+					console.log(error);
+					console.log(e.target);
+					e.target.style.opacity = '1';
+				});
+		}
+		else alert('Sin stock!');
 	};
 
-	const handleClickRest = e => {
+	const handleClickRemove = e => {
 		e.preventDefault();
-		e.persist()
+		e.persist();
 		e.target.style.opacity = '0.1';
-		if (carrito.quantity > 0 || loading === false) {
+		const changes = {
+			productId: robot.id,
+			quantity: carrito.quantity - 1,
+			price: (carrito.quantity - 1) * robot.price
+		};
+		if (carrito.quantity > 0 && loading === false) {
 			e.target.style.opacity = '0.1';
 			setLoading(true);
 			axios
-				.put(`${urlBack}/user/${userId}/cart`, {
-					productId: parseInt(carrito.productId),
-					quantity: parseInt(carrito.quantity - 1),
-					price: parseInt(carrito.price) //   * parseInt(carrito.quantity)
-				})
+				.put(`${urlBack}/user/${userId}/cart`, changes)
 				.then(response => {
-					setCarrito({...carrito, quantity: --carrito.quantity});
-        			e.target.style.opacity =  '1';
-        			setLoading(false)
+					e.target.style.opacity = '1';
+					setLoading(false);
 					alert('Quitado');
+					dispatch(allActions.cartActions.getUserCart(userId));
 				})
 				.catch(error => {
-          			alert(error.message);
-        			setLoading(false)
-        			e.target.style.opacity =  '1'
+					alert(error.message);
+					setLoading(false);
+					e.target.style.opacity = '1';
 				});
 		}
 	};
@@ -75,21 +89,21 @@ export default function ProductCard({robot}) {
 	return (
 		<div className="cardContainer">
 			<div className="imageContainer">
-				<img className="image" src={carrito.image} alt={carrito.name} />
+				<img className="image" src={robot.image} alt={robot.name} />
 			</div>
 			<div className="infoContainer">
-				<Link to={`/producto/${carrito.id}`}>
+				<Link to={`/producto/${robot.id}`}>
 					<div className="title">
-						<h3>{carrito.name}</h3>
+						<h3>{robot.name}</h3>
 					</div>
 				</Link>
 				<div className="body">
 					<div className="price">
-						<b> Precio : </b> U$S {carrito.price}
+						<b> Precio : </b> U$S {robot.price}
 					</div>
 					<div className="stock">
 						<b> Stock : </b>
-						{carrito.stock <= 0 ? 'Out of stock!' : carrito.stock}
+						{robot.stock <= 0 ? 'Out of stock!' : robot.stock}
 					</div>
 				</div>
 			</div>
@@ -105,7 +119,7 @@ export default function ProductCard({robot}) {
 						</div>
 					</div>
 					<div className="butonContainer">
-						<div className="boton rest" onClick={handleClickRest}>
+						<div className="boton rest" onClick={handleClickRemove}>
 							<div className="iconButtom">-</div>
 						</div>
 					</div>

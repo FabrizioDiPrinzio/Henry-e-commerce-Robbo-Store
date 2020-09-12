@@ -14,20 +14,11 @@ export default function ProductCard({robot}) {
 	const orderlines = useSelector(state => state.cart.orderlines);
 	const dispatch = useDispatch();
 
+	// React hooks
 	const currentRobot = orderlines.find(item => item.productId === robot.id);
 
-	// React hooks
+	const [carrito, setCarrito] = useState({quantity: currentRobot ? currentRobot.quantity : 0});
 	const [loading, setLoading] = useState(false);
-	// const [clickable, setClickable] = useState(false);
-
-	const [carrito, setCarrito] = useState({
-		quantity: currentRobot ? currentRobot.quantity : 0,
-		productId: robot.id,
-		name: robot.name,
-		price: robot.price,
-		stock: robot.stock,
-		image: robot.image
-	});
 
 	useEffect(
 		() => {
@@ -44,9 +35,9 @@ export default function ProductCard({robot}) {
 		e.target.style.opacity = '0.1';
 		setLoading(true);
 		const changes = {
-			productId: carrito.productId,
+			productId: robot.id,
 			quantity: carrito.quantity + 1,
-			price: (carrito.quantity + 1) * carrito.price
+			price: (carrito.quantity + 1) * robot.price
 		};
 		if (robot.stock > carrito.quantity) {
 			axios
@@ -67,14 +58,14 @@ export default function ProductCard({robot}) {
 		else alert('Sin stock!');
 	};
 
-	const handleClickRest = e => {
+	const handleClickRemove = e => {
 		e.preventDefault();
 		e.persist();
 		e.target.style.opacity = '0.1';
 		const changes = {
-			productId: carrito.productId,
+			productId: robot.id,
 			quantity: carrito.quantity - 1,
-			price: (carrito.quantity - 1) * carrito.price
+			price: (carrito.quantity - 1) * robot.price
 		};
 		if (carrito.quantity > 0 && loading === false) {
 			e.target.style.opacity = '0.1';
@@ -98,21 +89,21 @@ export default function ProductCard({robot}) {
 	return (
 		<div className="cardContainer">
 			<div className="imageContainer">
-				<img className="image" src={carrito.image} alt={carrito.name} />
+				<img className="image" src={robot.image} alt={robot.name} />
 			</div>
 			<div className="infoContainer">
 				<Link to={`/producto/${robot.id}`}>
 					<div className="title">
-						<h3>{carrito.name}</h3>
+						<h3>{robot.name}</h3>
 					</div>
 				</Link>
 				<div className="body">
 					<div className="price">
-						<b> Precio : </b> U$S {carrito.price}
+						<b> Precio : </b> U$S {robot.price}
 					</div>
 					<div className="stock">
 						<b> Stock : </b>
-						{carrito.stock <= 0 ? 'Out of stock!' : carrito.stock}
+						{robot.stock <= 0 ? 'Out of stock!' : robot.stock}
 					</div>
 				</div>
 			</div>
@@ -128,7 +119,7 @@ export default function ProductCard({robot}) {
 						</div>
 					</div>
 					<div className="butonContainer">
-						<div className="boton rest" onClick={handleClickRest}>
+						<div className="boton rest" onClick={handleClickRemove}>
 							<div className="iconButtom">-</div>
 						</div>
 					</div>

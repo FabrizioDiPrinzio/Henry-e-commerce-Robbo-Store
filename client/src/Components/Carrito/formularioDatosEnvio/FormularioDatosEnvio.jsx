@@ -40,31 +40,39 @@ export default function FormularioDatosEnvio() {
 				<div className="productTableTitle">
 				<form className="FormEnvio">
 					<h3>Formulario de Envio</h3>
-				<label htmlFor="Nombre" className="">
-							Nombre:
-						</label>
-				<input
-					className="product"
-					type="text"
-					name="recipient_name"
-					value={inputValues.recipient_name}
-					placeholder="Nombre"
-					onChange={handleInputChange}
-				/>
-				<label htmlFor="Apellido" className="">
-							Apellido:
-				</label>
-				<input
-					className="product"
-					type="text"
-					name="recipient_lastname"
-					value= {inputValues.recipient_lastname}
-					placeholder="Apellido"
-					onChange={handleInputChange}
-				/>
-				<label htmlFor="Pais" className="">
+				
+				<div className='lineaformularioenvio'>
+					<span htmlFor="Nombre" className="">
+								Nombre:
+							</span>
+					<input
+						className="product"
+						type="text"
+						name="recipient_name"
+						value={inputValues.recipient_name}
+						placeholder="Nombre"
+						onChange={handleInputChange}
+					/>					
+				</div>
+
+				<div className='lineaformularioenvio'>
+					<span htmlFor="Apellido" className="">
+								Apellido:
+					</span>
+					<input
+						className="product"
+						type="text"
+						name="recipient_lastname"
+						value= {inputValues.recipient_lastname}
+						placeholder="Apellido"
+						onChange={handleInputChange}
+					/>
+				</div>
+
+				<div className='lineaformularioenvio'>
+				<span htmlFor="Pais" className="">
 							Pais:
-						</label>
+						</span>
 				<input
 					className="product"
 					type="text"
@@ -73,9 +81,12 @@ export default function FormularioDatosEnvio() {
 					placeholder="Pais"
 					onChange={handleInputChange}
 				/>
-				<label htmlFor="Ciudad" className="">
+				</div>
+
+				<div className='lineaformularioenvio'>
+				<span htmlFor="Ciudad" className="">
 							Ciudad:
-						</label>
+						</span>
 				<input
 					className="product"
 					type="text"
@@ -84,9 +95,12 @@ export default function FormularioDatosEnvio() {
 					placeholder="Ciudad"
 					onChange={handleInputChange}
 				/>
-				<label htmlFor="Direccion" className="">
+				</div>
+
+				<div className='lineaformularioenvio'>
+				<span htmlFor="Direccion" className="">
 							Dirección:
-						</label>
+						</span>
 				<input
 					className="product"
 					type="text"
@@ -95,31 +109,40 @@ export default function FormularioDatosEnvio() {
 					placeholder="Dirección"
 					onChange={handleInputChange}
 				/>
-				<label htmlFor="CodigoPostal" className="">
+				</div>
+
+				<div className='lineaformularioenvio'>
+				<span htmlFor="CodigoPostal" className="">
 							Código Postal:
-						</label>
+						</span>
 				<input
 					className="product"
 					type="text"
 					name="postal_code"
-					value={inputValues.postal_code}
+					value={ inputValues.postal_code != 0 ? inputValues.postal_code : null}
 					placeholder="Código Postal"
 					onChange={handleInputChange}
 				/>
-				<label htmlFor="Telefono" className="">
+				</div>
+
+				<div className='lineaformularioenvio'>
+				<span htmlFor="Telefono" className="">
 							Telefono:
-						</label>
+						</span>
 				<input
 					className="product"
 					type="text"
 					name="phone_number"
-					value={inputValues.phone_number}
+					value={inputValues.phone_number  != 0 ? inputValues.phone_number : null}
 					placeholder="Telefono"
 					onChange={handleInputChange}
 				/>
-				<label htmlFor="TipodeEnvio" className="">
+				</div>
+
+				<div className='lineaformularioenvio'>
+				<span htmlFor="TipodeEnvio" className="">
 							Tipo de Envio:
-						</label>
+						</span>
 				<input
 					className="product"
 					type="text"
@@ -128,6 +151,9 @@ export default function FormularioDatosEnvio() {
 					value={inputValues.shipping_type}
 					onChange={handleInputChange}
 				/>
+				</div>
+
+
 				<div className="formActionContainer">
 					<button type="submit" className="SendBtn" value="Edit" onClick={handleSend}>
 						Aceptar

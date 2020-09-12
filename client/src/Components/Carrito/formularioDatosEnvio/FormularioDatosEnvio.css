@@ -1,5 +1,5 @@
 :root {
-    --max-width: 700px;
+    --max-width: 800px;
     --beau-blue: #d2e3f9ff;
     --baby-blue-eyes: #98b7f0ff;
     --glaucous: #617cc7ff;
@@ -7,29 +7,99 @@
     --razzmatazz: #d53467ff
 }
 
+.productFormAdmin {
+   display: flex;
+   margin: auto;
+  max-width: var(--max-width);
+   justify-content: center;
+   padding-bottom: 40px;
+}
+
 .FormEnvio {
-    color: var(--beau-blue);
-    margin: auto;
-    margin-top: 100px;
+    transition: 0.1s;
+    margin-top: 60px;
+    padding: 70px;
+    padding-top: 40px;
     max-width: var(--max-width);
     background-color: var(--baby-blue-eyes);
     border-radius: 12px;
-}
-
-.product {
     display: flex;
     flex-direction: column;
-    max-width: 320px;
+    justify-content: center;
+    align-items: flex-end;
+    box-shadow:  10px 10px 10px 0 rgb(0,0,0,0.2)
+}
+
+.FormEnvio h3 {
+    margin-bottom: 40px;
+    align-self: flex-start;
+    color: rgb(250,250,250,0.9);
+}
+
+.lineaformularioenvio span {
+    font-size: 14px;
+    color: rgb(250,250,250,0.9);
+  /* color:  rgb(86,52,136,0.9);*/
+    font-family: verdana;
+}
+
+
+
+.product {
+    max-width: 400px;
+    width: 45vw;
     margin-top: 15px;
     margin-left: 15px;
+    border: none;
+    display: inline-flex;
+    text-align: center;
+    border-radius: 5px;
 }
 
 .SendBtn {
     background: #617CC7;
     border-radius: 4px;
-    border: 4px solid #617CC7;
+    border: none;
+    padding: 8px 12px 8px 12px;
     color:white;
-    margin:0 5px 0 10px;
+    margin: 40px 5px 0;
     justify-content: center;
     align-items: center;
+    font-weight: bolder;
+    letter-spacing: 1.5px;
+    font-family: consolas;
+}
+
+.SendBtn:hover {
+  background-color: var(--razzmatazz)
+}
+
+
+@media (max-width: 500px) {
+
+    .FormEnvio {
+        transition: 0.1s;
+        padding: 30px;
+        align-items: center;
+        width: 90vw;
+    }
+
+    .FormEnvio h3 {
+        margin-bottom: 20px;
+    }
+
+    .product {
+        display: flex;
+        width: 75vw;
+        margin-bottom: 10px;
+        height: 30px;
+    }
+
+    .lineaformularioenvio span {
+        font-size: 16px;
+    }
+
+    .SendBtn {
+        width: 150px;
+    }
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {User, Purchase_order, Orderline} = require('../db.js'); //database
+const {User, Purchase_order, Orderline, Product} = require('../db.js'); //database
 
 router.get('/', async (req, res) => {
 	const userList = await User.findAll();
@@ -77,7 +77,7 @@ router.get('/:userId/cart', (req, res) => {
 
 	Purchase_order.findOne({
 		where: {buyerId: userId, status: 'enCarrito'},
-		include: Orderline
+		include: [{model: Orderline}, {model: Product}]
 	}).then(response => {
 		if (!response) return res.status(404).send('No se encontró el carrito de ese usuario');
 		else return res.send(response);
@@ -119,7 +119,7 @@ router.post('/:userId/cart', (req, res) => {
 			phone_number,
 			shipping_type
 		},
-		{include: [{model: User, as: 'buyer'}]}
+		{include: [{model: User, as: 'buyer'} /* , {model: Product}, {model: Orderline} */]}
 	)
 		.then(response => {
 			return res.send(response);

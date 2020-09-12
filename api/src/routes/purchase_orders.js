@@ -4,6 +4,7 @@ const {Orderline, User, Purchase_order} = require('../db.js');
 const {Op} = require('sequelize');
 
 // Cart es Purchase_order con status "enCarrito", purchase_orders son las que tienen cualquier otro estado
+
 // queryString:  orders?status=[enCarrito, creada, pagada, entregada, cancelada]
 
 router.get('/', (req, res) => {
@@ -61,17 +62,17 @@ router.put('/:id', async (req, res) => {
 	} = req.body;
 
 	if (
-		!status &&
-		!recipient_name &&
-		!recipient_lastname &&
-		!country &&
-		!city &&
-		!address &&
-		!postal_code &&
-		!phone_number &&
+		!status ||
+		!recipient_name ||
+		!recipient_lastname ||
+		!country ||
+		!city ||
+		!address ||
+		!postal_code ||
+		!phone_number ||
 		!shipping_type
 	) {
-		return res.status(400).send('Debes enviar al menos un campo para editar');
+		return res.status(400).send('Debes completar todos los campos para poder comprar!');
 	}
 
 	const order = await Purchase_order.findByPk(id);
@@ -79,15 +80,15 @@ router.put('/:id', async (req, res) => {
 	if (!order) return res.status(400).send('No se encontró la orden');
 
 	try {
-		order.status = status || order.status;
-		order.recipient_name = recipient_name || order.recipient_name;
-		order.recipient_lastname = recipient_lastname || order.recipient_lastname;
-		order.country = country || order.country;
-		order.city = city || order.city;
-		order.address = address || order.address;
-		order.postal_code = postal_code || order.postal_code;
-		order.phone_number = phone_number || order.phone_number;
-		order.shipping_type = shipping_type || order.shipping_type;
+		order.status = status;
+		order.recipient_name = recipient_name;
+		order.recipient_lastname = recipient_lastname;
+		order.country = country;
+		order.city = city;
+		order.address = address;
+		order.postal_code = postal_code;
+		order.phone_number = phone_number;
+		order.shipping_type = shipping_type;
 		await order.save();
 
 		const savedOrder = await order.reload();

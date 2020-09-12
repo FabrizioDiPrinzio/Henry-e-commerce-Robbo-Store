@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import {allActions} from '../../../Redux/Actions/actions.js'
 import 'bootstrap/dist/css/bootstrap.css';
 import './FormularioDatosEnvio.css';
 import axios from 'axios';
@@ -6,10 +8,10 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioDatosEnvio() {
-
+	const currentCartId = useSelector(state => state.cart.currentCart.id);
+	const dispatch = useDispatch();
 
 	const [inputValues, setInputValues] = useState({
-		id: 0,
 		recipient_name: "",
 		recipient_lastname: "",
 		country: "",
@@ -20,6 +22,19 @@ export default function FormularioDatosEnvio() {
 		shipping_type:"",
 	});
 
+	useEffect(() => {
+      	setInputValues({
+			recipient_name: "",
+			recipient_lastname: "",
+			country: "",
+			city: "",
+			address: "",
+			postal_code:0,
+			phone_number:0,
+			shipping_type:"",
+		})
+    }, [currentCartId])
+
 	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
@@ -27,11 +42,16 @@ export default function FormularioDatosEnvio() {
 	const handleSend = event => {
 		event.preventDefault();
 
-		// axios
-		// .put(`${urlBack}/user/${userId}/cart`, inputValues)
-		// .then(() => alert('Sus datos se han registrado correctamente'))
-		// .catch(err => alert(err.message));
-	}
+		let changes = {...inputValues, status: 'creada' }
+
+		axios
+			.put(`${urlBack}/orders/${currentCartId}`, changes)
+			.then(() => {
+				alert('Se realizaron los cambios')
+				dispatch(allActions.cartActions.getUserCart())
+			})
+			.catch(err => alert(err.message));
+	};
 
 	return (
 

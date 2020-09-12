@@ -11,11 +11,11 @@ export default function ProductCard({robot}) {
 	// Redux
 	const userId = useSelector(state => state.user.id);
 	const userType = useSelector(state => state.user.userType);
-	const orderlines = useSelector(state => state.cart.orderlines);
+	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
 
 	// React hooks
-	const currentRobot = orderlines.find(item => item.productId === robot.id);
+	const currentRobot =  orderlines && orderlines.find(item => item.productId === robot.id);
 
 	const [carrito, setCarrito] = useState({quantity: currentRobot ? currentRobot.quantity : 0});
 	const [loading, setLoading] = useState(false);
@@ -33,20 +33,22 @@ export default function ProductCard({robot}) {
 		e.preventDefault();
 		e.persist();
 		e.target.style.opacity = '0.1';
-		setLoading(true);
 		const changes = {
 			productId: robot.id,
 			quantity: carrito.quantity + 1,
 			price: (carrito.quantity + 1) * robot.price
 		};
-		if (robot.stock > carrito.quantity) {
+		if (robot.stock > carrito.quantity && loading === false) {
+			setLoading(true);
 			axios
 				.put(`${urlBack}/user/${userId}/cart`, changes)
 				.then(() => {
 					setLoading(false);
 					e.target.style.opacity = '1';
 					alert('Agregado');
+					dispatch(allActions.cartActions.postUserCart(userId));
 					dispatch(allActions.cartActions.getUserCart(userId));
+
 				})
 				.catch(error => {
 					setLoading(false);

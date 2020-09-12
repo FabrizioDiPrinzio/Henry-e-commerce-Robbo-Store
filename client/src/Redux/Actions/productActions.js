@@ -89,6 +89,6 @@ export const modifyProductCategories = (productId, categories) => dispatch => {
 };
 
 export const catchError = err => dispatch => {
-	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.message});
+	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.response.data});
 	dispatch({type: actionTypes.CLEAN_MESSAGES});
 };

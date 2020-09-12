@@ -18,7 +18,7 @@ export default function Catalogo(props) {
 				axios
 					.get(`${urlBack}/products`)
 					.then(res => setRobots(res.data))
-					.catch(err => console.log(err.message));
+					.catch(err => console.log(err.response.data));
 			}
 			else if (categoria) {
 				// Filter by category
@@ -27,7 +27,7 @@ export default function Catalogo(props) {
 					.then(res => setRobots(res.data.products))
 					.catch(err => {
 						setRobots(null);
-						console.log(err.message);
+						console.log(err.response.data);
 					});
 			}
 			else if (params) {
@@ -37,7 +37,7 @@ export default function Catalogo(props) {
 					.then(res => setRobots(res.data))
 					.catch(err => {
 						setRobots(null);
-						console.log(err.message);
+						console.log(err.response.data);
 					});
 			}
 		},

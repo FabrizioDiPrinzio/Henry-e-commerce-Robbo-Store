@@ -33,7 +33,7 @@ function App() {
 			.then(() => {
 				console.log('Usuario creado');
 			})
-			.catch(error => console.log(error.message));
+			.catch(error => console.log(error.response.data));
 
 		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());

@@ -36,7 +36,7 @@ export default function FormularioCategoria() {
 				setInputValues({name: null, rol: null, email: null, password: null});
 				formulario.current.reset();
 			})
-			.catch(error => alert('no se pudo registrar correctamente: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
+			.catch(error => alert('no se pudo registrar correctamente: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
 	};
 
 	return (

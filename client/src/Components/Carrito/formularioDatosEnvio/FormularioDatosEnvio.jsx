@@ -54,7 +54,7 @@ export default function FormularioDatosEnvio() {
 				alert('Se realizaron los cambios');
 			})
 			.then(() => dispatch(allActions.cartActions.postUserCart(userId)))
-			.catch(err => alert(err.message));
+			.catch(err => alert(err.response.data));
 	};
 
 	return (

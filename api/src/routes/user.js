@@ -35,7 +35,7 @@ router.put('/:id', (req, res) => {
 	const {name, rol, email, password} = req.body;
 	const {id} = req.params;
 
-	if (!name && !rol && !email && !password) return res.status(400).send('faltan parametros');
+	if (!name && !rol && !email && !password) return res.status(400).send('Faltan parámetros');
 	else {
 		User.findByPk(id)
 			.then(user => {

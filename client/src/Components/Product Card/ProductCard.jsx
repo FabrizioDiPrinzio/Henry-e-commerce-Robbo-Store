@@ -51,7 +51,7 @@ export default function ProductCard({robot}) {
 				})
 				.catch(error => {
 					setLoading(false);
-					console.log(error);
+					console.log(error.response.data);
 					console.log(e.target);
 					e.target.style.opacity = '1';
 				});
@@ -80,7 +80,7 @@ export default function ProductCard({robot}) {
 					dispatch(allActions.cartActions.getUserCart(userId));
 				})
 				.catch(error => {
-					alert(error.message);
+					alert(error.response.data);
 					setLoading(false);
 					e.target.style.opacity = '1';
 				});

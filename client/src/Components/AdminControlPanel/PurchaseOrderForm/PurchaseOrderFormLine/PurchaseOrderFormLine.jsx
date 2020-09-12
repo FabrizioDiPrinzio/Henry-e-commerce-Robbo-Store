@@ -64,7 +64,7 @@ export default function FormFormAdmin(props) {
 		axios
 			.put(`${urlBack}/orders/${id}`, inputValues)
 			.then(() => alert('Se realizaron los cambios'))
-			.catch(err => alert(err.message));
+			.catch(err => alert(err.response.data));
 	};
 
 	return (

@@ -22,7 +22,7 @@ export const getAllCategories = () => dispatch => {
 			});
 		})
 		.catch(error => {
-			const errorMsg = error.message;
+			const errorMsg = error.response.data;
 			dispatch(errorActionCreator(errorMsg));
 		});
 };
@@ -39,7 +39,7 @@ export const postCategory = category => dispatch => {
 			dispatch(getAllCategories());
 		})
 		.catch(error => {
-			const errorMsg = error.message;
+			const errorMsg = error.response.data;
 			dispatch(errorActionCreator(errorMsg));
 		});
 };
@@ -65,7 +65,7 @@ export const putCategory = (id, body) => dispatch => {
 			dispatch(getAllCategories());
 		})
 		.catch(error => {
-			const errorMsg = error.message;
+			const errorMsg = error.response.data;
 			dispatch(errorActionCreator(errorMsg));
 		});
 };

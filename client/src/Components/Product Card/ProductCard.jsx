@@ -4,6 +4,7 @@ import './ProductCard.css';
 import {useSelector, useDispatch} from 'react-redux';
 import {allActions} from '../../Redux/Actions/actions';
 import axios from 'axios';
+// =========== FIN DE IMPORTS ============
 
 const urlBack = process.env.REACT_APP_API_URL;
 
@@ -15,7 +16,7 @@ export default function ProductCard({robot}) {
 	const dispatch = useDispatch();
 
 	// React hooks
-	const currentRobot =  orderlines && orderlines.find(item => item.productId === robot.id);
+	const currentRobot = orderlines && orderlines.find(item => item.productId === robot.id);
 
 	const [carrito, setCarrito] = useState({quantity: currentRobot ? currentRobot.quantity : 0});
 	const [loading, setLoading] = useState(false);
@@ -46,9 +47,7 @@ export default function ProductCard({robot}) {
 					setLoading(false);
 					e.target.style.opacity = '1';
 					alert('Agregado');
-					dispatch(allActions.cartActions.postUserCart(userId));
 					dispatch(allActions.cartActions.getUserCart(userId));
-
 				})
 				.catch(error => {
 					setLoading(false);
@@ -74,7 +73,7 @@ export default function ProductCard({robot}) {
 			setLoading(true);
 			axios
 				.put(`${urlBack}/user/${userId}/cart`, changes)
-				.then(response => {
+				.then(() => {
 					e.target.style.opacity = '1';
 					setLoading(false);
 					alert('Quitado');

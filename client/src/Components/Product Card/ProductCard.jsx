@@ -33,13 +33,13 @@ export default function ProductCard({robot}) {
 		e.preventDefault();
 		e.persist();
 		e.target.style.opacity = '0.1';
-		setLoading(true);
 		const changes = {
 			productId: robot.id,
 			quantity: carrito.quantity + 1,
 			price: (carrito.quantity + 1) * robot.price
 		};
-		if (robot.stock > carrito.quantity) {
+		if (robot.stock > carrito.quantity && loading === false) {
+			setLoading(true);
 			axios
 				.put(`${urlBack}/user/${userId}/cart`, changes)
 				.then(() => {

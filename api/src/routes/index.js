@@ -33,7 +33,7 @@ app.get('/search', (req, res) => {
 				return res.status(404).send('No se encontró ningún robot de ese tipo :(');
 			return res.send(response);
 		})
-		.catch(() => res.status(400));
+		.catch(() => res.status(400).send('Algo salió mal'));
 });
 
 module.exports = app;

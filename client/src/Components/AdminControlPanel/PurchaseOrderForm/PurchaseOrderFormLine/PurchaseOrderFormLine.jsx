@@ -100,12 +100,12 @@ export default function FormFormAdmin(props) {
 	// };
 
 	// const handleEdit = event => {
-	// 	event.preventDefault();
-
+ 	// 	event.preventDefault();
+	//
 	// 	axios
 	// 		.put(`${urlBack}/orders/${id}`, inputValues)
 	// 		.then(() => alert('Se realizaron los cambios'))
-	// 		.catch(err => alert(err.message));
+	// 		.catch(err => alert(err.response.data));
 	// };
 
 	return (

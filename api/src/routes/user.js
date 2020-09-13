@@ -35,7 +35,7 @@ router.put('/:id', (req, res) => {
 	const {name, rol, email, password} = req.body;
 	const {id} = req.params;
 
-	if (!name && !rol && !email && !password) return res.status(400).send('faltan parametros');
+	if (!name && !rol && !email && !password) return res.status(400).send('Faltan parámetros');
 	else {
 		User.findByPk(id)
 			.then(user => {
@@ -84,7 +84,7 @@ router.get('/:userId/cart', (req, res) => {
 	});
 });
 
-router.post('/:userId/cart', (req, res) => {
+router.post('/:userId/cart', async (req, res) => {
 	const {userId} = req.params;
 	const {
 		status,
@@ -98,13 +98,11 @@ router.post('/:userId/cart', (req, res) => {
 		shipping_type
 	} = req.body;
 
-	Purchase_order.findOne({where: {buyerId: userId, status: 'enCarrito'}})
-		.then(response => {
-			if (response) return res.status(400).send('El usuario todavía tiene un carrito abierto');
-		})
-		.catch(err => {
-			return res.status(400).send('Algo salió mal: ' + err.message);
-		});
+	const userHasCart = await Purchase_order.findOne({
+		where: {buyerId: userId, status: 'enCarrito'}
+	});
+
+	if (userHasCart) return res.status(400).send('El usuario todavía tiene un carrito abierto');
 
 	Purchase_order.create(
 		{
@@ -119,11 +117,16 @@ router.post('/:userId/cart', (req, res) => {
 			phone_number,
 			shipping_type
 		},
-		{include: [{model: User, as: 'buyer'} /* , {model: Product}, {model: Orderline} */]}
+		{include: [{model: User, as: 'buyer'}]}
 	)
 		.then(response => {
-			return res.send(response);
-		})
+			response.products = []
+			response.orderlines = []
+			return response
+		}).then(villada => {
+			return res.send(villada);
+		}
+		)
 		.catch(err => res.status(400).send('Algo salió mal: ' + err.message));
 });
 
@@ -140,7 +143,7 @@ router.put('/:userId/cart', async (req, res) => {
 		include: Orderline
 	});
 
-	if (!order) return res.status(404).send('No se encontró el carrito del usuario');
+	if (!order) return res.status(400).send('No se encontró el carrito del usuario');
 
 	try {
 		const [currentOrder, created] = await Orderline.findOrCreate({
@@ -164,7 +167,7 @@ router.put('/:userId/cart', async (req, res) => {
 
 		return res.send(order);
 	} catch (error) {
-		return res.status(400).send('Algo salió mal: ' + error.message);
+		return res.status(405).send('Algo salió mal: ' + error.message);
 	}
 });
 

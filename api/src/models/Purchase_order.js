@@ -100,13 +100,23 @@ module.exports = sequelize => {
 				}
 			}
 		}
-
-		// Payment_date:{
-		//   type:DataTypes.DATE,
-		//   allowNull:false,
-		//   validate:{
-		//     isDate: true,
-		//   }
-		// }
+	}, 
+	{
+		validate: {
+    		statusChange() {
+      			if (this.status !== 'enCarrito' && (
+      				!this.recipient_name ||
+      				!this.recipient_lastname || 
+      				!this.country || 
+      				!this.city || 
+      				!this.address || 
+      				!this.postal_code || 
+      				!this.phone_number || 
+      				!this.shipping_type
+      				)) {
+						throw new Error('Purchase Order cannot change status without all properties filled')
+					}
+      		}
+    	}
 	});
 };

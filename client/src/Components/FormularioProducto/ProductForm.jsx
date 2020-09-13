@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import './ProductForm.css';
+import TablaPics from './TablaPics/TablaPics.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 //------ Fin de imports -----
 
@@ -293,6 +294,7 @@ export default function ProductFormFunction() {
 					</button>
 				</div>
 			</div>
+			<TablaPics/>
 		</div>
 	);
 }

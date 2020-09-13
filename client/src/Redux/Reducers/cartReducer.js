@@ -13,9 +13,12 @@ export default function cartReducer(state = initialState, action) {
 				currentCart: action.payload
 			};
 		case actionTypes.POST_CART:
+			const initialFix = action.payload
+			initialFix.products = [];
+			initialFix.ordelines = [];
 			return {
 				...state,
-				currentCart: action.payload
+				currentCart: initialFix
 			};
 		case actionTypes.CART_ERROR:
 			return {

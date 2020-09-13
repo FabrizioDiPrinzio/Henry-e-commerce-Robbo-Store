@@ -117,11 +117,16 @@ router.post('/:userId/cart', async (req, res) => {
 			phone_number,
 			shipping_type
 		},
-		{include: [{model: User, as: 'buyer'} /* , {model: Product}, {model: Orderline} */]}
+		{include: [{model: User, as: 'buyer'}]}
 	)
 		.then(response => {
-			return res.send(response);
-		})
+			response.products = []
+			response.orderlines = []
+			return response
+		}).then(villada => {
+			return res.send(villada);
+		}
+		)
 		.catch(err => res.status(400).send('Algo salió mal: ' + err.message));
 });
 

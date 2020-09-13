@@ -27,8 +27,8 @@ export default function FormularioCategoria() {
 	// Creates a new category
 	const handleAdd = event => {
     event.preventDefault();
-    
-    const userFix = {...inputValues, rol: 'Client', }
+
+    const userFix = {...inputValues, rol: 'User', }
 
     axios.post(`${urlBack}/user/signup`, userFix)
     .then(response => {
@@ -37,7 +37,7 @@ export default function FormularioCategoria() {
       formulario.current.reset();
 		})
     .catch(error => alert('no se pudo registrar correctamente: ' + error.message)); // < ---- Limpiar todo y hacer un getCategories de redux
-    
+
 	};
 
 	return (
@@ -79,7 +79,7 @@ export default function FormularioCategoria() {
 					onChange={handleInputChange}
 				/>
         <br />
-				
+
 				<button type="submit" className="addBtn" value="Enviar" onClick={handleAdd}>
 					Registrarse
 				</button>

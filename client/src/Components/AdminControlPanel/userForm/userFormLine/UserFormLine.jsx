@@ -20,7 +20,7 @@ export default function UserFormAdmin(props) {
 		name,
 		email,
 		password,
-		rol,	
+		rol,
 	});
 
 	const [stateEdit, setStateEdit] = useState({
@@ -58,7 +58,7 @@ export default function UserFormAdmin(props) {
 
 	const handleDelete = event => {
 		event.preventDefault();
-		
+
 		axios
 			.delete(`${urlBack}/user/${id}`)
 			.then(response => {
@@ -70,6 +70,7 @@ export default function UserFormAdmin(props) {
 
 	return (
 		<div>
+		
 			<ul className="userFormLine">
 				<div className="inputTag" id={name}>{name}</div>
 				<div className="inputTag" id={email}>{email}</div>
@@ -97,7 +98,6 @@ export default function UserFormAdmin(props) {
 				<input className="inputTag" type="text" name="name" value={inputValues.name} onChange={handleInputChange}></input>
 				<input className="inputTag" type="text" name="email" value={inputValues.email} onChange={handleInputChange}></input>
 				<input className="inputTag" type="text" name="password" value={inputValues.password} onChange={handleInputChange}></input>
-				{/*<input className="inputTag" type="text" id={rol} value={inputValues.rol} onChange={handleInputChange}></input>*/}
 				<select className="inputTag" defaultValue={rol} onChange={handleSelectChange}>
 					<option value="Usuario">Usuario</option>
 					<option value="Admin">Admin</option>

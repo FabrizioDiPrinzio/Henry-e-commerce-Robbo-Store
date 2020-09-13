@@ -1,6 +1,6 @@
 :root {
   background-color: var(--ksu-purple);
-  --max-width: 700px;
+  --max-width: 800px;
   --beau-blue: #d2e3f9ff;
   --baby-blue-eyes: #98b7f0ff;
   --glaucous: #617cc7ff;
@@ -33,7 +33,4 @@
 
 .userTableTitle {
   margin-top: 8px;
-}
-.userList {
-  height: 700px;
 }

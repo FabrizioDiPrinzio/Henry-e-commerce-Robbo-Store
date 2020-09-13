@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import PurchaseOrderFormLine from './PurchaseOrderFormLine/PurchaseOrderFormLine';
 import axios from 'axios';
 import './PurchaseOrderForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import PurchaseOrderFormLine from './PurchaseOrderFormLine/PurchaseOrderFormLine';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
@@ -17,6 +17,7 @@ export default function PurchaseOrderForm() {
 			.get(`${urlBack}/orders`)
 			.then(response => {
 				setProductOrders(response.data);
+				console.log(response)
 			})
 			.catch(err => console.log(err.message));
 	}, []);
@@ -25,22 +26,19 @@ export default function PurchaseOrderForm() {
 		<div className="productFormAdmin">
 			<div className="productTableTitleContainer">
 				<div className="productTableTitle">
-					<h6>status</h6>
-					<h6>recipient_name</h6>
-					<h6>recipient_lastname</h6>
-					<h6>country</h6>
-					<h6>city</h6>
-					<h6>address</h6>
-					<h6>postal_code</h6>
-					<h6>phone_number</h6>
-					<h6>shipping_type</h6>
+					<h6>Id Orden</h6>
+					<h6>Nombre</h6>
+					<h6>Estado</h6>
+					<h6>Envío</h6>
+					<h6>Fecha</h6>
+					<h6>Precio Total</h6>
 				</div>
 			</div>
 			<div className="productListContainer">
 				<ul className="productList">
 					{productOrders &&
 						productOrders.map(order => (
-							<li className="listItem" key={order.id}>
+							<li key={order.id}>
 								<PurchaseOrderFormLine info={order} />
 							</li>
 						))}

@@ -1,5 +1,4 @@
 :root {
-	--max-width: 700px;
 	--beau-blue: #d2e3f9ff;
 	--baby-blue-eyes: #98b7f0ff;
 	--glaucous: #617cc7ff;
@@ -8,7 +7,12 @@
 }
 
 .formContainer {
-	padding: 0;
+	padding: 10px;
+	color: var(--ksu-purple);
+  	margin: auto;
+  	margin-top: -70px;
+  	margin-bottom: 30px;
+  	max-width: var(--max-width);
 }
 .addBtn {
 	margin: 0px;

@@ -49,6 +49,7 @@ export default function RegisterForm() {
 
 	return (
 		<form className="form" onSubmit={handleAdd} ref={formulario}>
+			<br />
 			<h3 className="titulo">Registrarse</h3>
 			<br />
 

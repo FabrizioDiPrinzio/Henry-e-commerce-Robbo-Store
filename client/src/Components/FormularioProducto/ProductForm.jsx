@@ -2,8 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import './ProductForm.css';
-import TablaPics from './TablaPics/TablaPics.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
+import {Button, Row,Container,Col, Form,Table} from 'react-bootstrap';
 //------ Fin de imports -----
 
 const {productActions} = allActions;
@@ -20,7 +20,6 @@ export default function ProductFormFunction() {
 		name: '',
 		price: '',
 		stock: '',
-		image: '',
 		description: ''
 	});
 	const [checkboxes, setCheckboxes] = useState([]);
@@ -35,7 +34,6 @@ export default function ProductFormFunction() {
 			name: '',
 			price: '',
 			stock: '',
-			image: '',
 			description: ''
 		});
 		resetCheckboxes();
@@ -75,6 +73,7 @@ export default function ProductFormFunction() {
 
 			// Resets all fields after getting a response from the server
 			resetFields();
+			resetImages();
 		},
 		[products, lastError]
 	);
@@ -101,6 +100,10 @@ export default function ProductFormFunction() {
 		if (selectedId > 0) {
 			const currentProduct = products.find(p => p.id === selectedId);
 			setInputValues(currentProduct);
+			const imagenes = currentProduct.pics.map(i=> {
+				return i.imageUrl;
+			})
+			setImages(imagenes);
 
 			// If the product has a category, it is checked, else it is unchecked
 			currentProduct.categories.map(productCategory => {
@@ -116,9 +119,9 @@ export default function ProductFormFunction() {
 				name: '',
 				price: '',
 				stock: '',
-				image: '',
 				description: ''
-			});
+			});	
+			setImages([]);
 		}
 	};
 
@@ -141,8 +144,8 @@ export default function ProductFormFunction() {
 		the main image of the product. The other images will be stored
 		in the associated to the product and stored in the model named Pics.
 		*/
-		const wrappedImage = [inputValues.image];
-		const changedState = {...inputValues, image: wrappedImage, id: null};
+		
+		const changedState = {...inputValues, image: images, id: null};
 
 		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
 		const checkedCategories = checkboxes.map(c => {
@@ -154,7 +157,7 @@ export default function ProductFormFunction() {
 
 		dispatch(productActions.postProduct(changedState, modifiedCategories));
 	};
-
+	
 	// Deletes the selected product
 	const handleDelete = event => {
 		event.preventDefault();
@@ -172,14 +175,40 @@ export default function ProductFormFunction() {
 		the main image of the product. The other images will be stored
 		in the asosiated to the product and sotred in the model named Pics.
 		*/
-		const wrappedImage = [inputValues.image];
-		const changedState = {...inputValues, image: wrappedImage};
+		
+		const changedState = {...inputValues, image: images};
 
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
 		dispatch(productActions.putProduct(selected, changedState, modifiedCategories));
 	};
 
+	//------TABLA PICS-----
+
+	const [images, setImages] = useState([]);
+	const [newImage, setnewImage] = useState('');
+	
+	function resetImg() {
+		lista.current.value = 0;
+		setnewImage('')
+	}
+
+	function resetImages() {
+		setImages ([]);
+	}
+
+	const handleAddImg = () => {
+		images.push(newImage);
+		resetImg();
+    };
+
+    const handleDeleteImg = event => {
+		
+		event.preventDefault(); 
+        
+    };
+
+   
 	return (
 		<div>
 			<form className="form">
@@ -224,19 +253,7 @@ export default function ProductFormFunction() {
 							onChange={handleNumberChange}
 						/>
 					</div>
-					<div className="inpt">
-						<label htmlFor="ImgLab" className="">
-							Imagen:
-						</label>
-						<input
-							className="ImgIn"
-							name="image"
-							value={inputValues.image}
-							type="text"
-							placeholder="URL de la imagen"
-							onChange={handleInputChange}
-						/>
-					</div>
+					
 				</div>
 				<div className="inpt">
 					<label className="DescLab">Descripción:</label>
@@ -294,7 +311,52 @@ export default function ProductFormFunction() {
 					</button>
 				</div>
 			</div>
-			<TablaPics/>
-		</div>
+			<div> 
+        <Container>
+            <Row>
+            <Col>
+                <h2>Agregar Imagen</h2> 
+                <Form >
+                    <Form.Group controlId="fromChechbox" >
+                    <input 
+                                className=" " 
+								type="text"
+								autocomplete="off"
+								value={newImage}
+								onChange={e=>setnewImage(e.target.value)}
+                                placeholder="URL de la imagen"/>
+                    <Button onClick={handleAddImg} className="BtnAdd">Agregar Imagen</Button>
+                    </Form.Group>
+                </Form>
+            </Col>
+            </Row>
+            <br/>
+            <Row>
+                <Col>
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+							<th>Url</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {images.map(image =>(
+                            <tr key={image}>
+
+                                <td className="Texto"><img src={image}></img></td>
+								<td className="Texto">{image}</td>
+                                <td> <Button  className="BtnDelete" value="Eliminar" onClick={handleDeleteImg}>Eliminar</Button></td> 
+                            </tr>
+						
+						))}
+                    </tbody>
+				</Table>
+                </Col>
+            </Row>
+        </Container>
+    </div>
+	</div>
 	);
 }

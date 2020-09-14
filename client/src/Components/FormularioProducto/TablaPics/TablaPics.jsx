@@ -14,7 +14,6 @@ export default function TablaPics() {
 
     const handleAdd = () => {
         images.push(newImage);
-        	
     };
 
     function handleDelete(image) {
@@ -22,12 +21,12 @@ export default function TablaPics() {
         images.splice(index, 1)
     };
 
-    const handleEdit =(image)=> {
+    const handleEditImg =(image)=> {
         let index= images.indexOf(image);       
     }
 
     return ( 
-    <div> 
+        <div> 
         <Container>
             <Row>
             <Col>
@@ -75,6 +74,7 @@ export default function TablaPics() {
             </Row>
         </Container>
     </div>
+    
             
     )
 }

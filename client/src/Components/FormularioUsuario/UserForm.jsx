@@ -15,7 +15,7 @@ export default function FormularioCategoria() {
 	const switchForms = () => setHasAccount(!hasAccount);
 
 	return (
-		<div className="formContainer form">
+		<div className="formContainer">
 			{!hasAccount && <RegisterForm />}
 			<br />
 			{!hasAccount && (

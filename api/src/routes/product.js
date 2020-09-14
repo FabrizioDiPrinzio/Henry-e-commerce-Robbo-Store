@@ -63,8 +63,8 @@ router.put('/:id', async (req, res) => {
 	en algúnas es posible o necesario manejar más de una imágen.
 	*/
 
-	const {name, price, stock, description} = req.body;
-	const image = req.body.image ? req.body.image[0] : null;
+	const {name, price, stock, description, image} = req.body;
+	// const image = req.body.image ? req.body.image[0] : null;
 	const {id} = req.params;
 
 	if (!name && typeof price !== 'number' && typeof stock !== 'number' && !image && !description) {
@@ -79,9 +79,27 @@ router.put('/:id', async (req, res) => {
 		robot.description = description || robot.description;
 		robot.price = price || robot.price;
 		robot.stock = stock || stock === 0 ? stock : robot.stock;
+
 		if (image) {
-			await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
-			robot.image = image;
+			// await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
+			// robot.image = image;
+			const productPics = await Pics.findOne({where: {productId: id}});
+			productPics.destroy();
+
+			try {
+				image.map(img => {
+					Pics.create({imageUrl: img})
+						.then(newPic => robot.addPic(newPic))
+						.catch(error => res.status(400).send(error.message));
+				});
+			} catch (error) {
+				res.status(400).send(error.message);
+			}
+
+			robot.image = image[0];
+
+			await robot.save();
+			await robot.reload();
 		}
 		await robot.save();
 		const savedRobot = await robot.reload();

@@ -41,7 +41,7 @@ export default function Carrito() {
 
 				<div className="containerComprar">
 					<h3>Envio:</h3>
-					<h1>Total: {total ? total.price : 0}</h1>
+					<h1>Total: U$S {total ? total.price : 0}</h1>
 				</div>
 				<button className="btnComprar">Comprar</button>
 			</div>

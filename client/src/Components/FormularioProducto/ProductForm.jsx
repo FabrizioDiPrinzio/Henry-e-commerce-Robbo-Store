@@ -50,8 +50,7 @@ export default function ProductFormFunction() {
 
 	// ------------  Functionality ----------------------
 
-	// Gets all the categories from the server when the page loads.
-	// Refreshes with [categoriesState] in case the user opens this URL first, because then it would be empty.
+	// Creates category checkboxes
 	useEffect(
 		() => {
 			const categoryTypes = categories.map(c => ({
@@ -64,16 +63,16 @@ export default function ProductFormFunction() {
 			setCheckboxes(categoryTypes);
 		},
 		[categories]
-	);	
+	);
 
 	// Creates an alert after each successful or failed operation
 	useEffect(
 		() => {
-			if (lastResponse) alert(lastResponse.message);
+			if (lastResponse) {
+				alert(lastResponse.message);
+				resetFields();
+			}
 			if (lastError) alert(lastError);
-
-			// Resets all fields after getting a response from the server
-			resetFields();
 		},
 		[products, lastError]
 	);

@@ -1,8 +1,32 @@
+:root {
+	--max-width: 700px;
+	--beau-blue: #d2e3f9ff;
+	--baby-blue-eyes: #98b7f0ff;
+	--glaucous: #617cc7ff;
+	--ksu-purple: #563488ff;
+	--razzmatazz: #d53467ff;
+}
+
 .formContainer {
-  padding: 0;
-  padding-top: 15px;
-  padding-bottom: 60px;
+	padding: 0;
 }
 .addBtn {
-  margin: 0px;
+	margin: 0px;
+}
+
+.password-wrapper {
+	position: relative;
+	display: flex;
+	margin-bottom: 14px;
+}
+
+i {
+	position: absolute;
+	top: 15%;
+	right: 3%;
+}
+
+i:hover {
+	color: var(--razzmatazz);
+	cursor: pointer;
 }

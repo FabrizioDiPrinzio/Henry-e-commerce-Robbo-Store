@@ -9,9 +9,8 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioCategoria() {
-
 	//=====================   redux state    ==================== //
-	
+
 	const categories = useSelector(state => state.categories.allCategories);
 	const dispatch = useDispatch();
 
@@ -23,18 +22,17 @@ export default function FormularioCategoria() {
 
 	// ==================== auxiliary function ==================== //
 
-	const axiosPetitionHandler = (response) => {
-
+	const axiosPetitionHandler = response => {
 		alert(response.statusText);
 		setSelectedCategoryId(0);
 		lista.current.value = 0;
-		setInputValues({id: 0, name: '', description: ''})
-		
+		setInputValues({id: 0, name: '', description: ''});
+
 		dispatch(allActions.categoryActions.getAllCategories());
 	};
 
 	// ================== component event handlers ================ //
-	
+
 	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
@@ -60,7 +58,6 @@ export default function FormularioCategoria() {
 			.post(`${urlBack}/products/category`, {...inputValues, id: null})
 			.then(response => axiosPetitionHandler(response))
 			.catch(error => alert('No se pudo crear la categoria: ' + error.response.data));
-
 	};
 
 	// Deletes the selected category
@@ -71,7 +68,6 @@ export default function FormularioCategoria() {
 			.delete(`${urlBack}/products/category/${selectedCategoryId}`)
 			.then(response => axiosPetitionHandler(response))
 			.catch(error => alert('No se pudo eliminar la categoria: ' + error.response.data));
-
 	};
 
 	// Edits the selected category
@@ -80,9 +76,8 @@ export default function FormularioCategoria() {
 
 		axios
 			.put(`${urlBack}/products/category/${selectedCategoryId}`, inputValues)
-			.then(axiosPetitionHandler(response => axiosPetitionHandler(response)))
+			.then(response => axiosPetitionHandler(response))
 			.catch(error => alert('No se pudo editar la categoria: ' + error.response.data));
-
 	};
 
 	return (
@@ -126,7 +121,6 @@ export default function FormularioCategoria() {
 							{categories.map(categoria => {
 								return <option value={categoria.id}>{categoria.name}</option>;
 							})}
-
 						</select>
 						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
 							Editar

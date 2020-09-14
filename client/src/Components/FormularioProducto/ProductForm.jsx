@@ -26,6 +26,9 @@ export default function ProductFormFunction() {
 	const [selected, setSelected] = useState(0);
 	const lista = useRef(0);
 
+	const [images, setImages] = useState([]);
+	const [newImage, setnewImage] = useState('');
+
 	// Auxiliary functions
 	function resetFields() {
 		setSelected(0);
@@ -47,6 +50,15 @@ export default function ProductFormFunction() {
 		});
 	}
 
+	function resetImg() {
+		lista.current.value = 0;
+		setnewImage('')
+	}
+
+	function resetImages() {
+		setImages ([]);
+	}
+
 	// ------------  Functionality ----------------------
 
 	// Gets all the categories from the server when the page loads.
@@ -63,7 +75,7 @@ export default function ProductFormFunction() {
 			setCheckboxes(categoryTypes);
 		},
 		[categories]
-	);	
+	);
 
 	// Creates an alert after each successful or failed operation
 	useEffect(
@@ -120,7 +132,7 @@ export default function ProductFormFunction() {
 				price: '',
 				stock: '',
 				description: ''
-			});	
+			});
 			setImages([]);
 		}
 	};
@@ -134,17 +146,21 @@ export default function ProductFormFunction() {
 		setCheckboxes(modifiedCategories);
 	};
 
+	const handleAddImg = evemt => {
+		event.preventDefault();
+		images.push(newImage);
+		resetImg();
+	};
+
+	const handleDeleteImg = event => {
+		event.preventDefault();
+
+	};
+
 	// Creates products
 	const handleAdd = event => {
 		event.preventDefault();
 
-		/*
-		the image wrap is a temporary fix. the form should be able
-		to send multiple images in an array and the first one will be
-		the main image of the product. The other images will be stored
-		in the associated to the product and stored in the model named Pics.
-		*/
-		
 		const changedState = {...inputValues, image: images, id: null};
 
 		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
@@ -157,7 +173,7 @@ export default function ProductFormFunction() {
 
 		dispatch(productActions.postProduct(changedState, modifiedCategories));
 	};
-	
+
 	// Deletes the selected product
 	const handleDelete = event => {
 		event.preventDefault();
@@ -169,13 +185,6 @@ export default function ProductFormFunction() {
 	const handleEdit = event => {
 		event.preventDefault();
 
-		/*
-		the image wrap is a temporary fix. The form should be able
-		to send multiple images in an array and the first one will be
-		the main image of the product. The other images will be stored
-		in the asosiated to the product and sotred in the model named Pics.
-		*/
-		
 		const changedState = {...inputValues, image: images};
 
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
@@ -183,32 +192,6 @@ export default function ProductFormFunction() {
 		dispatch(productActions.putProduct(selected, changedState, modifiedCategories));
 	};
 
-	//------TABLA PICS-----
-
-	const [images, setImages] = useState([]);
-	const [newImage, setnewImage] = useState('');
-	
-	function resetImg() {
-		lista.current.value = 0;
-		setnewImage('')
-	}
-
-	function resetImages() {
-		setImages ([]);
-	}
-
-	const handleAddImg = () => {
-		images.push(newImage);
-		resetImg();
-    };
-
-    const handleDeleteImg = event => {
-		
-		event.preventDefault(); 
-        
-    };
-
-   
 	return (
 		<div>
 			<form className="form">
@@ -253,7 +236,7 @@ export default function ProductFormFunction() {
 							onChange={handleNumberChange}
 						/>
 					</div>
-					
+
 				</div>
 				<div className="inpt">
 					<label className="DescLab">Descripción:</label>
@@ -311,49 +294,55 @@ export default function ProductFormFunction() {
 					</button>
 				</div>
 			</div>
-			<div> 
+			<div>
         <Container>
             <Row>
-            <Col>
-                <h2>Agregar Imagen</h2> 
-                <Form >
-                    <Form.Group controlId="fromChechbox" >
-                    <input 
-                                className=" " 
-								type="text"
-								autocomplete="off"
-								value={newImage}
-								onChange={e=>setnewImage(e.target.value)}
-                                placeholder="URL de la imagen"/>
-                    <Button onClick={handleAddImg} className="BtnAdd">Agregar Imagen</Button>
-                    </Form.Group>
-                </Form>
-            </Col>
+	            <Col>
+	                <h2>Agregar Imagen</h2>
+	                <Form >
+	                    <Form.Group controlId="fromChechbox" >
+	                    <input
+	                    	className=" "
+												type="text"
+												autocomplete="off"
+												value={newImage}
+												onChange={e=>setnewImage(e.target.value)}
+	                      placeholder="URL de la imagen"
+											/>
+	                    <Button onClick={handleAddImg} className="BtnAdd">Agregar Imagen</Button>
+	                    </Form.Group>
+	                </Form>
+	            </Col>
             </Row>
             <br/>
             <Row>
-                <Col>
-                <Table>
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-							<th>Url</th>
-                            <th>Eliminar</th>
+	            <Col>
+		            <Table>
+	                <thead>
+                    <tr>
+                      <th>Imagen</th>
+											<th>Url</th>
+                      <th>Eliminar</th>
+                    </tr>
+	                </thead>
+	                <tbody>
+                    {images.map(image =>(
+                        <tr key={image}>
+                            <td className="Texto"><img src={image}></img></td>
+														<td className="Texto">{image}</td>
+                            <td>
+															<Button
+																className="BtnDelete"
+																value="Eliminar"
+																onClick={handleDeleteImg}>
+																Eliminar
+															</Button>
+														</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {images.map(image =>(
-                            <tr key={image}>
-
-                                <td className="Texto"><img src={image}></img></td>
-								<td className="Texto">{image}</td>
-                                <td> <Button  className="BtnDelete" value="Eliminar" onClick={handleDeleteImg}>Eliminar</Button></td> 
-                            </tr>
-						
-						))}
-                    </tbody>
-				</Table>
-                </Col>
+											))}
+	                </tbody>
+								</Table>
+	            </Col>
             </Row>
         </Container>
     </div>

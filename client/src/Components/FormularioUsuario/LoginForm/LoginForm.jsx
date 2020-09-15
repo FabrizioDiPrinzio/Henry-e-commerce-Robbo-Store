@@ -34,7 +34,10 @@ export default function RegisterForm() {
 
 		axios
 			.post(`${urlBack}/auth/login`, inputValues)
-			.then(res => dispatch(allActions.userActions.login(res.data)))
+			.then(res => {
+				alert(`Bienvenido, ${res.data.name}`);
+				dispatch(allActions.userActions.login(res.data));
+			})
 			.catch(error => alert(error.response.data));
 
 		console.log(inputValues);

@@ -17,6 +17,14 @@ export default function userReducer(state = initialState, action) {
 				name: action.payload.name,
 				email: action.payload.email
 			};
+		case actionTypes.LOGOUT:
+			return {
+				...state,
+				rol: 'Guest',
+				id: 0,
+				name: null,
+				email: null
+			};
 		default:
 			return state;
 	}

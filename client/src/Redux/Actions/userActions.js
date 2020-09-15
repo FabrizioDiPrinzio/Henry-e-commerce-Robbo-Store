@@ -6,3 +6,5 @@ export const login = user => dispatch => {
 		payload: user
 	});
 };
+
+export const logOut = () => dispatch => dispatch({type: actions.LOGOUT});

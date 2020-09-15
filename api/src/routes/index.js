@@ -2,6 +2,7 @@ const express = require('express');
 // import all routers;
 const productRouter = require('./product.js');
 const user = require('./user.js');
+const review = require('./review.js');
 const purchase_orders = require('./purchase_orders.js');
 const category = require('./category.js');
 const {Product, User} = require('../db.js');
@@ -12,6 +13,8 @@ const app = express();
 // load each router on a route
 // i.e: router.use('/auth', authRouter);s
 // app.use('/auth', authRouter);
+
+//app.use('/products/:idProducto/review', review); ???? se puede hacer esto ??
 app.use('/products', productRouter);
 app.use('/products/category', category);
 app.use('/user', user);

@@ -44,7 +44,7 @@ export const GET_GUEST_CART = 'GET_GUEST_CART';
 
 export const POST_GUEST_CART = 'POST_GUEST_CART';
 
-export const PUT_GUEST_CART = 'PUT_GUEST_CART';
+export const EDIT_GUEST_CART = 'EDIT_GUEST_CART';
 
 export const EMPTY_CART = 'EMPTY_CART';
 

@@ -20,6 +20,14 @@ export default function cartReducer(state = initialState, action) {
 				...state,
 				currentCart: initialFix
 			};
+		case actionTypes.EDIT_GUEST_CART:
+			return {
+				...state,
+				currentCart: {
+					...state.currentCart,
+					orderlines: action.payload
+				}
+			};
 		case actionTypes.EMPTY_CART:
 			return {
 				...state,

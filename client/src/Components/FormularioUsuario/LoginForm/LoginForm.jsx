@@ -39,8 +39,6 @@ export default function RegisterForm() {
 				dispatch(allActions.userActions.login(res.data));
 			})
 			.catch(error => alert(error.response.data));
-
-		console.log(inputValues);
 	};
 
 	return (

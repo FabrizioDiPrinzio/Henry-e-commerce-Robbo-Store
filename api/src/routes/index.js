@@ -47,7 +47,7 @@ app.post('/auth/login', async (req, res) => {
 		const usuario = await User.findOne({where: {email}});
 
 		if (!usuario || usuario.password !== password) {
-			return res.status(418).send('El email o la contraseña son incorrectos.');
+			return res.status(400).send('El email o la contraseña son incorrectos.');
 		}
 
 		return res.send(usuario);

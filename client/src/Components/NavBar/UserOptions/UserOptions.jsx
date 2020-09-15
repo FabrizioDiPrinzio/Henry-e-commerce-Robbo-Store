@@ -10,6 +10,7 @@ export default function UserOptions() {
 
 	const logout = () => {
 		alert('Sesión cerrada');
+		dispatch(allActions.cartActions.emptyCart());
 		dispatch(allActions.userActions.logOut());
 	};
 

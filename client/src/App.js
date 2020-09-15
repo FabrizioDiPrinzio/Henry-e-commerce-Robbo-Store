@@ -25,29 +25,29 @@ function App() {
 
 	useEffect(() => {
 		// TEMPORARY!! Create a new user on startup to make testing things less tedious
-		axios
-			.post(`${urlBack}/user/signup`, {
-				name: 'admin',
-				rol: 'Admin',
-				email: 'admin@admin.admin',
-				password: 'admin'
-			})
-			.then(() => {
-				console.log('Usuario creado');
-			})
-			.catch(error => console.log(error.response.data));
+		if (user.rol === 'Guest') {
+			axios
+				.post(`${urlBack}/user/signup`, {
+					name: 'admin',
+					rol: 'Admin',
+					email: 'admin@admin.admin',
+					password: 'admin'
+				})
+				.then(() => {
+					console.log('Usuario creado');
+				})
+				.catch(error => console.log(error.response.data));
+		}
 
 		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());
 		dispatch(allActions.productActions.getAllProducts());
 	}, []);
 
-	useEffect(
-		() => {
-			if (user.id > 0) dispatch(allActions.cartActions.getUserCart(user.id));
-		},
-		[user]
-	);
+	// Trae el carrito del usuario la primera vez que abe la página.
+	useEffect(() => {
+		if (user.id > 0) dispatch(allActions.cartActions.getUserCart(user.id));
+	}, []);
 
 	return (
 		<div>

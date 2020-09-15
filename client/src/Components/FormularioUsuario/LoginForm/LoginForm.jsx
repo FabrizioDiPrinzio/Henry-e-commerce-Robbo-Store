@@ -37,6 +37,7 @@ export default function RegisterForm() {
 			.then(res => {
 				alert(`Bienvenido, ${res.data.name}`);
 				dispatch(allActions.userActions.login(res.data));
+				dispatch(allActions.cartActions.getUserCart(res.data.id));
 			})
 			.catch(error => alert(error.response.data));
 	};

@@ -10,8 +10,7 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductCard({robot}) {
 	// Redux
-	const userId = useSelector(state => state.user.id);
-	const userType = useSelector(state => state.user.userType);
+	const user = useSelector(state => state.user);
 	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
 
@@ -42,17 +41,16 @@ export default function ProductCard({robot}) {
 		if (robot.stock > carrito.quantity && loading === false) {
 			setLoading(true);
 			axios
-				.put(`${urlBack}/user/${userId}/cart`, changes)
+				.put(`${urlBack}/user/${user.id}/cart`, changes)
 				.then(() => {
 					setLoading(false);
 					e.target.style.opacity = '1';
 					alert('Agregado');
-					dispatch(allActions.cartActions.getUserCart(userId));
+					dispatch(allActions.cartActions.getUserCart(user.id));
 				})
 				.catch(error => {
 					setLoading(false);
-					console.log(error.response.data);
-					console.log(e.target);
+					alert(error.response.data);
 					e.target.style.opacity = '1';
 				});
 		}
@@ -72,12 +70,12 @@ export default function ProductCard({robot}) {
 			e.target.style.opacity = '0.1';
 			setLoading(true);
 			axios
-				.put(`${urlBack}/user/${userId}/cart`, changes)
+				.put(`${urlBack}/user/${user.id}/cart`, changes)
 				.then(() => {
 					e.target.style.opacity = '1';
 					setLoading(false);
 					alert('Quitado');
-					dispatch(allActions.cartActions.getUserCart(userId));
+					dispatch(allActions.cartActions.getUserCart(user.id));
 				})
 				.catch(error => {
 					alert(error.response.data);

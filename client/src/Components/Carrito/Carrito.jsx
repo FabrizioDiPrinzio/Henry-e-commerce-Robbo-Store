@@ -11,6 +11,7 @@ export default function Carrito() {
 	const cartId = useSelector(state => state.cart.currentCart.id);
 	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
+	const [formularioState, setFormulario] = useState({visibility : false})
 
 	const total =
 		orderlines &&
@@ -25,12 +26,9 @@ export default function Carrito() {
 	);
 
 	return (
-		<div>
-			<div className="containerCarrito">
-				<div className="header">
-					<h1>Carrito de compras</h1>
-				</div>
-				<ul className="list">
+		<div className="containerCarrito">
+		{ formularioState.visibility  && <button className="cerrarForm" onClick={() => setFormulario(formularioState.visibility=false)}>X</button>  }
+				<ul className="list">			
 					{productsInCart &&
 						productsInCart.map(bot => (
 							<li className="listItem" key={bot.id}>
@@ -39,15 +37,18 @@ export default function Carrito() {
 						))}
 				</ul>
 
-				<div className="containerComprar">
+				<div className="datostotales">
 					<h3>Envio:</h3>
-					<h1>Total: U$S {total ? total.price : 0}</h1>
+					<h2>Total: U$S {total ? total.price : 0}</h2>
 				</div>
-				<button className="btnComprar">Comprar</button>
-			</div>
+
+				<button className="btnComprar" onClick={()=> setFormulario({...formularioState, visibility : formularioState.visibility ? false : true})   
+				}>Comprar</button>
+			
+	
 
 			<div>
-				<FormularioDatosEnvio />
+				{ formularioState.visibility && <FormularioDatosEnvio />}
 			</div>
 		</div>
 	);

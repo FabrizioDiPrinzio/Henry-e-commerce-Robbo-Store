@@ -5,42 +5,96 @@
 	--ksu-purple: #563488ff;
 	--razzmatazz: #d53467ff;
 }
-.containerCarrito{
+
+.cerrarForm {
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    top: 140px;
+    right: 25vw;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--razzmatazz);
+    color: white;
+    font-weight: bold;
+    z-index: 35;
+}
+
+.containerCarrito {
+    max-width: 800px;
+    width: 90vw;
     margin: auto;
-    margin-top: 80px;
-    width: 700px;
     display: flex;
     flex-direction: column;
 }
 
-.containerComprar{
-    width: 300px;
-    height: 200px;
-    padding: 10px;
-    margin-top: 20px;
+
+.datostotales{  
+    background-color: var(--glaucous);
+    color: white;
+    width: 35vw;
+    max-width: 400px;
+    padding: 4vw;
+    margin-right: 10px;
+    border-radius: 10px 10px 0 0;
+    z-index: 10;
+    box-shadow: 10px 0 10px 0 rgb(0,0,0,0.2);
     align-self: flex-end;
-    background-color: var(--baby-blue-eyes);
-    border-radius: 10% 10% 0% 0%;
-    margin-right: 15px;
-    vertical-align: middle;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2)
+}
+
+.datostotales h2{
+    font-size: 25px;
+}
+
+.datostotales h3 {
+    font-size: 20px;
 }
 
 .btnComprar{
-    width: 300px;
-    height: 50px;
-    padding: 10px;
-    align-self: flex-end;
+    padding: 1vmax;
+    width: 35vw;
+    max-width: 400px;
     background-color: var(--razzmatazz);
-    border-radius: 0% 0% 20% 20%;
-    margin-right: 15px;
-    font-size: 25px;
-    margin-bottom: 50px;
+    font-weight: bold;
+    border-radius: 0 0 10px 10px;
     border: none;
-    box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2)
-    
+    margin-right: 10px;
+    color: white;
+    font-size: 25px;
+    z-index: 5;
+    box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2);
+    align-self: flex-end;
+    margin-bottom: 5vw;
+}
 
+.btnComprar:hover {
+    background-color: var(--ksu-purple);
+}
+
+@media (max-width: 900px) {
+     .datostotales h2 {
+        font-size: 3vw;
+    }
+    .datostotales h3 {
+        font-size: 2.5vw;
+    }
+    .btnComprar{
+        font-size: 3vmax;
+    }
+}
+
+
+@media (max-width: 500px) {
+    .datostotales {
+        width: 60%;
+    }
+    .btnComprar {
+        width: 60%;
+    }
+     .datostotales h2 {
+        font-size: 6vw;
+    }
+    .datostotales h3 {
+        font-size: 5vw;
+    }
 }

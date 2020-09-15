@@ -5,10 +5,7 @@ const {Op} = require('sequelize');
 
 router.get('/names', (req, res) => {
 	Categories.findAll()
-		.then(c => {
-			const respuesta = c.map(e => ({id: e.id, name: e.name, description: e.description}));
-			return res.send(respuesta);
-		})
+		.then(response => res.send(response))
 		.catch(err => {
 			return res.status(400).send(err.message);
 		});
@@ -17,7 +14,7 @@ router.get('/names', (req, res) => {
 router.post('/', (req, res) => {
 	const {name, description} = req.body;
 	if (!name || !description) {
-		return res.status(400).send('parametros incompletos');
+		return res.status(400).send('Parámetros incompletos');
 	}
 	else {
 		Categories.create(req.body)
@@ -44,7 +41,7 @@ router.put('/:id', (req, res) => {
 	const {name, description} = req.body;
 	const {id} = req.params;
 
-	if (!name && !description) return res.status(400).send('faltan parametros');
+	if (!name && !description) return res.status(400).send('Faltan parámetros');
 	else {
 		Categories.findByPk(id)
 			.then(category => {

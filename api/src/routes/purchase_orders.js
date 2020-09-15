@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {Orderline, User, Purchase_order} = require('../db.js');
+const {Orderline, User, Purchase_order, Product} = require('../db.js');
 const {Op} = require('sequelize');
 
 // Cart es Purchase_order con status "enCarrito", purchase_orders son las que tienen cualquier otro estado
@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 	const {status} = req.query;
 
 	Purchase_order.findAll({
-		include: Orderline,
+		include: [{model: Orderline}, {model: Product}],
 		where: status ? {status: {[Op.iLike]: status}} : {}
 	}).then(response => {
 		if (response.length <= 0) res.status(404).send('No hay órdenes de compra de ese tipo');

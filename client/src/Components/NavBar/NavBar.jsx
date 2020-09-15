@@ -1,8 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 import Menu from './Menu/Menu.jsx';
-import './navBar.css';
+import Modal from 'react-bootstrap/Modal';
+import UserOptions from './UserOptions/UserOptions';
 import 'bootstrap/dist/css/bootstrap.css';
+import './navBar.css';
+import UserForm from '../FormularioUsuario/UserForm';
+// ------- Fin de imports --------------
 
 document.addEventListener('scroll', e => {
 	const searchBar = document.querySelector('.SearchBarContainer');
@@ -15,8 +20,21 @@ document.addEventListener('scroll', e => {
 });
 
 export default function NavBar() {
-	const [search, setSearch] = useState({query: ''});
+	// Redux
+	const user = useSelector(state => state.user);
 
+	// React Hooks
+	const [search, setSearch] = useState({query: ''});
+	const [showModal, setShowModal] = useState(false);
+
+	useEffect(
+		() => {
+			setShowModal(false); // Closes modals whenever a user logs in or out
+		},
+		[user.id]
+	);
+
+	// ----- Functionality ----
 	const handleInputChange = event =>
 		setSearch({...search, [event.target.name]: event.target.value});
 
@@ -28,24 +46,33 @@ export default function NavBar() {
 				</Link>
 				<img src="../favicon.svg" alt="logo" className="logo" />
 				<span className="espacioBlanco"> </span>
+				<span className="welcome"> Bienvenido, {user.name || 'visitante'}! </span>
 				<div>
-					<Link to="/signup">
-						<button className="UserBtn">
-							<svg
-								width="2em"
-								height="2em"
-								viewBox="0 0 16 16"
-								className="bi bi-person"
-								fill="white"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fillRule="evenodd"
-									d="M10 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"
-								/>
-							</svg>
-						</button>
-					</Link>
+					<button className="UserBtn" onClick={() => setShowModal(!showModal)}>
+						<svg
+							width="2em"
+							height="2em"
+							viewBox="0 0 16 16"
+							className="bi bi-person"
+							fill="white"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								fillRule="evenodd"
+								d="M10 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"
+							/>
+						</svg>
+					</button>
+					{user.rol === 'Guest' && (
+						<Modal show={showModal} onHide={() => setShowModal(!showModal)}>
+							<UserForm />
+						</Modal>
+					)}
+					{user.rol !== 'Guest' && (
+						<Modal show={showModal} onHide={() => setShowModal(!showModal)}>
+							<UserOptions />
+						</Modal>
+					)}
 
 					<Link to="/carrito">
 						<button className="CartBtn">

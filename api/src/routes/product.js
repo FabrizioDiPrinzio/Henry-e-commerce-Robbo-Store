@@ -55,7 +55,7 @@ router.put('/:id', async (req, res) => {
 	const {id} = req.params;
 
 	if (!name && typeof price !== 'number' && typeof stock !== 'number' && !image && !description) {
-		return res.status(400).send('Debes enviar al menos un parametro para editar');
+		return res.status(400).send('Debes enviar al menos un parámetro para editar');
 	}
 
 	const robot = await Product.findByPk(id);

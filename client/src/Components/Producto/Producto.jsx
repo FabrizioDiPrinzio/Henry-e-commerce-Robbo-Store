@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom';
 import './Producto.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Axios from 'axios';
+// =========== FIN DE IMPORTS ============
 
 const urlBack = process.env.REACT_APP_API_URL;
 
@@ -18,7 +19,11 @@ export default function Producto() {
 	);
 
 	if (!robot)
-		return <h1>Lo sentimos, pero ese producto no se encuentra en nuestra base de datos!</h1>;
+		return (
+			<h1 className="not-found">
+				Lo sentimos, pero ese producto no se encuentra en nuestra base de datos!
+			</h1>
+		);
 
 	return (
 		<div className="productContainer">

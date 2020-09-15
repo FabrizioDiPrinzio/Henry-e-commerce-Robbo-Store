@@ -13,6 +13,12 @@
   max-width: var(--max-width);
    justify-content: center;
    padding-bottom: 40px;
+   z-index: 30;
+}
+
+.overAll{
+	position: absolute;
+   top: 130px;
 }
 
 .FormEnvio {
@@ -42,8 +48,6 @@
   /* color:  rgb(86,52,136,0.9);*/
     font-family: verdana;
 }
-
-
 
 .product {
     max-width: 400px;

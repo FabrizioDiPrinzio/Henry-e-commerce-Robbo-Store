@@ -13,6 +13,7 @@ import UserForm from './Components/FormularioUsuario/UserForm.jsx';
 import AdminControlPanel from './Components/AdminControlPanel/AdminControlPanel.jsx';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
+import Purchase_order from './Components/Purchase_order/Purchase_order.jsx'
 // =========== FIN DE IMPORTS ============
 
 const urlBack = process.env.REACT_APP_API_URL;
@@ -61,6 +62,7 @@ function App() {
 				<Route exact path="/producto/:id" component={Producto} />
 				<Route exact path="/signup" component={UserForm} />
 				<Route exact path="/admin" component={AdminControlPanel} />
+				<Route exact path="/purchase_order/:id" component={Purchase_order} />
 			</Router>
 		</div>
 	);

@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
 
 	console.log(id);
 
-	Purchase_order.findByPk(id, {include: Orderline})
+	Purchase_order.findByPk(id, [{model: Orderline}, {model: Product}])
 		.then(response => {
 			if (!response) return res.status(404).send('No se encontró la orden');
 			else return res.send(response);

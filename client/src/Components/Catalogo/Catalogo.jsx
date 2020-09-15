@@ -51,6 +51,7 @@ export default function Catalogo(props) {
 					robots.map(bot => (
 						<li className="listItem" key={bot.id}>
 							<ProductCard robot={bot} />
+							<h1>hola</h1>
 						</li>
 					))}
 			</ul>

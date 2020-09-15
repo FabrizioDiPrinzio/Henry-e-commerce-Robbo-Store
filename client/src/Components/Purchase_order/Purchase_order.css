@@ -11,16 +11,34 @@
 	margin-right: auto;
 	max-width: 800px;
 	display: grid;
-	grid-template-rows: 60px 60px 60px auto;
+	grid-template-rows: auto auto auto auto;
 	align-items: left;
 }
 
 .firstRow {
+	margin-top: 25px;
+	margin-bottom: 25px;
 	display: grid;
 	grid-template-columns: 2fr 4fr 2fr;
+}
+
+.form {
+	margin-top: 0px;
+	align-items: center;
+	text-align: center;
 }
 
 .purchaseOrderData {
 	display: grid;
 	grid-template-rows: 1fr 1fr;
+	height: 70px;
+}
+
+.date {
+	text-align: right;
+	font-size: 0.7em;
+}
+
+.secondRow {
+	margin-bottom: 25px;
 }

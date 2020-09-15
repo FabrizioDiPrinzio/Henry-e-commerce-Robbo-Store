@@ -62,7 +62,7 @@ function App() {
 				<Route exact path="/category_form" component={FormularioCategoria} />
 				<Route exact path="/producto/:id" component={Producto} />
 				<Route exact path="/admin" component={AdminControlPanel} />
-				<Route exact path="/purchase_order/:id" component={Purchase_order} />
+				<Route exact path="/purchase_order/:purchaseOrderid" component={Purchase_order} />
 			</Router>
 		</div>
 	);

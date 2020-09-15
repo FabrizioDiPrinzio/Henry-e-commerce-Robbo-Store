@@ -22,10 +22,10 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
 	const {id} = req.params;
 
-	console.log(id);
-
-	Purchase_order.findByPk(id, [{model: Orderline}, {model: Product}])
-		.then(response => {
+	Purchase_order.findOne({
+		include: [{model: Orderline}, {model: Product}],
+		where: {id}
+	}).then(response => {
 			if (!response) return res.status(404).send('No se encontró la orden');
 			else return res.send(response);
 		})
@@ -35,7 +35,7 @@ router.get('/:id', (req, res) => {
 router.get('/users/:id', (req, res) => {
 	const {id} = req.params;
 
-	Purchase_order.findAll({
+	Purchase_order.findOne({
 		include: [{model: User, as: 'buyer', where: {id}}]
 	})
 		.then(response => {

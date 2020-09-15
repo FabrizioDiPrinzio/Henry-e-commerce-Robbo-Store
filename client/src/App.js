@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from './Redux/Actions/actions.js';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import Catalogo from './Components/Catalogo/Catalogo.jsx';
 import NavBar from './Components/NavBar/NavBar.jsx';
@@ -60,7 +61,6 @@ function App() {
 				<Route exact path="/product_form" component={FormularioProducto} />
 				<Route exact path="/category_form" component={FormularioCategoria} />
 				<Route exact path="/producto/:id" component={Producto} />
-				<Route exact path="/signup" component={UserForm} />
 				<Route exact path="/admin" component={AdminControlPanel} />
 				<Route exact path="/purchase_order/:id" component={Purchase_order} />
 			</Router>

@@ -9,12 +9,29 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioCategoria() {
+	//=====================   redux state    ==================== //
+
 	const categories = useSelector(state => state.categories.allCategories);
 	const dispatch = useDispatch();
+
+	//=====================   react-component state    ==================== //
 
 	const [inputValues, setInputValues] = useState({id: 0, name: '', description: ''});
 	const [selectedCategoryId, setSelectedCategoryId] = useState(0);
 	const lista = useRef(0);
+
+	// ==================== auxiliary function ==================== //
+
+	const axiosPetitionHandler = response => {
+		alert(response.statusText);
+		setSelectedCategoryId(0);
+		lista.current.value = 0;
+		setInputValues({id: 0, name: '', description: ''});
+
+		dispatch(allActions.categoryActions.getAllCategories());
+	};
+
+	// ================== component event handlers ================ //
 
 	const handleInputChange = event => {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
@@ -39,19 +56,8 @@ export default function FormularioCategoria() {
 
 		axios
 			.post(`${urlBack}/products/category`, {...inputValues, id: null})
-			.then(response => {
-				// <--------------------------< desde el .then hasta el catch hago lo mismo
-				alert(response.statusText);
-				setSelectedCategoryId(0);
-				lista.current.value = 0;
-				setInputValues({id: 0, name: '', description: ''});
-			})
-			.then(() => {
-				dispatch(allActions.categoryActions.getAllCategories());
-			})
-			.catch(error => alert('No se pudo agregar la categoria: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
-
-		// dispatch(allActions.categoryActions.postCategory(inputValues));
+			.then(response => axiosPetitionHandler(response))
+			.catch(error => alert('No se pudo crear la categoria: ' + error.response.data));
 	};
 
 	// Deletes the selected category
@@ -60,38 +66,18 @@ export default function FormularioCategoria() {
 
 		axios
 			.delete(`${urlBack}/products/category/${selectedCategoryId}`)
-			.then(response => {
-				// <--------------------------< desde el .then hasta el catch hago lo mismo
-				alert(response.statusText);
-				setSelectedCategoryId(0);
-				lista.current.value = 0;
-				setInputValues({id: 0, name: '', description: ''});
-			})
-			.then(() => {
-				dispatch(allActions.categoryActions.getAllCategories());
-			})
-			.catch(error => alert('no se pudo eliminar la categoria: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
+			.then(response => axiosPetitionHandler(response))
+			.catch(error => alert('No se pudo eliminar la categoria: ' + error.response.data));
 	};
 
 	// Edits the selected category
 	const handleEdit = event => {
 		event.preventDefault();
 
-		// dispatch(allActions.categoryActions.putCategory(parseInt(selectedCategoryId), inputValues));
-
 		axios
 			.put(`${urlBack}/products/category/${selectedCategoryId}`, inputValues)
-			.then(response => {
-				// <--------------------------< desde el .then hasta el catch hago lo mismo
-				alert(response.data);
-				setSelectedCategoryId(0);
-				lista.current.value = 0;
-				setInputValues({id: 0, name: '', description: ''});
-			})
-			.then(() => {
-				dispatch(allActions.categoryActions.getAllCategories());
-			})
-			.catch(error => alert('no se pudo eliminar la categoria: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
+			.then(response => axiosPetitionHandler(response))
+			.catch(error => alert('No se pudo editar la categoria: ' + error.response.data));
 	};
 
 	return (
@@ -131,7 +117,7 @@ export default function FormularioCategoria() {
 							<option selected value="0">
 								Categorías...
 							</option>
-							{/* categories en el primer render está vacío porque el useEffect es el que hace el dispatch del get*/}
+
 							{categories.map(categoria => {
 								return <option value={categoria.id}>{categoria.name}</option>;
 							})}

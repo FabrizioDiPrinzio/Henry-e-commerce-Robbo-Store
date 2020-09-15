@@ -3,6 +3,7 @@ import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import './ProductForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import {Button, Row,Container,Col, Form,Table} from 'react-bootstrap';
 //------ Fin de imports -----
 
 const {productActions} = allActions;
@@ -19,12 +20,14 @@ export default function ProductFormFunction() {
 		name: '',
 		price: '',
 		stock: '',
-		image: '',
 		description: ''
 	});
 	const [checkboxes, setCheckboxes] = useState([]);
 	const [selected, setSelected] = useState(0);
 	const lista = useRef(0);
+
+	const [images, setImages] = useState([]);
+	const [newImage, setnewImage] = useState('');
 
 	// Auxiliary functions
 	function resetFields() {
@@ -34,7 +37,6 @@ export default function ProductFormFunction() {
 			name: '',
 			price: '',
 			stock: '',
-			image: '',
 			description: ''
 		});
 		resetCheckboxes();
@@ -46,6 +48,15 @@ export default function ProductFormFunction() {
 			c.modified = false;
 			return c;
 		});
+	}
+
+	function resetImg() {
+		lista.current.value = 0;
+		setnewImage('')
+	}
+
+	function resetImages() {
+		setImages([]);
 	}
 
 	// ------------  Functionality ----------------------
@@ -71,6 +82,7 @@ export default function ProductFormFunction() {
 			if (lastResponse) {
 				alert(lastResponse.message);
 				resetFields();
+				resetImages();
 			}
 			if (lastError) alert(lastError);
 		},
@@ -99,6 +111,10 @@ export default function ProductFormFunction() {
 		if (selectedId > 0) {
 			const currentProduct = products.find(p => p.id === selectedId);
 			setInputValues(currentProduct);
+			const imagenes = currentProduct.pics.map(i=> {
+				return i.imageUrl;
+			})
+			setImages(imagenes);
 
 			// If the product has a category, it is checked, else it is unchecked
 			currentProduct.categories.map(productCategory => {
@@ -114,9 +130,9 @@ export default function ProductFormFunction() {
 				name: '',
 				price: '',
 				stock: '',
-				image: '',
 				description: ''
 			});
+			setImages([]);
 		}
 	};
 
@@ -129,18 +145,24 @@ export default function ProductFormFunction() {
 		setCheckboxes(modifiedCategories);
 	};
 
+	const handleAddImg = event => {
+		event.preventDefault();
+		images.push(newImage);
+		resetImg();
+	};
+
+	const handleDeleteImg = event => {
+	  event.preventDefault();
+
+	  const updatedTable = images.filter(i => i !== event.target.value);
+	  setImages(updatedTable);
+	}
+
 	// Creates products
 	const handleAdd = event => {
 		event.preventDefault();
 
-		/*
-		the image wrap is a temporary fix. the form should be able
-		to send multiple images in an array and the first one will be
-		the main image of the product. The other images will be stored
-		in the associated to the product and stored in the model named Pics.
-		*/
-		const wrappedImage = [inputValues.image];
-		const changedState = {...inputValues, image: wrappedImage, id: null};
+		const changedState = {...inputValues, image: images, id: null};
 
 		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
 		const checkedCategories = checkboxes.map(c => {
@@ -164,14 +186,7 @@ export default function ProductFormFunction() {
 	const handleEdit = event => {
 		event.preventDefault();
 
-		/*
-		the image wrap is a temporary fix. The form should be able
-		to send multiple images in an array and the first one will be
-		the main image of the product. The other images will be stored
-		in the asosiated to the product and sotred in the model named Pics.
-		*/
-		const wrappedImage = [inputValues.image];
-		const changedState = {...inputValues, image: wrappedImage};
+		const changedState = {...inputValues, image: images};
 
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
@@ -182,7 +197,7 @@ export default function ProductFormFunction() {
 		<div>
 			<form className="form">
 				<h3 className="titulo">Agregar producto</h3>
-				<div className="InputContainer">
+				<div className="">
 					<div className="inpt">
 						<label htmlFor="NombreLab" className="">
 							Nombre:
@@ -222,19 +237,7 @@ export default function ProductFormFunction() {
 							onChange={handleNumberChange}
 						/>
 					</div>
-					<div className="inpt">
-						<label htmlFor="ImgLab" className="">
-							Imagen:
-						</label>
-						<input
-							className="ImgIn"
-							name="image"
-							value={inputValues.image}
-							type="text"
-							placeholder="URL de la imagen"
-							onChange={handleInputChange}
-						/>
-					</div>
+
 				</div>
 				<div className="inpt">
 					<label className="DescLab">Descripción:</label>
@@ -265,33 +268,88 @@ export default function ProductFormFunction() {
 					})}
 				</div>
 
+				<div className="picsTable">
+	        <Container>
+	            <Row>
+		            <Col>
+		                <h5>Agregar Imagen</h5>
+		                <Form>
+		                    <Form.Group controlId="fromChechbox" >
+		                    <input
+		                    	className=" "
+													type="text"
+													autocomplete="off"
+													value={newImage}
+													onChange={e=>setnewImage(e.target.value)}
+		                      placeholder="URL de la imagen"
+												/>
+												{' '}
+		                    <button onClick={handleAddImg} className="submitBtn">Agregar imagen</button>
+		                    </Form.Group>
+		                </Form>
+		            </Col>
+	            </Row>
+	            <br/>
+	            <Row>
+		            <Col>
+			            <Table>
+		                <thead>
+	                    <tr>
+	                      <th>Imagen</th>
+												<th>Url</th>
+	                      <th>Eliminar</th>
+	                    </tr>
+		                </thead>
+		                <tbody>
+	                    {images.map(image =>(
+	                        <tr key={image}>
+	                            <td><img className="prodImg" src={image}></img></td>
+															<td className="imgUrl">{image}</td>
+	                            <td>
+																<button
+																	className="deleteBtn"
+																	value={image}
+																	onClick={handleDeleteImg}>
+																	Eliminar
+																</button>
+															</td>
+		                        </tr>
+													))}
+			                </tbody>
+										</Table>
+			            </Col>
+		            </Row>
+		        </Container>
+		    </div>
+
 				<button onClick={handleAdd} className="submitBtn">
 					Agregar producto
 				</button>
+
+				<div className="adit">
+					<div className={'botonOpcion'}>
+						<h4 className="titulo">Editar / Eliminar producto</h4>
+
+						<select ref={lista} id="select" defaultValue="0" onChange={handleSelectChange}>
+							<option value="0">Robots...</option>
+							{products.map(product => {
+								return (
+									<option value={product.id} key={product.id}>
+										{product.name}
+									</option>
+								);
+							})}
+						</select>
+						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
+							Editar
+						</button>
+						<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
+							Eliminar
+						</button>
+					</div>
+				</div>
 			</form>
 
-			<div className="adit">
-				<div className={'botonOpcion'}>
-					<h4 className="titulo">Editar / Eliminar producto</h4>
-
-					<select ref={lista} id="select" defaultValue="0" onChange={handleSelectChange}>
-						<option value="0">Robots...</option>
-						{products.map(product => {
-							return (
-								<option value={product.id} key={product.id}>
-									{product.name}
-								</option>
-							);
-						})}
-					</select>
-					<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
-						Editar
-					</button>
-					<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
-						Eliminar
-					</button>
-				</div>
-			</div>
-		</div>
+	</div>
 	);
 }

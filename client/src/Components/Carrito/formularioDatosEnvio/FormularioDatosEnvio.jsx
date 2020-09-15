@@ -58,7 +58,7 @@ export default function FormularioDatosEnvio() {
 	};
 
 	return (
-		<div className="productFormAdmin">
+		<div className="productFormAdmin overAll">
 			<div className="productTableTitleContainer">
 				<div className="productTableTitle">
 					<form className="FormEnvio">

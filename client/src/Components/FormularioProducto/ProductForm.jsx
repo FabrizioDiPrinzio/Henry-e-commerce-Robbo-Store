@@ -56,7 +56,7 @@ export default function ProductFormFunction() {
 	}
 
 	function resetImages() {
-		setImages ([]);
+		setImages([]);
 	}
 
 	// ------------  Functionality ----------------------
@@ -146,16 +146,18 @@ export default function ProductFormFunction() {
 		setCheckboxes(modifiedCategories);
 	};
 
-	const handleAddImg = evemt => {
+	const handleAddImg = event => {
 		event.preventDefault();
 		images.push(newImage);
 		resetImg();
 	};
 
 	const handleDeleteImg = event => {
-		event.preventDefault();
+	  event.preventDefault();
 
-	};
+	  const updatedTable = images.filter(i => i !== event.target.value);
+	  setImages(updatedTable);
+	}
 
 	// Creates products
 	const handleAdd = event => {
@@ -196,7 +198,7 @@ export default function ProductFormFunction() {
 		<div>
 			<form className="form">
 				<h3 className="titulo">Agregar producto</h3>
-				<div className="InputContainer">
+				<div className="">
 					<div className="inpt">
 						<label htmlFor="NombreLab" className="">
 							Nombre:
@@ -267,85 +269,88 @@ export default function ProductFormFunction() {
 					})}
 				</div>
 
+				<div className="picsTable">
+	        <Container>
+	            <Row>
+		            <Col>
+		                <h5>Agregar Imagen</h5>
+		                <Form>
+		                    <Form.Group controlId="fromChechbox" >
+		                    <input
+		                    	className=" "
+													type="text"
+													autocomplete="off"
+													value={newImage}
+													onChange={e=>setnewImage(e.target.value)}
+		                      placeholder="URL de la imagen"
+												/>
+												{' '}
+		                    <button onClick={handleAddImg} className="submitBtn">Agregar imagen</button>
+		                    </Form.Group>
+		                </Form>
+		            </Col>
+	            </Row>
+	            <br/>
+	            <Row>
+		            <Col>
+			            <Table>
+		                <thead>
+	                    <tr>
+	                      <th>Imagen</th>
+												<th>Url</th>
+	                      <th>Eliminar</th>
+	                    </tr>
+		                </thead>
+		                <tbody>
+	                    {images.map(image =>(
+	                        <tr key={image}>
+	                            <td><img className="prodImg" src={image}></img></td>
+															<td className="imgUrl">{image}</td>
+	                            <td>
+																<button
+																	className="deleteBtn"
+																	value={image}
+																	onClick={handleDeleteImg}>
+																	Eliminar
+																</button>
+															</td>
+		                        </tr>
+													))}
+			                </tbody>
+										</Table>
+			            </Col>
+		            </Row>
+		        </Container>
+		    </div>
+
 				<button onClick={handleAdd} className="submitBtn">
 					Agregar producto
 				</button>
+
+				<div className="adit">
+					<div className={'botonOpcion'}>
+						<h4 className="titulo">Editar / Eliminar producto</h4>
+
+						<select ref={lista} id="select" defaultValue="0" onChange={handleSelectChange}>
+							<option value="0">Robots...</option>
+							{products.map(product => {
+								return (
+									<option value={product.id} key={product.id}>
+										{product.name}
+									</option>
+								);
+							})}
+						</select>
+						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
+							Editar
+						</button>
+						<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
+							Eliminar
+						</button>
+					</div>
+				</div>
 			</form>
 
-			<div className="adit">
-				<div className={'botonOpcion'}>
-					<h4 className="titulo">Editar / Eliminar producto</h4>
-
-					<select ref={lista} id="select" defaultValue="0" onChange={handleSelectChange}>
-						<option value="0">Robots...</option>
-						{products.map(product => {
-							return (
-								<option value={product.id} key={product.id}>
-									{product.name}
-								</option>
-							);
-						})}
-					</select>
-					<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
-						Editar
-					</button>
-					<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
-						Eliminar
-					</button>
-				</div>
-			</div>
-			<div>
-        <Container>
-            <Row>
-	            <Col>
-	                <h2>Agregar Imagen</h2>
-	                <Form >
-	                    <Form.Group controlId="fromChechbox" >
-	                    <input
-	                    	className=" "
-												type="text"
-												autocomplete="off"
-												value={newImage}
-												onChange={e=>setnewImage(e.target.value)}
-	                      placeholder="URL de la imagen"
-											/>
-	                    <Button onClick={handleAddImg} className="BtnAdd">Agregar Imagen</Button>
-	                    </Form.Group>
-	                </Form>
-	            </Col>
-            </Row>
-            <br/>
-            <Row>
-	            <Col>
-		            <Table>
-	                <thead>
-                    <tr>
-                      <th>Imagen</th>
-											<th>Url</th>
-                      <th>Eliminar</th>
-                    </tr>
-	                </thead>
-	                <tbody>
-                    {images.map(image =>(
-                        <tr key={image}>
-                            <td className="Texto"><img src={image}></img></td>
-														<td className="Texto">{image}</td>
-                            <td>
-															<Button
-																className="BtnDelete"
-																value="Eliminar"
-																onClick={handleDeleteImg}>
-																Eliminar
-															</Button>
-														</td>
-                        </tr>
-											))}
-	                </tbody>
-								</Table>
-	            </Col>
-            </Row>
-        </Container>
-    </div>
 	</div>
 	);
 }

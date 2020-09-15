@@ -7,15 +7,7 @@ export const getAllProducts = () => dispatch => {
 	axios
 		.get(`${urlBack}/products`)
 		.then(res => {
-			const products = res.data.map(product => ({
-				id: product.id,
-				name: product.name,
-				price: product.price,
-				stock: product.stock,
-				image: product.image,
-				description: product.description,
-				categories: product.categories
-			}));
+			const products = res.data;
 
 			dispatch({type: actionTypes.GET_ALL_PRODUCTS, payload: products});
 
@@ -39,7 +31,7 @@ export const postProduct = (product, categories) => dispatch => {
 			if (categories.length) dispatch(modifyProductCategories(res.data.id, categories));
 			else dispatch(getAllProducts());
 		})
-		.catch(err => dispatch(catchError(err)));
+		.catch(err => dispatch(catchError( err)));
 };
 
 export const deleteProduct = productId => dispatch => {

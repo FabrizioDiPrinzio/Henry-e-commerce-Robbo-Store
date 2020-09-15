@@ -74,22 +74,9 @@ router.delete('/:id', (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
-	/*
-	Esta ruta SOLO cambia la image principal del producto,
-	NO agrega nuevas fotos asociadas al producto.
 
-	Esto es así porque debemos crear un formulario CRUD de Pics
-	donde se puedan guardar nuevas fotos, editarlas y eliminarlas.
-
-	Hacer todo eso en esta ruta sería muy complejo y lo único que
-	permitiremos es cambiar la image del producto (la image principal).
-
-	Las rutas de products reciben en image un array por convención, ya que
-	en algúnas es posible o necesario manejar más de una imágen.
-	*/
-
-	const {name, price, stock, description} = req.body;
-	const image = req.body.image ? req.body.image[0] : null;
+	const {name, price, stock, description, image} = req.body;
+	// const image = req.body.image ? req.body.image[0] : null;
 	const {id} = req.params;
 
 	if (!name && typeof price !== 'number' && typeof stock !== 'number' && !image && !description) {
@@ -105,9 +92,17 @@ router.put('/:id', async (req, res) => {
 		robot.price = price || robot.price;
 		robot.stock = stock || stock === 0 ? stock : robot.stock;
 		if (image) {
-			await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
-			robot.image = image;
+		// 	await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
+		// 	robot.image = image;
+		await Pics.destroy({where: {productId: robot.id}});
+
+			image.map(img => {
+				Pics.create({imageUrl: img})
+					.then(newPic => robot.addPic(newPic))
+					.then(response => res.status(201).send(response));
+			})
 		}
+
 		await robot.save();
 		const savedRobot = await robot.reload();
 		res.status(200).send(savedRobot);
@@ -137,7 +132,5 @@ router.delete('/:idProducto/category/:idCategoria', (req, res) => {
 		.destroy({where: {productId: idProducto, categoryId: idCategoria}})
 		.then(() => res.sendStatus(200));
 });
-
-
 
 module.exports = router;

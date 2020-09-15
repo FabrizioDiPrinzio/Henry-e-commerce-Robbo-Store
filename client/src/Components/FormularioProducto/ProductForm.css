@@ -1,6 +1,6 @@
 :root {
   background-color: var(--ksu-purple);
-  --max-width: 700px;
+  --max-width: 800px;
   --beau-blue: #d2e3f9ff;
   --baby-blue-eyes: #98b7f0ff;
   --glaucous: #617cc7ff;
@@ -62,5 +62,13 @@
   color:white;
   justify-content: center;
   align-items: center;
-  margin-bottom: 50px;
+}
+
+.picsTable {
+max-width: 800px
+}
+
+.prodImg {
+  max-width: 150px;
+  max-height: 150px
 }

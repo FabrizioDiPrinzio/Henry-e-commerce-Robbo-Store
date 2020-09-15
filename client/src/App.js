@@ -10,9 +10,10 @@ import Home from './Components/Home/Home.jsx';
 import Producto from './Components/Producto/Producto.jsx';
 import FormularioProducto from './Components/FormularioProducto/ProductForm.jsx';
 import FormularioCategoria from './Components/FormularioCategoria/FormularioCategoria.jsx';
-import UserForm from './Components/FormularioUsuario/UserForm.jsx';
 import AdminControlPanel from './Components/AdminControlPanel/AdminControlPanel.jsx';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import UserProfile from './Components/UserProfile/UserProfile';
+import NotFound from './Components/NotFound/NotFound';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
 // =========== FIN DE IMPORTS ============
 
@@ -26,10 +27,10 @@ function App() {
 		// TEMPORARY!! Create a new user on startup to make testing things less tedious
 		axios
 			.post(`${urlBack}/user/signup`, {
-				name: 'Dummy User',
-				rol: 'Client',
-				email: 'dummy@account.com',
-				password: 'DummyPassword123'
+				name: 'admin',
+				rol: 'Admin',
+				email: 'admin@admin.admin',
+				password: 'admin'
 			})
 			.then(() => {
 				console.log('Usuario creado');
@@ -43,7 +44,7 @@ function App() {
 
 	useEffect(
 		() => {
-			dispatch(allActions.cartActions.getUserCart(user.id));
+			if (user.id > 0) dispatch(allActions.cartActions.getUserCart(user.id));
 		},
 		[user]
 	);
@@ -53,14 +54,30 @@ function App() {
 			<Router>
 				<Route path="/" component={NavBar} />
 				<Route exact path="/" component={Home} />
-				<Route exact path="/" component={Catalogo} />
-				<Route exact path="/categories/:categoria" component={Catalogo} />
-				<Route exact path="/carrito" component={Carrito} />
-				<Route path="/search" component={Catalogo} />
-				<Route exact path="/product_form" component={FormularioProducto} />
-				<Route exact path="/category_form" component={FormularioCategoria} />
-				<Route exact path="/producto/:id" component={Producto} />
-				<Route exact path="/admin" component={AdminControlPanel} />
+				<Switch>
+					<Route exact path="/" component={Catalogo} />
+					<Route exact path="/categories/:categoria" component={Catalogo} />
+					<Route exact path="/carrito" component={Carrito} />
+					<Route path="/search" component={Catalogo} />
+					<Route exact path="/producto/:id" component={Producto} />
+					<Route exact path="/user/:id" component={UserProfile} />
+					<Route
+						exact
+						path="/product_form"
+						component={user.rol === 'Admin' ? FormularioProducto : NotFound}
+					/>
+					<Route
+						exact
+						path="/category_form"
+						component={user.rol === 'Admin' ? FormularioCategoria : NotFound}
+					/>
+					<Route
+						exact
+						path="/admin"
+						component={user.rol === 'Admin' ? AdminControlPanel : NotFound}
+					/>
+					<NotFound />
+				</Switch>
 			</Router>
 		</div>
 	);

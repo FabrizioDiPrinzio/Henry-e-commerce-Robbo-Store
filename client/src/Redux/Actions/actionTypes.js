@@ -41,3 +41,9 @@ export const GET_CART = 'GET_CART';
 export const POST_CART = 'POST_CART';
 
 export const CART_ERROR = 'CART_ERROR';
+
+// ---------------- User Actions ------------------
+
+export const LOGIN = 'LOGIN';
+
+export const LOGOUT = 'LOGOUT';

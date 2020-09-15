@@ -4,7 +4,7 @@ const productRouter = require('./product.js');
 const user = require('./user.js');
 const purchase_orders = require('./purchase_orders.js');
 const category = require('./category.js');
-const {Product} = require('../db.js');
+const {Product, User} = require('../db.js');
 const {Op} = require('sequelize');
 
 const app = express();
@@ -34,6 +34,26 @@ app.get('/search', (req, res) => {
 			return res.send(response);
 		})
 		.catch(() => res.status(400).send('Algo salió mal'));
+});
+
+// Login routes
+
+// PLACEHOLDER ONLY!!! These routes don't do any authentication.
+
+app.post('/auth/login', async (req, res) => {
+	const {email, password} = req.body;
+
+	try {
+		const usuario = await User.findOne({where: {email}});
+
+		if (!usuario || usuario.password !== password) {
+			return res.status(418).send('El email o la contraseña son incorrectos.');
+		}
+
+		return res.send(usuario);
+	} catch (error) {
+		return res.status(400).send('El email o la contraseña son incorrectos.');
+	}
 });
 
 module.exports = app;

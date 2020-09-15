@@ -1,10 +1,8 @@
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 // import {allActions} from '../../Redux/Actions/actions';
 // import {useSelector, useDispatch} from 'react-redux';
-import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.css';
 import './UserForm.css';
-import axios from 'axios';
 import RegisterForm from './RegisterForm/RegisterForm';
 import LoginForm from './LoginForm/LoginForm';
 //------ Fin de imports -----

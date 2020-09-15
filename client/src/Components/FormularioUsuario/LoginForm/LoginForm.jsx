@@ -1,4 +1,6 @@
 import React, {useState, useRef} from 'react';
+import {useDispatch} from 'react-redux';
+import {allActions} from '../../../Redux/Actions/actions';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../UserForm.css';
 import axios from 'axios';
@@ -7,6 +9,9 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function RegisterForm() {
+	// Redux
+	const dispatch = useDispatch();
+
 	// React Hooks
 	const [hidePassword, setHidePassword] = useState(true);
 	const [inputValues, setInputValues] = useState({
@@ -27,7 +32,15 @@ export default function RegisterForm() {
 	const handleAdd = event => {
 		event.preventDefault();
 
-		alert('La ruta de iniciar sesión se encuentra bajo construccion!');
+		axios
+			.post(`${urlBack}/auth/login`, inputValues)
+			.then(res => {
+				alert(`Bienvenido, ${res.data.name}`);
+				dispatch(allActions.userActions.login(res.data));
+			})
+			.catch(error => alert(error.response.data));
+
+		console.log(inputValues);
 	};
 
 	return (

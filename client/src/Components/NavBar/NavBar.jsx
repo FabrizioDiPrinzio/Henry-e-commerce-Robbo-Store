@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 import Menu from './Menu/Menu.jsx';
 import Modal from 'react-bootstrap/Modal';
+import UserOptions from './UserOptions/UserOptions';
 import 'bootstrap/dist/css/bootstrap.css';
 import './navBar.css';
 import UserForm from '../FormularioUsuario/UserForm';
@@ -18,9 +20,19 @@ document.addEventListener('scroll', e => {
 });
 
 export default function NavBar() {
+	// Redux
+	const user = useSelector(state => state.user);
+
 	// React Hooks
 	const [search, setSearch] = useState({query: ''});
-	const [showLogin, setShowLogin] = useState(false);
+	const [showModal, setShowModal] = useState(false);
+
+	useEffect(
+		() => {
+			setShowModal(false); // Closes modals whenever a user logs in or out
+		},
+		[user.id]
+	);
 
 	// ----- Functionality ----
 	const handleInputChange = event =>
@@ -34,8 +46,9 @@ export default function NavBar() {
 				</Link>
 				<img src="../favicon.svg" alt="logo" className="logo" />
 				<span className="espacioBlanco"> </span>
+				<span className="welcome"> Bienvenido, {user.name || 'visitante'}! </span>
 				<div>
-					<button className="UserBtn" onClick={() => setShowLogin(!showLogin)}>
+					<button className="UserBtn" onClick={() => setShowModal(!showModal)}>
 						<svg
 							width="2em"
 							height="2em"
@@ -50,9 +63,16 @@ export default function NavBar() {
 							/>
 						</svg>
 					</button>
-					<Modal show={showLogin} onHide={() => setShowLogin(!showLogin)}>
-						<UserForm />
-					</Modal>
+					{user.rol === 'Guest' && (
+						<Modal show={showModal} onHide={() => setShowModal(!showModal)}>
+							<UserForm />
+						</Modal>
+					)}
+					{user.rol !== 'Guest' && (
+						<Modal show={showModal} onHide={() => setShowModal(!showModal)}>
+							<UserOptions />
+						</Modal>
+					)}
 
 					<Link to="/carrito">
 						<button className="CartBtn">

@@ -19,7 +19,11 @@ export default function Producto() {
 	);
 
 	if (!robot)
-		return <h1>Lo sentimos, pero ese producto no se encuentra en nuestra base de datos!</h1>;
+		return (
+			<h1 className="not-found">
+				Lo sentimos, pero ese producto no se encuentra en nuestra base de datos!
+			</h1>
+		);
 
 	return (
 		<div className="productContainer">

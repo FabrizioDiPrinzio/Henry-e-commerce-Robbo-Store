@@ -35,14 +35,26 @@ module.exports = (sequelize) => {
           isEmail: true,
       }
     },
+
+
+
     password:{
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        isString(value) {
-          if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
-        }
-      },
+       get() {
+            return () => this.getDataValue('password')
+      }
+    },
+
+
+    salt:{
+      type: DataTypes.STRING,
+      get() {
+            return() => this.getDataValue('salt')
+      }
     }
+
+
+
   });
 };

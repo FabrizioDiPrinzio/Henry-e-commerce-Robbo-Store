@@ -3,8 +3,11 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
+const passport = require('passport');
+const session = require('express-session')
+const LocalStrategy = require('passport-local').Strategy;
 
-require('./db.js');
+const {User} = require('./db.js');
 
 const server = express();
 
@@ -21,6 +24,46 @@ server.use((req, res, next) => {
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 	next();
 });
+
+server.use(session({ secret: 'derpy', resave: false, saveUninitialized: true, }));
+
+
+// ================= Express/Passport Setup ================= //
+server.use(passport.initialize());
+server.use(passport.session());
+
+passport.use(new LocalStrategy(
+	{
+		usernameField: 'email',
+        passwordField: 'password'
+	},
+	function(email, password, done) {
+        User.findOne({where: { email: email }}).then(function(user) {
+            if (!user || !user.correctPassword(password)) {
+                return done(null, false, { message: 'Incorrect email or password.' });
+            }
+
+            done(null, user);
+        })
+        .catch(err => done(err))
+    })
+);
+
+// ================= Passport Strategy Setup ================= //
+
+passport.serializeUser(function(user, done) {
+	done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+	User.findByPk(id).then(function(user) {
+        done(null, user);
+    }).catch(function(err) {
+        done(err, null);
+    });
+});
+
+
 
 server.use('/', routes);
 

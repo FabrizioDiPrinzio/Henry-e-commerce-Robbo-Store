@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 // import all routers;
 const productRouter = require('./product.js');
 const user = require('./user.js');
@@ -36,6 +37,11 @@ app.get('/search', (req, res) => {
 		.catch(() => res.status(400).send('Algo salió mal'));
 });
 
+
+
+
+
+
 // Login routes
 
 // PLACEHOLDER ONLY!!! These routes don't do any authentication.
@@ -46,14 +52,33 @@ app.post('/auth/login', async (req, res) => {
 	try {
 		const usuario = await User.findOne({where: {email}});
 
-		if (!usuario || usuario.password !== password) {
+		if (!usuario || !usuario.correctPassword(password)) {
 			return res.status(400).send('El email o la contraseña son incorrectos.');
-		}
+    }
+    
+    passport.authenticate('local', 
+    { failureFlash: false })
 
 		return res.send(usuario);
 	} catch (error) {
 		return res.status(400).send('El email o la contraseña son incorrectos.');
 	}
 });
+
+
+app.get('/auth/logout',
+  function(req, res){
+    req.logout();
+    res.redirect('/');
+});
+
+app.get('/auth/me',
+  passport.authenticate('local', { session: true }),
+  function(req, res) {
+    res.json({ user: req.user });
+});
+
+
+
 
 module.exports = app;

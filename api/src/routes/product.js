@@ -6,7 +6,22 @@ const {Product, Categories, product_categories, Pics, Reviews} = require('../db.
 
 ////<========= Esto lo quiero poner en review.js pero no pude!
 
-router.post('/:idProducto/review', async (req,res) => {
+router.get('/idProducto/review', (req, res) => {
+//	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	const {idProducto} = req.params;
+	Reviews.findAll({where: {productId : idProducto}})
+		.then(data => {
+			res.status(200).send(data)
+		})
+		.catch(error => {
+			res.status(400).send('Algo salio mal ' + error)
+		})
+})
+
+
+//Crear review
+
+router.post('/:idProducto/review', (req,res) => {
 
 //	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
 
@@ -26,6 +41,8 @@ router.post('/:idProducto/review', async (req,res) => {
 				res.status(400).send('Algo salio mal ' + error)
 			})
 });
+
+//Borrar review
 
 router.delete('/:idProducto/review/:idReview', (req,res) => {
 

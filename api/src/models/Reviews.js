@@ -8,7 +8,7 @@ module.exports = sequelize => {
 		//idUser
 		//idProduct
 
-		comment: {
+		commentary: {
 			type: DataTypes.STRING,
 			allowNull: true,
 			validate: {

@@ -6,7 +6,25 @@ const {Product, Categories, product_categories, Pics, Reviews} = require('../db.
 
 ////<========= Esto lo quiero poner en review.js pero no pude!
 
-router.post('/:idProducto/review', async (req,res) => {
+router.get('/:idProducto/review', (req, res) => {
+//	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	const {idProducto} = req.params;
+	Reviews.findAll({where: {productId : idProducto}})
+		.then(data => {
+			res.status(200).send(data)
+		})
+		.catch(error => {
+			res.status(400).send('Algo salio mal ' + error)
+		})
+})
+
+
+//Crear review
+
+router.post('/:idProducto/review', (req,res) => {
+
+//	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+
 	const {idProducto} = req.params
 	const {commentary, qualification, creatorId} = req.body
 	
@@ -20,9 +38,30 @@ router.post('/:idProducto/review', async (req,res) => {
 				res.status(200).send('Creado!')
 			})
 		.catch(error => {
-				res.status(400).send('Algo salio mal' + error)
+				res.status(400).send('Algo salio mal ' + error)
 			})
 });
+
+//Borrar review
+
+router.delete('/:idProducto/review/:idReview', (req,res) => {
+
+//	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+
+	const {idProducto, idReview} = req.params;
+	Reviews.destroy({where: {id : idReview}})
+
+		.then(response => {
+			if (response === 0) res.status(400).send('Hubo un problema')
+			res.status(200).send(`Review ${idReview} del producto ${idProducto} eliminada`);
+		})
+		.catch(error => {
+			res.status(400).send('Algo salio mal ' + error);
+		});
+});
+
+
+
 
 ////<=======     hasta acá!
 

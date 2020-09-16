@@ -36,9 +36,17 @@ export const PRODUCTS_ERROR = 'PRODUCTS_ERROR';
 
 // ------------------ Cart Actions -------------------
 
-export const GET_CART = 'GET_CART';
+export const GET_USER_CART = 'GET_USER_CART';
 
-export const POST_CART = 'POST_CART';
+export const POST_USER_CART = 'POST_USER_CART';
+
+export const GET_GUEST_CART = 'GET_GUEST_CART';
+
+export const POST_GUEST_CART = 'POST_GUEST_CART';
+
+export const EDIT_GUEST_CART = 'EDIT_GUEST_CART';
+
+export const EMPTY_CART = 'EMPTY_CART';
 
 export const CART_ERROR = 'CART_ERROR';
 

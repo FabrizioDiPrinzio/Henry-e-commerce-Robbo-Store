@@ -8,7 +8,7 @@ export const getUserCart = userId => dispatch => {
 		.get(`${urlBack}/user/${userId}/cart`)
 		.then(res => {
 			dispatch({
-				type: actionTypes.GET_CART,
+				type: actionTypes.GET_USER_CART,
 				payload: res.data
 			});
 		})
@@ -20,11 +20,27 @@ export const postUserCart = userId => dispatch => {
 		.post(`${urlBack}/user/${userId}/cart`)
 		.then(res =>
 			dispatch({
-				type: actionTypes.POST_CART,
+				type: actionTypes.POST_USER_CART,
 				payload: res.data
 			})
 		)
 		.catch(err => dispatch(onError(err.response.data)));
+};
+
+export const editGuestCart = (product, orderlines) => dispatch => {
+	const index = orderlines.findIndex(order => order.productId === product.productId);
+	console.log('orderlines: ', orderlines);
+	console.log('product: ', product);
+	console.log('index: ', index);
+
+	if (index < 0) orderlines.push(product);
+	else orderlines[index] = product;
+
+	dispatch({type: actionTypes.EDIT_GUEST_CART, payload: orderlines});
+};
+
+export const emptyCart = () => dispatch => {
+	dispatch({type: actionTypes.EMPTY_CART});
 };
 
 const onError = errorMessage => {

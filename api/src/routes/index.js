@@ -1,10 +1,12 @@
 const express = require('express');
+const passport = require('passport');
 // import all routers;
 const productRouter = require('./product.js');
 const user = require('./user.js');
 const review = require('./review.js');
 const purchase_orders = require('./purchase_orders.js');
 const category = require('./category.js');
+const auth = require('./auth');
 const {Product, User} = require('../db.js');
 const {Op} = require('sequelize');
 
@@ -19,6 +21,7 @@ app.use('/products', productRouter);
 app.use('/products/category', category);
 app.use('/user', user);
 app.use('/orders', purchase_orders);
+app.use('/auth', auth);
 
 app.get('/', (req, res) => {
 	res.send('Hola');
@@ -39,23 +42,17 @@ app.get('/search', (req, res) => {
 		.catch(() => res.status(400).send('Algo salió mal'));
 });
 
-// Login routes
-
-// PLACEHOLDER ONLY!!! These routes don't do any authentication.
-
-app.post('/auth/login', async (req, res) => {
-	const {email, password} = req.body;
-
+app.post('/createAdmin', async (req, res) => {
 	try {
-		const usuario = await User.findOne({where: {email}});
-
-		if (!usuario || usuario.password !== password) {
-			return res.status(418).send('El email o la contraseña son incorrectos.');
-		}
-
-		return res.send(usuario);
+		const admin = await User.create({
+			name: 'Admin',
+			rol: 'Admin',
+			email: 'admin@admin.com',
+			password: 'admin'
+		});
+		return console.log('Creado: ', admin.name);
 	} catch (error) {
-		return res.status(400).send('El email o la contraseña son incorrectos.');
+		/*Para que no crashee*/
 	}
 });
 

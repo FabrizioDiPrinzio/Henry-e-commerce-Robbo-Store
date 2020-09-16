@@ -10,10 +10,11 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductCard({robot}) {
 	// Redux
-	const userId = useSelector(state => state.user.id);
-	const userType = useSelector(state => state.user.userType);
-	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
+	const user = useSelector(state => state.user);
+	const currentCart = useSelector(state => state.cart.currentCart);
 	const dispatch = useDispatch();
+
+	const {orderlines} = currentCart;
 
 	// React hooks
 	const currentRobot = orderlines && orderlines.find(item => item.productId === robot.id);
@@ -25,7 +26,7 @@ export default function ProductCard({robot}) {
 		() => {
 			setCarrito({...carrito, quantity: currentRobot ? currentRobot.quantity : 0});
 		},
-		[orderlines]
+		[currentCart]
 	);
 
 	// ------------------- Funcionalidad ----------------
@@ -34,56 +35,76 @@ export default function ProductCard({robot}) {
 		e.preventDefault();
 		e.persist();
 		e.target.style.opacity = '0.1';
+
+		if (robot.stock <= carrito.quantity || loading === true) return alert('Sin stock!');
+
 		const changes = {
 			productId: robot.id,
 			quantity: carrito.quantity + 1,
 			price: (carrito.quantity + 1) * robot.price
 		};
-		if (robot.stock > carrito.quantity && loading === false) {
-			setLoading(true);
+
+		setLoading(true);
+
+		if (user.rol === 'Guest') {
+			dispatch(allActions.cartActions.editGuestCart(changes, orderlines));
+			setLoading(false);
+			e.target.style.opacity = '1';
+			alert('Agregado');
+		}
+		else {
 			axios
-				.put(`${urlBack}/user/${userId}/cart`, changes)
+				.put(`${urlBack}/user/${user.id}/cart`, changes)
 				.then(() => {
 					setLoading(false);
 					e.target.style.opacity = '1';
 					alert('Agregado');
-					dispatch(allActions.cartActions.getUserCart(userId));
+					dispatch(allActions.cartActions.getUserCart(user.id));
 				})
 				.catch(error => {
 					setLoading(false);
-					console.log(error.response.data);
-					console.log(e.target);
+					alert(error.response.data);
 					e.target.style.opacity = '1';
 				});
 		}
-		else alert('Sin stock!');
 	};
 
 	const handleClickRemove = e => {
 		e.preventDefault();
 		e.persist();
 		e.target.style.opacity = '0.1';
+
 		const changes = {
 			productId: robot.id,
 			quantity: carrito.quantity - 1,
 			price: (carrito.quantity - 1) * robot.price
 		};
+
 		if (carrito.quantity > 0 && loading === false) {
 			e.target.style.opacity = '0.1';
 			setLoading(true);
-			axios
-				.put(`${urlBack}/user/${userId}/cart`, changes)
-				.then(() => {
-					e.target.style.opacity = '1';
-					setLoading(false);
-					alert('Quitado');
-					dispatch(allActions.cartActions.getUserCart(userId));
-				})
-				.catch(error => {
-					alert(error.response.data);
-					setLoading(false);
-					e.target.style.opacity = '1';
-				});
+
+			if (user.rol === 'Guest') {
+				dispatch(allActions.cartActions.editGuestCart(changes, orderlines));
+				setLoading(false);
+				e.target.style.opacity = '1';
+				alert('Quitado');
+			}
+			else {
+				axios
+					.put(`${urlBack}/user/${user.id}/cart`, changes)
+					.then(() => {
+						e.target.style.opacity = '1';
+						setLoading(false);
+						alert('Quitado');
+						dispatch(allActions.cartActions.getUserCart(user.id));
+					})
+					.catch(error => {
+						alert(error.response.data);
+						setLoading(false);
+						e.target.style.opacity = '1';
+					});
+			}
 		}
 	};
 

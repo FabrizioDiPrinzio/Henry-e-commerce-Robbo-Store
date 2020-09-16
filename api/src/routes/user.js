@@ -3,12 +3,26 @@ const router = express.Router();
 const {User, Purchase_order, Orderline, Product} = require('../db.js'); //database
 
 router.get('/', async (req, res) => {
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes ver la lista de usuarios');
+	}
+
 	const userList = await User.findAll();
 	res.send(userList);
 });
 
 router.get('/:id', (req, res) => {
-	User.findByPk(req.params.id).then(user => {
+	const {id} = req.params;
+
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.id !== Number(id) && req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes editar a otro usuario');
+	}
+
+	User.findByPk(id).then(user => {
 		if (!user) res.status(404).send('No se encontró el usuario');
 		res.send(user);
 	});
@@ -16,8 +30,8 @@ router.get('/:id', (req, res) => {
 
 //Ruta para crear Usuario
 router.post('/signup', (req, res) => {
-	const {name, rol, email, password} = req.body;
-	if (!name && !rol && !email && !password) {
+	const {name, email, password} = req.body;
+	if (!name && !email && !password) {
 		return res.status(400).send('Falta algún parámetro');
 	}
 	else {
@@ -32,18 +46,23 @@ router.post('/signup', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-	const {name, rol, email, password} = req.body;
+	const {name, email, password} = req.body;
 	const {id} = req.params;
 
-	if (!name && !rol && !email && !password) return res.status(400).send('Faltan parámetros');
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.id !== Number(id) && req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes editar a otro usuario');
+	}
+
+	if (!name && !email && !password) return res.status(400).send('Faltan parámetros');
 	else {
 		User.findByPk(id)
 			.then(user => {
 				if (!user) return res.status(400).send('No se encontró el usuario:(');
 
 				user.name = name || user.name;
-				user.rol = rol || user.rol;
-				user.email = email || user.rol;
+				user.email = email || user.email;
 				user.password = password || user.password;
 				user.save();
 
@@ -62,6 +81,12 @@ router.delete('/:id', (req, res) => {
 	let {id} = req.params;
 	id = parseInt(id);
 
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.id !== Number(id) && req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes eliminar a otro usuario');
+	}
+
 	User.destroy({where: {id}}).then(response => {
 		if (response === 0) return res.sendStatus(404);
 		else return res.sendStatus(200);
@@ -75,17 +100,31 @@ router.delete('/:id', (req, res) => {
 router.get('/:userId/cart', (req, res) => {
 	const {userId} = req.params;
 
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	console.log(req.user);
+	if (req.user.id !== Number(userId) && req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes ver el carrito de otra persona');
+	}
+
 	Purchase_order.findOne({
 		where: {buyerId: userId, status: 'enCarrito'},
 		include: [{model: Orderline}, {model: Product}]
 	}).then(response => {
-		if (!response) return res.status(404).send('No se encontró el carrito de ese usuario');
+		if (!response) return res.status(404).send('No se encontró el carrito');
 		else return res.send(response);
 	});
 });
 
 router.post('/:userId/cart', async (req, res) => {
 	const {userId} = req.params;
+
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.id !== Number(userId) && req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes crear el carrito de otra persona');
+	}
+
 	const {
 		status,
 		recipient_name,
@@ -120,19 +159,25 @@ router.post('/:userId/cart', async (req, res) => {
 		{include: [{model: User, as: 'buyer'}]}
 	)
 		.then(response => {
-			response.products = []
-			response.orderlines = []
-			return response
-		}).then(villada => {
+			response.products = [];
+			response.orderlines = [];
+			return response;
+		})
+		.then(villada => {
 			return res.send(villada);
-		}
-		)
+		})
 		.catch(err => res.status(400).send('Algo salió mal: ' + err.message));
 });
 
 router.put('/:userId/cart', async (req, res) => {
 	const {userId} = req.params;
 	const {productId, quantity, price} = req.body;
+
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.id !== Number(userId) && req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes editar el carrito de otra persona');
+	}
 
 	if (!productId) {
 		return res.status(400).send('Debes indicar el producto a editar');
@@ -173,6 +218,12 @@ router.put('/:userId/cart', async (req, res) => {
 
 router.delete('/:userId/cart', (req, res) => {
 	const {userId} = req.params;
+
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.id !== Number(userId) && req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes borrar el carrito de otra persona');
+	}
 
 	Purchase_order.destroy({where: {buyerId: userId, status: 'enCarrito'}})
 		.then(response => {

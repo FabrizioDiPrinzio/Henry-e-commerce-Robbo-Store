@@ -1,5 +1,6 @@
 require('dotenv').config(); //Es la forma de requerir el archivo .env//
 const {Sequelize} = require('sequelize');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const {DB_USER, DB_PASSWORD, DB_HOST} = process.env;
@@ -48,10 +49,42 @@ Product.hasMany(Reviews);
 Product.hasMany(Pics, {onDelete: 'CASCADE'});
 Pics.belongsTo(Product);
 
-
 Product.belongsToMany(Categories, {through: 'product_categories'});
 Categories.belongsToMany(Product, {through: 'product_categories'});
 // Categories.hasMany(Product);
+
+// ======== User instance and class method declaration: ============== //
+
+// encrypting password:
+
+// generates a random salt (salt is a random string)
+User.generateSalt = function() {
+	return crypto.randomBytes(16).toString('base64');
+};
+
+// uses crypto and a salt to encrypt a plain text
+User.encryptPassword = function(plainText, salt) {
+	return crypto.createHash('sha1').update(plainText).update(salt).digest('hex');
+};
+
+// A hook that uses the two previous functions to encrypt the password and saves the random salt
+const setSaltAndPassword = user => {
+	if (user.changed('password')) {
+		user.salt = User.generateSalt();
+		user.password = User.encryptPassword(user.password(), user.salt());
+	}
+};
+
+// tells the model to use the encrypting functiong when an instace is created or updated.
+User.beforeCreate(setSaltAndPassword);
+User.beforeUpdate(setSaltAndPassword);
+
+// Model instance to compare encrypted passwod with the entered password.
+User.prototype.correctPassword = function(enteredPassword) {
+	return User.encryptPassword(enteredPassword, this.salt()) === this.password();
+};
+
+// ================= Exporting the models =============== //
 
 module.exports = {
 	...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

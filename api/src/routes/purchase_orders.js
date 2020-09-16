@@ -8,6 +8,10 @@ const {Op} = require('sequelize');
 // queryString:  orders?status=[enCarrito, creada, pagada, entregada, cancelada]
 
 router.get('/', (req, res) => {
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {status} = req.query;
 
 	Purchase_order.findAll({
@@ -34,6 +38,12 @@ router.get('/:id', (req, res) => {
 
 router.get('/users/:id', (req, res) => {
 	const {id} = req.params;
+
+	// Guard clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.id !== Number(id) && req.user.rol !== 'Admin') {
+		return res.status(401).send('No puedes ver la órdenes de otra persona');
+	}
 
 	Purchase_order.findAll({
 		include: [{model: User, as: 'buyer', where: {id}}]

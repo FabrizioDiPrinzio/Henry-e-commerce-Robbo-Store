@@ -6,7 +6,7 @@ const {Product, Categories, product_categories, Pics, Reviews} = require('../db.
 
 ////<========= Esto lo quiero poner en review.js pero no pude!
 
-router.get('/idProducto/review', (req, res) => {
+router.get('/:idProducto/review', (req, res) => {
 //	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
 	const {idProducto} = req.params;
 	Reviews.findAll({where: {productId : idProducto}})

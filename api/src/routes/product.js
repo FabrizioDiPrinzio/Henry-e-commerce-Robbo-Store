@@ -20,11 +20,21 @@ router.post('/:idProducto/review', async (req,res) => {
 				res.status(200).send('Creado!')
 			})
 		.catch(error => {
-				res.status(400).send('Algo salio mal' + error)
+				res.status(400).send('Algo salio mal ' + error)
 			})
 });
 
-router.delete('/:idProducto/review/:idReview')
+router.delete('/:idProducto/review/:idReview'. async (req,res) => {
+	const {idProducto, idReview} = req.params
+	Reviews.destroy({where: {id : idReview}})
+		.then(response => {
+			if (response === 0) return res.sendStatus(404);
+			else return res.sendStatus(200);
+		});
+		.catch(error => {
+			res.status(400).send('Algo salio mal ' + error)
+		})
+}
 
 
 

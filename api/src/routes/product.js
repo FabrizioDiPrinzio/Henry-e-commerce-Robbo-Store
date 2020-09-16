@@ -24,6 +24,11 @@ router.post('/:idProducto/review', async (req,res) => {
 			})
 });
 
+router.delete('/:idProducto/review/:idReview')
+
+
+
+
 ////<=======     hasta acá!
 
 

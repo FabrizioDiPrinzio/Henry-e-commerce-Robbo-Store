@@ -24,22 +24,9 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		// TEMPORARY!! Create a new user on startup to make testing things less tedious
-		if (user.rol === 'Guest') {
-			axios
-				.post(`${urlBack}/user/signup`, {
-					name: 'admin',
-					rol: 'Admin',
-					email: 'admin@admin.admin',
-					password: 'admin'
-				})
-				.then(() => {
-					console.log('Usuario creado');
-				})
-				.catch(error => console.log(error.response.data));
-		}
+		// Placeholder, crea admin
+		axios.post(`${urlBack}/createAdmin`);
 
-		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());
 		dispatch(allActions.productActions.getAllProducts());
 	}, []);

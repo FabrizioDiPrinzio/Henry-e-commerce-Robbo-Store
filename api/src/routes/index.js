@@ -24,14 +24,6 @@ app.get('/', (req, res) => {
 	res.send('Hola');
 });
 
-app.get('/authenticated', (req, res) => {
-	res.send('Fue autenticado');
-});
-
-app.get('/notAuthenticated', (req, res) => {
-	res.send('No fue autenticado');
-});
-
 app.get('/search', (req, res) => {
 	const {query} = req.query;
 	Product.findAll({
@@ -45,6 +37,20 @@ app.get('/search', (req, res) => {
 			return res.send(response);
 		})
 		.catch(() => res.status(400).send('Algo salió mal'));
+});
+
+app.post('/createAdmin', async (req, res) => {
+	try {
+		const admin = await User.create({
+			name: 'Admin',
+			rol: 'Admin',
+			email: 'admin@admin.com',
+			password: 'admin'
+		});
+		return console.log('Creado: ', admin.name);
+	} catch (error) {
+		/*Para que no crashee*/
+	}
 });
 
 module.exports = app;

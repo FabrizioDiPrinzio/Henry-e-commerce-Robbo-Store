@@ -4,15 +4,17 @@ const {Categories, Product} = require('../db.js');
 const {Op} = require('sequelize');
 
 router.get('/names', (req, res) => {
-	Categories.findAll()
-		.then(response => res.send(response))
-		.catch(err => {
-			return res.status(400).send(err.message);
-		});
+	Categories.findAll().then(response => res.send(response)).catch(err => {
+		return res.status(400).send(err.message);
+	});
 });
 
 router.post('/', (req, res) => {
 	const {name, description} = req.body;
+
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	if (!name || !description) {
 		return res.status(400).send('Parámetros incompletos');
 	}
@@ -31,6 +33,9 @@ router.delete('/:id', (req, res) => {
 	let {id} = req.params;
 	id = parseInt(id);
 
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	Categories.destroy({where: {id}}).then(response => {
 		if (response === 0) return res.sendStatus(404);
 		else return res.sendStatus(200);
@@ -40,6 +45,9 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
 	const {name, description} = req.body;
 	const {id} = req.params;
+
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
 
 	if (!name && !description) return res.status(400).send('Faltan parámetros');
 	else {

@@ -1,7 +1,32 @@
 const express = require('express');
 const router = express.Router();
 const category = require('./category'); // rutas
-const {Product, Categories, product_categories, Pics} = require('../db.js'); //database
+const {Product, Categories, product_categories, Pics, Reviews} = require('../db.js'); //database
+
+
+////<========= Esto lo quiero poner en review.js pero no pude!
+
+router.post('/:idProducto/review', async (req,res) => {
+	const {idProducto} = req.params
+	const {commentary, qualification, creatorId} = req.body
+	
+	Reviews.create({
+		commentary: commentary,
+		qualification: qualification,
+		productId: idProducto,
+		creatorId : creatorId
+		})
+		.then(data => {
+				res.status(200).send('Creado!')
+			})
+		.catch(error => {
+				res.status(400).send('Algo salio mal' + error)
+			})
+});
+
+////<=======     hasta acá!
+
+
 
 router.get('/', (req, res, next) => {
 	Product.findAll({include: [Categories, Pics]})
@@ -107,14 +132,5 @@ router.delete('/:idProducto/category/:idCategoria', (req, res) => {
 		.destroy({where: {productId: idProducto, categoryId: idCategoria}})
 		.then(() => res.sendStatus(200));
 });
-
-// router.get('/:idProducto/pics', (req, res) => {
-//
-// });
-//
-//
-// router.put('/:idProducto/pics', (req, res) => {
-//
-// });
 
 module.exports = router;

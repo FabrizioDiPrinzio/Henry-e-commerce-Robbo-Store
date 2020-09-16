@@ -5,6 +5,7 @@ const productRouter = require('./product.js');
 const user = require('./user.js');
 const purchase_orders = require('./purchase_orders.js');
 const category = require('./category.js');
+const auth = require('./auth');
 const {Product, User} = require('../db.js');
 const {Op} = require('sequelize');
 
@@ -17,9 +18,18 @@ app.use('/products', productRouter);
 app.use('/products/category', category);
 app.use('/user', user);
 app.use('/orders', purchase_orders);
+app.use('/auth', auth);
 
 app.get('/', (req, res) => {
 	res.send('Hola');
+});
+
+app.get('/authenticated', (req, res) => {
+	res.send('Fue autenticado');
+});
+
+app.get('/notAuthenticated', (req, res) => {
+	res.send('No fue autenticado');
 });
 
 app.get('/search', (req, res) => {
@@ -36,49 +46,5 @@ app.get('/search', (req, res) => {
 		})
 		.catch(() => res.status(400).send('Algo salió mal'));
 });
-
-
-
-
-
-
-// Login routes
-
-// PLACEHOLDER ONLY!!! These routes don't do any authentication.
-
-app.post('/auth/login', async (req, res) => {
-	const {email, password} = req.body;
-
-	try {
-		const usuario = await User.findOne({where: {email}});
-
-		if (!usuario || !usuario.correctPassword(password)) {
-			return res.status(400).send('El email o la contraseña son incorrectos.');
-    }
-    
-    passport.authenticate('local', 
-    { failureFlash: false })
-
-		return res.send(usuario);
-	} catch (error) {
-		return res.status(400).send('El email o la contraseña son incorrectos.');
-	}
-});
-
-
-app.get('/auth/logout',
-  function(req, res){
-    req.logout();
-    res.redirect('/');
-});
-
-app.get('/auth/me',
-  passport.authenticate('local', { session: true }),
-  function(req, res) {
-    res.json({ user: req.user });
-});
-
-
-
 
 module.exports = app;

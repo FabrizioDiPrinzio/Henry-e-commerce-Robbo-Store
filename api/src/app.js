@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
 const passport = require('passport');
-const session = require('express-session')
+const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 
 const {User} = require('./db.js');
@@ -25,45 +25,40 @@ server.use((req, res, next) => {
 	next();
 });
 
-server.use(session({ secret: 'derpy', resave: false, saveUninitialized: true, }));
-
-
-// ================= Express/Passport Setup ================= //
-server.use(passport.initialize());
-server.use(passport.session());
-
-passport.use(new LocalStrategy(
-	{
-		usernameField: 'email',
-        passwordField: 'password'
-	},
-	function(email, password, done) {
-        User.findOne({where: { email: email }}).then(function(user) {
-            if (!user || !user.correctPassword(password)) {
-                return done(null, false, { message: 'Incorrect email or password.' });
-            }
-
-            done(null, user);
-        })
-        .catch(err => done(err))
-    })
-);
-
 // ================= Passport Strategy Setup ================= //
 
-passport.serializeUser(function(user, done) {
-	done(null, user.id);
-});
+passport.use(
+	new LocalStrategy(
+		{
+			usernameField: 'email',
+			passwordField: 'password'
+		},
+		function(email, password, done) {
+			User.findOne({where: {email: email}})
+				.then(function(user) {
+					if (!user || !user.correctPassword(password)) {
+						return done(null, false, {message: 'Incorrect email or password.'}); // On error
+					}
+
+					// On success
+					return done(null, user);
+				})
+				.catch(err => done(err));
+		}
+	)
+);
+
+passport.serializeUser((user, done) => done(null, user.id));
 
 passport.deserializeUser(function(id, done) {
-	User.findByPk(id).then(function(user) {
-        done(null, user);
-    }).catch(function(err) {
-        done(err, null);
-    });
+	User.findByPk(id).then(user => done(null, user)).catch(err => done(err, null));
 });
 
+// ================= Express/Passport Setup ================= //
+server.use(session({secret: 'derpy', resave: false, saveUninitialized: true}));
 
+server.use(passport.initialize());
+server.use(passport.session());
 
 server.use('/', routes);
 

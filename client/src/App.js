@@ -24,16 +24,23 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		// Placeholder, crea admin
-		axios.post(`${urlBack}/createAdmin`);
+		// PLACEHOLDER ONLY, creates admin. Mail: 'admin@admin.com', Password: 'admin'
+		axios
+			.post(`${urlBack}/createAdmin`)
+			.then(response => console.log(response.data))
+			.catch(error => console.log(error.response.data));
 
+		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());
 		dispatch(allActions.productActions.getAllProducts());
 	}, []);
 
 	// Trae el carrito del usuario la primera vez que abe la página.
 	useEffect(() => {
-		if (user.id > 0) dispatch(allActions.cartActions.getUserCart(user.id));
+		axios
+			.get(`${urlBack}/auth/me`)
+			.then(user => dispatch(allActions.userActions.login(user.data)))
+			.catch(() => {}); // Se queda con el default de Guest
 	}, []);
 
 	return (

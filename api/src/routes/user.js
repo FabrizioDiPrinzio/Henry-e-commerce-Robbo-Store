@@ -102,7 +102,6 @@ router.get('/:userId/cart', (req, res) => {
 
 	// Guard clauses
 	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
-	console.log(req.user);
 	if (req.user.id !== Number(userId) && req.user.rol !== 'Admin') {
 		return res.status(401).send('No puedes ver el carrito de otra persona');
 	}

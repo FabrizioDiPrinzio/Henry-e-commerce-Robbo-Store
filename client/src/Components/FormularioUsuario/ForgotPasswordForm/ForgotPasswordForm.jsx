@@ -17,14 +17,14 @@ export default function ForgotPasswordForm() {
 	// ------------ Functionality ---------
 
 	const handleInputChange = event => {
+		if (error) setError('');
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
 
 	const handleSend = event => {
 		event.preventDefault();
 
-		setToken('');
-		setError('');
+		if (!inputValues.email) return setError('Debes completar todos los campos');
 
 		axios
 			.post(`${urlBack}/auth/forgot`, inputValues)
@@ -33,30 +33,28 @@ export default function ForgotPasswordForm() {
 	};
 
 	return (
-		<div>
-			<form className="form" onSubmit={handleSend}>
-				<h3 className="titulo">Resetear contraseña</h3>
-				<br />
+		<form className="form" onSubmit={handleSend}>
+			<h3 className="titulo">Resetear contraseña</h3>
+			<br />
 
-				<label htmlFor="Email" className="">
-					Email:
-				</label>
-				<input
-					className="form-control"
-					type="email"
-					name="email"
-					value={inputValues.email}
-					placeholder="Email"
-					onChange={handleInputChange}
-				/>
-				<br />
+			<label htmlFor="Email" className="">
+				Email:
+			</label>
+			<input
+				className="form-control"
+				type="email"
+				name="email"
+				value={inputValues.email}
+				placeholder="Email"
+				onChange={handleInputChange}
+			/>
+			<br />
 
-				<button type="submit" className="addBtn" value="Enviar" onClick={handleSend}>
-					Resetear contraseña
-				</button>
-				<br />
-			</form>
-
+			<button type="submit" className="addBtn" value="Enviar" onClick={handleSend}>
+				Resetear contraseña
+			</button>
+			<br />
+			<br />
 			{token && (
 				<div className="success">
 					{success} Te hemos enviado un email con las instrucciones a seguir.
@@ -74,6 +72,6 @@ export default function ForgotPasswordForm() {
 					{failure} {error}
 				</p>
 			)}
-		</div>
+		</form>
 	);
 }

@@ -44,12 +44,12 @@ router.post('/forgot', async (req, res) => {
 
 // El usuario resetea la contraseña
 router.patch('/reset', async (req, res) => {
-	const {password, token} = req.body;
+	const {email, password, token} = req.body;
 
-	if (!password || !token) return res.status(400).send('Faltan parámetros');
+	if (!email || !password || !token) return res.status(400).send('Faltan parámetros');
 
 	try {
-		const user = await User.findOne({where: {forgotPasswordToken: token}});
+		const user = await User.findOne({where: {email, forgotPasswordToken: token}});
 		if (!user) return res.status(400).send('Token inválida');
 
 		user.password = password;

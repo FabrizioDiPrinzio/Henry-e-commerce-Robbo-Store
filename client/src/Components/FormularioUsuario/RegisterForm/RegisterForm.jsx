@@ -55,70 +55,68 @@ export default function RegisterForm() {
 	};
 
 	return (
-		<div>
-			<form className="form" onSubmit={handleRegister} ref={formulario}>
-				<br />
-				<h3 className="titulo">Registrarse</h3>
-				<br />
+		<form className="form" onSubmit={handleRegister} ref={formulario}>
+			<br />
+			<h3 className="titulo">Registrarse</h3>
+			<br />
 
-				<label htmlFor="nombre">Nombre de Usuario:</label>
+			<label htmlFor="nombre">Nombre de Usuario:</label>
+			<input
+				className="form-control"
+				type="text"
+				name="name"
+				value={inputValues.name}
+				placeholder="Nombre de Usuario"
+				onChange={handleInputChange}
+			/>
+			<br />
+
+			<label htmlFor="Email" className="">
+				Email:
+			</label>
+			<input
+				className="form-control"
+				type="email"
+				name="email"
+				value={inputValues.email}
+				placeholder="Email"
+				onChange={handleInputChange}
+			/>
+			<br />
+
+			<label htmlFor="nombre">Contraseña:</label>
+			<div className="password-wrapper">
 				<input
 					className="form-control"
-					type="text"
-					name="name"
-					value={inputValues.name}
-					placeholder="Nombre de Usuario"
+					type={hidePassword ? 'password' : 'text'}
+					name="password"
+					placeholder="Contraseña"
+					value={inputValues.password}
 					onChange={handleInputChange}
 				/>
-				<br />
-
-				<label htmlFor="Email" className="">
-					Email:
-				</label>
+				{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
+				{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}
+			</div>
+			<br />
+			<label htmlFor="nombre">Confirmar contraseña:</label>
+			<div className="password-wrapper">
 				<input
 					className="form-control"
-					type="email"
-					name="email"
-					value={inputValues.email}
-					placeholder="Email"
+					type={hideConfirmedPassword ? 'password' : 'text'}
+					name="confirmPassword"
+					placeholder="Contraseña"
+					value={inputValues.confirmPassword}
 					onChange={handleInputChange}
 				/>
-				<br />
+				{hideConfirmedPassword && <i onClick={revealConfirmedPassword}>{openEye}</i>}
+				{!hideConfirmedPassword && <i onClick={revealConfirmedPassword}>{closedEye}</i>}
+			</div>
+			<br />
 
-				<label htmlFor="nombre">Contraseña:</label>
-				<div className="password-wrapper">
-					<input
-						className="form-control"
-						type={hidePassword ? 'password' : 'text'}
-						name="password"
-						placeholder="Contraseña"
-						value={inputValues.password}
-						onChange={handleInputChange}
-					/>
-					{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
-					{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}
-				</div>
-				<br />
-				<label htmlFor="nombre">Confirmar contraseña:</label>
-				<div className="password-wrapper">
-					<input
-						className="form-control"
-						type={hideConfirmedPassword ? 'password' : 'text'}
-						name="confirmPassword"
-						placeholder="Contraseña"
-						value={inputValues.confirmPassword}
-						onChange={handleInputChange}
-					/>
-					{hideConfirmedPassword && <i onClick={revealConfirmedPassword}>{openEye}</i>}
-					{!hideConfirmedPassword && <i onClick={revealConfirmedPassword}>{closedEye}</i>}
-				</div>
-				<br />
-
-				<button type="submit" className="addBtn" value="Enviar" onClick={handleRegister}>
-					Registrarse
-				</button>
-				<br />
-			</form>
+			<button type="submit" className="addBtn" value="Enviar" onClick={handleRegister}>
+				Registrarse
+			</button>
+			<br />
 			<br />
 			{error && (
 				<div className="error">
@@ -130,6 +128,6 @@ export default function RegisterForm() {
 					{success} {registered} <br />
 				</div>
 			)}
-		</div>
+		</form>
 	);
 }

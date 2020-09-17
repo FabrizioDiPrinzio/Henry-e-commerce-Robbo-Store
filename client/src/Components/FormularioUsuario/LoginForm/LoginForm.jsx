@@ -63,43 +63,41 @@ export default function LoginForm() {
 	};
 
 	return (
-		<div>
-			<form className="form" onSubmit={handleLogin} ref={formulario}>
-				<h3 className="titulo">Iniciar sesión</h3>
-				<br />
+		<form className="form" onSubmit={handleLogin} ref={formulario}>
+			<h3 className="titulo">Iniciar sesión</h3>
+			<br />
 
-				<label htmlFor="Email" className="">
-					Email:
-				</label>
+			<label htmlFor="Email" className="">
+				Email:
+			</label>
+			<input
+				className="form-control"
+				type="text"
+				name="email"
+				value={inputValues.email}
+				placeholder="Email"
+				onChange={handleInputChange}
+			/>
+			<br />
+
+			<label htmlFor="nombre">Contraseña:</label>
+			<div className="password-wrapper">
 				<input
 					className="form-control"
-					type="text"
-					name="email"
-					value={inputValues.email}
-					placeholder="Email"
+					type={hidePassword ? 'password' : 'text'}
+					name="password"
+					placeholder="Contraseña"
+					value={inputValues.password}
 					onChange={handleInputChange}
 				/>
-				<br />
+				{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
+				{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}
+			</div>
 
-				<label htmlFor="nombre">Contraseña:</label>
-				<div className="password-wrapper">
-					<input
-						className="form-control"
-						type={hidePassword ? 'password' : 'text'}
-						name="password"
-						placeholder="Contraseña"
-						value={inputValues.password}
-						onChange={handleInputChange}
-					/>
-					{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
-					{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}
-				</div>
-
-				<button type="submit" className="addBtn" value="Enviar" onClick={handleLogin}>
-					Iniciar sesión
-				</button>
-				<br />
-			</form>
+			<button type="submit" className="addBtn" value="Enviar" onClick={handleLogin}>
+				Iniciar sesión
+			</button>
+			<br />
 			<br />
 
 			{error && (
@@ -112,6 +110,6 @@ export default function LoginForm() {
 					{success} {loggedIn} <br />
 				</div>
 			)}
-		</div>
+		</form>
 	);
 }

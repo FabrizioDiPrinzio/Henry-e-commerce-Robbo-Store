@@ -39,8 +39,8 @@ router.post('/signup', (req, res) => {
 			.then(response => {
 				return res.status(201).send(response);
 			})
-			.catch(err => {
-				return res.status(400).send(err.message);
+			.catch(() => {
+				return res.status(400).send('Ya existe otro usuario con ese email');
 			});
 	}
 });

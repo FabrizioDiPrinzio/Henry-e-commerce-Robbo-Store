@@ -4,6 +4,8 @@
 	--glaucous: #617cc7ff;
 	--ksu-purple: #563488ff;
 	--razzmatazz: #d53467ff;
+	--success: rgb(45, 177, 5);
+	--error: rgb(197, 0, 0);
 }
 
 .formContainer {
@@ -22,6 +24,7 @@
 	position: relative;
 	display: flex;
 	margin-bottom: 14px;
+	width: 350px;
 }
 
 i {
@@ -40,9 +43,10 @@ a {
 }
 
 .success {
-	color: rgb(45, 177, 5);
+	color: var(--success);
 }
 
 .error {
-	color: rgb(197, 0, 0);
+	display: flex;
+	color: var(--error);
 }

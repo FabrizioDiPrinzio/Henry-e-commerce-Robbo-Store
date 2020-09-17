@@ -12,6 +12,7 @@ import FormularioProducto from './Components/FormularioProducto/ProductForm.jsx'
 import FormularioCategoria from './Components/FormularioCategoria/FormularioCategoria.jsx';
 import AdminControlPanel from './Components/AdminControlPanel/AdminControlPanel.jsx';
 import UserProfile from './Components/UserProfile/UserProfile';
+import ResetPasswordForm from './Components/FormularioUsuario/ResetPasswordForm/ResetPasswordForm';
 import NotFound from './Components/NotFound/NotFound';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
@@ -58,6 +59,7 @@ function App() {
 					<Route path="/search" component={Catalogo} />
 					<Route exact path="/producto/:id" component={Producto} />
 					<Route exact path="/user/:id" component={UserProfile} />
+					<Route exact path="/reset/:token" component={ResetPasswordForm} />
 					<Route
 						exact
 						path="/product_form"

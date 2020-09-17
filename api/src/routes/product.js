@@ -57,6 +57,9 @@ router.put('/:id', async (req, res) => {
 	if (!name && typeof price !== 'number' && typeof stock !== 'number' && !image && !description) {
 		return res.status(400).send('Debes enviar al menos un parámetro para editar');
 	}
+	if(image[0] === undefined) {
+		return res.status(400).send('El producto debe contener al menos una imagen');
+	}
 
 	const robot = await Product.findByPk(id);
 	if (!robot) return res.status(400).send('No se encontró el robot :(');
@@ -66,6 +69,7 @@ router.put('/:id', async (req, res) => {
 		robot.description = description || robot.description;
 		robot.price = price || robot.price;
 		robot.stock = stock || stock === 0 ? stock : robot.stock;
+		robot.image = image[0] || robot.image;
 		if (image) {
 		// 	await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
 		// 	robot.image = image;

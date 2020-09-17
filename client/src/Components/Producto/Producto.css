@@ -1,6 +1,6 @@
 /** CSS de Producto **/
 :root {
-  --max-width: 700px;
+  --max-width: 800px;
   --beau-blue: #d2e3f9ff;
   --baby-blue-eyes: #98b7f0ff;
   --glaucous: #617cc7ff;
@@ -9,12 +9,15 @@
 }
 
 .productContainer {
-  max-width: var(--max-width);
+  max-width: 400px;
   margin: auto;
   margin-top: 80px;
-  max-width: 400px;
   display: flex;
   justify-content: center;
+}
+
+.productCont2 {
+  margin-bottom: 50px;
 }
 
 .productTitle {
@@ -22,24 +25,39 @@
   font-size: 225%;
 }
 
-.productImg {
-  border: solid lightgray;
-  border-width: thin;
-  border-radius: 15px;
-  max-width: 400px;
-  max-height: 400px;
-  margin-bottom: 10px;
+.carItems {
+  height: 400px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-self: center
 }
 
-.productCont2 {
-  margin-bottom: 50px;
-  border-radius: 15px;
+.productImg {
+  margin-bottom: 10px
+}
+
+.carousel-control-next {
+  background-color: rgba(0,0,0,0.0);
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.carousel-control-prev {
+  background-color: rgba(0,0,0,0.0);
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px
+}
+
+.carCap {
+  background-color: rgba(0,0,0,0.0);
 }
 
 .infoCard {
   background-color: var(--glaucous);
   color: white;
   padding: 10px;
+  margin-top: 10px;
   border-radius: 15px;
   box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2);
 }

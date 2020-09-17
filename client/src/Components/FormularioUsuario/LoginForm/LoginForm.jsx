@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from '../../../Redux/Actions/actions';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../UserForm.css';
@@ -8,8 +8,9 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export default function RegisterForm() {
+export default function LoginForm() {
 	// Redux
+	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
 
 	// React Hooks
@@ -29,21 +30,30 @@ export default function RegisterForm() {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
 
-	const handleAdd = event => {
+	const handleLogin = async event => {
 		event.preventDefault();
 
-		axios
-			.post(`${urlBack}/auth/login`, inputValues)
-			.then(res => {
-				alert(`Bienvenido, ${res.data.name}`);
-				dispatch(allActions.userActions.login(res.data));
-				dispatch(allActions.cartActions.getUserCart(res.data.id));
-			})
-			.catch(error => alert(error.response.data));
+		try {
+			// Inicia sesión
+			const user = await axios.post(`${urlBack}/auth/login`, inputValues);
+
+			dispatch(allActions.userActions.login(user.data));
+
+			// Modifica el carrito del usuario ---> [for await... of] para iterar acciones asíncronas en un array.
+			for await (const order of orderlines) {
+				await axios
+					.put(`${urlBack}/user/${user.data.id}/cart`, order)
+					.catch(error => console.log(error));
+			}
+
+			dispatch(allActions.cartActions.getUserCart(user.data.id));
+		} catch (error) {
+			alert(error);
+		}
 	};
 
 	return (
-		<form className="form" onSubmit={handleAdd} ref={formulario}>
+		<form className="form" onSubmit={handleLogin} ref={formulario}>
 			<h3 className="titulo">Iniciar sesión</h3>
 			<br />
 
@@ -113,7 +123,7 @@ export default function RegisterForm() {
 				)}
 			</div>
 
-			<button type="submit" className="addBtn" value="Enviar" onClick={handleAdd}>
+			<button type="submit" className="addBtn" value="Enviar" onClick={handleLogin}>
 				Iniciar sesión
 			</button>
 			<br />

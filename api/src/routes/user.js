@@ -118,12 +118,6 @@ router.get('/:userId/cart', (req, res) => {
 router.post('/:userId/cart', async (req, res) => {
 	const {userId} = req.params;
 
-	// Guard clauses
-	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
-	if (req.user.id !== Number(userId) && req.user.rol !== 'Admin') {
-		return res.status(401).send('No puedes crear el carrito de otra persona');
-	}
-
 	const {
 		status,
 		recipient_name,

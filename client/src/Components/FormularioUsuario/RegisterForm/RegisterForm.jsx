@@ -28,27 +28,28 @@ export default function RegisterForm() {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
 
-	const handleAdd = event => {
+	const handleRegister = async event => {
 		event.preventDefault();
 
 		if (inputValues.password !== inputValues.confirmPassword) {
 			return alert('Las contraseñas no coinciden');
 		}
 
-		const userFix = {...inputValues, rol: 'Client'};
+		try {
+			const user = await axios.post(`${urlBack}/user/signup`, inputValues);
 
-		axios
-			.post(`${urlBack}/user/signup`, userFix)
-			.then(response => {
-				alert(response.data.name + ' es ahora un nuevo Usuario');
-				setInputValues({name: null, rol: null, email: null, password: null});
-				formulario.current.reset();
-			})
-			.catch(error => alert('no se pudo registrar correctamente: ' + error.response.data)); // < ---- Limpiar todo y hacer un getCategories de redux
+			await axios.post(`${urlBack}/user/${user.data.id}/cart`);
+
+			alert(user.data.name + ' es ahora un nuevo Usuario');
+			setInputValues({name: null, rol: null, email: null, password: null});
+			formulario.current.reset();
+		} catch (error) {
+			alert('No se pudo registrar correctamente: ', error.response.data);
+		}
 	};
 
 	return (
-		<form className="form" onSubmit={handleAdd} ref={formulario}>
+		<form className="form" onSubmit={handleRegister} ref={formulario}>
 			<br />
 			<h3 className="titulo">Registrarse</h3>
 			<br />
@@ -184,7 +185,7 @@ export default function RegisterForm() {
 			</div>
 			<br />
 
-			<button type="submit" className="addBtn" value="Enviar" onClick={handleAdd}>
+			<button type="submit" className="addBtn" value="Enviar" onClick={handleRegister}>
 				Registrarse
 			</button>
 			<br />

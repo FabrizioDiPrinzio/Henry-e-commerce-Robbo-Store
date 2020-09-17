@@ -35,12 +35,15 @@ function App() {
 		dispatch(allActions.productActions.getAllProducts());
 	}, []);
 
-	// Trae el carrito del usuario la primera vez que abe la página.
+	// Loguea al usuario con las cookies.
 	useEffect(() => {
 		axios
 			.get(`${urlBack}/auth/me`)
-			.then(user => dispatch(allActions.userActions.login(user.data)))
-			.catch(() => {}); // Se queda con el default de Guest
+			.then(user => {
+				dispatch(allActions.userActions.login(user.data));
+				dispatch(allActions.cartActions.getUserCart(user.data.id));
+			})
+			.catch(error => console.log(error)); // Se queda con el default de Guest
 	}, []);
 
 	return (

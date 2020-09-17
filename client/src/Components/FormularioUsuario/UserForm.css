@@ -9,10 +9,10 @@
 .formContainer {
 	padding: 10px;
 	color: var(--ksu-purple);
-  	margin: auto;
-  	margin-top: -70px;
-  	margin-bottom: 30px;
-  	max-width: var(--max-width);
+	margin: auto;
+	margin-top: -70px;
+	margin-bottom: 30px;
+	max-width: var(--max-width);
 }
 .addBtn {
 	margin: 0px;
@@ -33,4 +33,16 @@ i {
 i:hover {
 	color: var(--razzmatazz);
 	cursor: pointer;
+}
+
+a {
+	color: var(--razzmatazz);
+}
+
+.success {
+	color: rgb(45, 177, 5);
+}
+
+.error {
+	color: rgb(197, 0, 0);
 }

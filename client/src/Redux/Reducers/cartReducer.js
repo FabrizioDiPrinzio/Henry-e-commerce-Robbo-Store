@@ -1,7 +1,10 @@
 import * as actionTypes from '../Actions/actionTypes';
 
 const initialState = {
-	currentCart: {},
+	currentCart: {
+		orderlines: [],
+		products: []
+	},
 	lastError: null
 };
 
@@ -15,17 +18,27 @@ export default function cartReducer(state = initialState, action) {
 		case actionTypes.POST_USER_CART:
 			const initialFix = action.payload;
 			initialFix.products = [];
-			initialFix.ordelines = [];
+			initialFix.orderlines = [];
 			return {
 				...state,
 				currentCart: initialFix
 			};
 		case actionTypes.EDIT_GUEST_CART:
+			const {orderlines, robot, modifyProducts} = action.payload;
+			const products = [...state.currentCart.products];
+
+			if (modifyProducts === 'AddToProducts') products.push(robot);
+			if (modifyProducts === 'RemoveFromProducts') {
+				const index = products.findIndex(p => p.id === robot.id);
+				products.splice(index, 1);
+			}
+
 			return {
 				...state,
 				currentCart: {
 					...state.currentCart,
-					orderlines: action.payload
+					orderlines,
+					products
 				}
 			};
 		case actionTypes.EMPTY_CART:

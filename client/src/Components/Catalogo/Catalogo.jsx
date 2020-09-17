@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import ProductCard from '../Product Card/ProductCard.jsx';
 import axios from 'axios';
@@ -7,6 +8,9 @@ import './Catalogo.css';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Catalogo(props) {
+	const products = useSelector(state => state.products.allProducts);
+
+	// React hooks
 	const [robots, setRobots] = useState([]);
 	const {categoria} = useParams();
 	const params = new URLSearchParams(props.location.search).get('query');
@@ -14,13 +18,14 @@ export default function Catalogo(props) {
 	useEffect(
 		() => {
 			// Main page, returns ALL products
-			if (!categoria && !params) {
-				axios
-					.get(`${urlBack}/products`)
-					.then(res => setRobots(res.data))
-					.catch(err => console.log(err.response.data));
-			}
-			else if (categoria) {
+			if (!categoria && !params) setRobots(products);
+		},
+		[products]
+	);
+
+	useEffect(
+		() => {
+			if (categoria) {
 				// Filter by category
 				axios
 					.get(`${urlBack}/products/category/${categoria}`)

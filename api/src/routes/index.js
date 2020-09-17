@@ -50,9 +50,9 @@ app.post('/createAdmin', async (req, res) => {
 			email: 'admin@admin.com',
 			password: 'admin'
 		});
-		return console.log('Creado: ', admin.name);
+		return res.send('Admin creado');
 	} catch (error) {
-		/*Para que no crashee*/
+		return res.status(400).send('Ya existe el admin');
 	}
 });
 

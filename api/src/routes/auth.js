@@ -27,14 +27,16 @@ router.post('/forgot', async (req, res) => {
 	try {
 		const user = await User.findOne({where: {email}});
 		if (!user) return res.status(404).send('No hay usuarios registrados con ese email');
-		if (user.forgotPasswordToken) {
-			return res.status(400).send('Ya has solicitado un cambio de contraseña. Revisa tu correo');
-		}
 
 		const salt = await User.generateSalt();
 
 		user.forgotPasswordToken = salt;
 		await user.save();
+
+		setTimeout(() => {
+			user.forgotPasswordToken = null;
+			user.save();
+		}, 3600000); // Caduca en una hora
 
 		return res.send(salt);
 	} catch (error) {

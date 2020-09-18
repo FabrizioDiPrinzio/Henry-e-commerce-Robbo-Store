@@ -100,10 +100,6 @@ const calculateAverageQualification = async review => {
 
 	product.averageQualification = average;
 	await product.save();
-
-	console.log('totalReviews: ', totalReviews);
-	console.log('addedScore: ', addedScore);
-	console.log('average: ', average);
 };
 
 Reviews.afterCreate(calculateAverageQualification);

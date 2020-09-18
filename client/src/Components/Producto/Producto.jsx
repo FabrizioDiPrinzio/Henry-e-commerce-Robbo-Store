@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import './Producto.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Review from './Review/Review.jsx';
 import Axios from 'axios';
 // =========== FIN DE IMPORTS ============
 
@@ -42,6 +43,7 @@ export default function Producto() {
 					</ul>
 				</div>
 			</div>
+			<Review robotId={robot.id}/>
 		</div>
 	);
 }

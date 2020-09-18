@@ -59,11 +59,11 @@ router.post('/:idProducto/review', (req,res) => {
 		productId: idProducto,
 		creatorId : creatorId
 		})
-		.then(data => {
-				res.status(200).send('Creado!')
+		.then(response => {
+				return res.status(200).send(response)
 			})
 		.catch(error => {
-				res.status(400).send('Algo salio mal ' + error)
+				return res.status(400).send('Algo salio mal ' + error.message)
 			})
 });
 
@@ -77,11 +77,11 @@ router.delete('/:idProducto/review/:idReview', (req,res) => {
 	Reviews.destroy({where: {id : idReview}})
 
 		.then(response => {
-			if (response === 0) res.status(400).send('Hubo un problema')
-			res.status(200).send(`Review ${idReview} del producto ${idProducto} eliminada`);
+			if (response === 0) return res.status(400).send('Hubo un problema')
+			return res.status(200).send(`Review ${idReview} del producto ${idProducto} eliminada`);
 		})
 		.catch(error => {
-			res.status(400).send('Algo salio mal ' + error);
+			return res.status(400).send(error.message);
 		});
 });
 

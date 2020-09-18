@@ -16,6 +16,7 @@ module.exports = sequelize => {
 				}
 			}
 		},
+
 		rol: {
 			type: DataTypes.STRING,
 			defaultValue: 'Guest',
@@ -48,6 +49,10 @@ module.exports = sequelize => {
 			get() {
 				return () => this.getDataValue('salt');
 			}
+		},
+
+		forgotPasswordToken: {
+			type: DataTypes.STRING
 		}
 	});
 };

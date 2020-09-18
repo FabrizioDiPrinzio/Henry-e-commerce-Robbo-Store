@@ -50,3 +50,6 @@ table {
 html {
   width: 100%;
 }
+.tooltip-inner {
+    max-width: none;
+}

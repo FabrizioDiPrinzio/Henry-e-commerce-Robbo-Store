@@ -8,11 +8,10 @@
   --razzmatazz: #d53467ff
 }
 
-.form {
+.prodForm {
   color: var(--ksu-purple);
-  margin: auto;
-  margin-top: 100px;
   max-width: var(--max-width);
+  margin: auto;
 }
 
 .inpt {
@@ -62,13 +61,17 @@
   color:white;
   justify-content: center;
   align-items: center;
+  margin-bottom: 40px
+}
+
+.picsCont{
+  margin-bottom: 0px
 }
 
 .picsTable {
-max-width: 800px
+  max-width: 60%
 }
 
 .prodImg {
-  max-width: 150px;
-  max-height: 150px
+  max-width: 80%;
 }

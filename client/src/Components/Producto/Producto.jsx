@@ -51,7 +51,7 @@ export default function Producto() {
 							<Carousel.Item className="">
 								<img
 								//d-block w-100
-									className="productImg w-100"
+									className="productImg h-100"
 									src={image}
 									alt={pics.indexOf(image)}
 								/>

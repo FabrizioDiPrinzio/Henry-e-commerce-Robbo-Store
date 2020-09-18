@@ -2,7 +2,11 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from './Redux/Actions/actions.js';
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import $ from 'jquery'; // Bootstrap usa jquery
+import Popper from 'popper.js'; // Bootstrap usa Poppr
+import 'bootstrap/dist/js/bootstrap.bundle.min'; // este es el boundle que me funcionó para importar bootstrap completo
+
 import './App.css';
 import Catalogo from './Components/Catalogo/Catalogo.jsx';
 import NavBar from './Components/NavBar/NavBar.jsx';
@@ -16,7 +20,30 @@ import ResetPasswordForm from './Components/FormularioUsuario/ResetPasswordForm/
 import NotFound from './Components/NotFound/NotFound';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
+import Purchase_order from './Components/Purchase_order/Purchase_order.jsx';
+
 // =========== FIN DE IMPORTS ============
+
+
+
+// ======== Inicializando el uso de algunas propiedades de Bootstrap que usan Jquery ======= //
+
+// inicia el uso de los popovers
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+
+
+// inicia el uso de los tooltip 
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+// inicia los collapse
+$('.collapse').collapse()
+
+// ================================== Fin de jquery ======================================= //
+
 
 const urlBack = process.env.REACT_APP_API_URL;
 
@@ -45,6 +72,9 @@ function App() {
 				dispatch(allActions.cartActions.getUserCart(user.data.id));
 			})
 			.catch(error => console.log(error)); // Se queda con el default de Guest
+
+
+
 	}, []);
 
 	return (
@@ -59,6 +89,7 @@ function App() {
 					<Route path="/search" component={Catalogo} />
 					<Route exact path="/producto/:id" component={Producto} />
 					<Route exact path="/user/:id" component={UserProfile} />
+					<Route exact path="/purchase_order/:purchaseOrderId" component={Purchase_order} />
 					<Route exact path="/reset/:token" component={ResetPasswordForm} />
 					<Route
 						exact

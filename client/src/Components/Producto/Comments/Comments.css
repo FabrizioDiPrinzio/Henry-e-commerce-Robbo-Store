@@ -1,0 +1,15 @@
+:root {
+    background-color: var(--ksu-purple);
+    --max-width: 800px;
+    --beau-blue: #d2e3f9ff;
+    --baby-blue-eyes: #98b7f0ff;
+    --glaucous: #617cc7ff;
+    --ksu-purple: #563488ff;
+    --razzmatazz: #d53467ff
+}
+.Comment{
+    background-color:var(--baby-blue-eyes);
+    color: black;
+    margin-top: 10px;
+    border-radius: 4px;
+}

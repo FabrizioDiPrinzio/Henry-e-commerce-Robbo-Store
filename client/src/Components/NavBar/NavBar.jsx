@@ -37,6 +37,10 @@ export default function NavBar() {
 	);
 
 	// ----- Functionality ----
+	const onEnterKey = e => {
+		if (e.key === 'Enter') handleLogin(e);
+	};
+
 	const handleInputChange = event =>
 		setSearch({...search, [event.target.name]: event.target.value});
 
@@ -59,7 +63,8 @@ export default function NavBar() {
 						{userButton}
 					</button>
 					{user.rol === 'Guest' &&
-					!statusChanged && (
+					!statusChanged &&
+					showModal && (
 						<Modal show={showModal} onHide={hideModals}>
 							<UserForm />
 						</Modal>

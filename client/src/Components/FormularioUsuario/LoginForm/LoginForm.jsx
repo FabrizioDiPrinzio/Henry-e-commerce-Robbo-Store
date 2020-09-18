@@ -27,6 +27,10 @@ export default function LoginForm() {
 
 	// ------------ Functionality ---------
 
+	const onEnterKey = e => {
+		if (e.key === 'Enter') handleLogin(e);
+	};
+
 	const revealPassword = () => setHidePassword(!hidePassword);
 
 	const handleInputChange = event => {
@@ -77,6 +81,7 @@ export default function LoginForm() {
 				value={inputValues.email}
 				placeholder="Email"
 				onChange={handleInputChange}
+				onKeyPress={onEnterKey}
 			/>
 			<br />
 
@@ -89,6 +94,7 @@ export default function LoginForm() {
 					placeholder="Contraseña"
 					value={inputValues.password}
 					onChange={handleInputChange}
+					onKeyPress={onEnterKey}
 				/>
 				{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
 				{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}

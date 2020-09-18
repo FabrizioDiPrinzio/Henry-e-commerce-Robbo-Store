@@ -9,23 +9,10 @@ import ForgotPasswordForm from './ForgotPasswordForm/ForgotPasswordForm';
 //------ Fin de imports -----
 
 export default function FormularioCategoria() {
-	const [showForm, setShowForm] = useState('Register');
+	const [showForm, setShowForm] = useState('Login');
 
 	return (
 		<div className="formContainer">
-			{showForm === 'Register' && (
-				<div>
-					<RegisterForm />
-					<br />
-					<p>
-						¿Ya tienes una cuenta? {' '}
-						<a href="#" onClick={() => setShowForm('Login')}>
-							Inicia sesión.
-						</a>
-					</p>
-				</div>
-			)}
-
 			{showForm === 'Login' && (
 				<div>
 					<LoginForm />
@@ -38,6 +25,19 @@ export default function FormularioCategoria() {
 					<p>
 						<a href="#" onClick={() => setShowForm('Forgot')}>
 							¿Olvidaste tu contraseña?
+						</a>
+					</p>
+				</div>
+			)}
+
+			{showForm === 'Register' && (
+				<div>
+					<RegisterForm />
+					<br />
+					<p>
+						¿Ya tienes una cuenta? {' '}
+						<a href="#" onClick={() => setShowForm('Login')}>
+							Inicia sesión.
 						</a>
 					</p>
 				</div>

@@ -151,7 +151,6 @@ router.post('/:productId/review', async (req, res) => {
 	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
 
 	const yaExiste = await Reviews.findOne({where: {creatorId, productId}});
-	console.log(yaExiste);
 
 	if (yaExiste) return res.status(400).send('Solo puedes crear una reseña por producto');
 

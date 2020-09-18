@@ -1,18 +1,25 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 import './Producto.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import Carousel from 'react-bootstrap/Carousel'
+import Carousel from 'react-bootstrap/Carousel';
+import Modal from 'react-bootstrap/Modal';
 import Axios from 'axios';
+import ProductForm from '../FormularioProducto/ProductForm';
 // =========== FIN DE IMPORTS ============
 
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Producto() {
+
+	const user = useSelector(state => state.user);
+
 	const [robot, setRobot] = useState({});
 	const [pics, setPics] = useState([]);
 	const [index, setIndex] = useState(0);
 	const {id} = useParams();
+	const [showModal, setShowModal] = useState(false);
 
 	useEffect(
 		() => {
@@ -56,12 +63,24 @@ export default function Producto() {
 					</Carousel>
 				<div className="infoCard">
 					<p className="infoCardDesc">{robot.description}</p>
-					<ul className="infoCardData">
-						<li className="">$ {robot.price}</li>
-						<li className="">
-							{robot.stock > 0 ? `Stock: ${robot.stock} unidades` : 'Out of stock!'}
-						</li>
-					</ul>
+					<div className="infoCont">
+						<ul className="infoCardData">
+							<li className="">$ {robot.price}</li>
+							<li className="">
+								{robot.stock > 0 ? `Stock: ${robot.stock} unidades` : 'Out of stock!'}
+							</li>
+						</ul>
+						{user.rol !=='Guest' && (
+							<div>
+								<button type="submit" className="editProdBtn" value="Editar" onClick={() => setShowModal(!showModal)}>
+										Editar
+								</button>
+								<Modal show={showModal} onHide={() => setShowModal(!showModal)}>
+									<ProductForm />
+								</Modal>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

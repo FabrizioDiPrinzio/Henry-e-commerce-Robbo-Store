@@ -1,12 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {allActions} from '../../../Redux/Actions/actions';
-import {useSelector, useDispatch} from 'react-redux';
+import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 import './menu.css';
 
 export default function Menu() {
 	const categories = useSelector(state => state.categories.allCategories);
-	const dispatch = useDispatch();
 
 	const [stateMenu, setStateMenu] = useState({
 		line: 'line',

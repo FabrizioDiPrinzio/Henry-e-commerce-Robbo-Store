@@ -1,7 +1,96 @@
 const express = require('express');
 const router = express.Router();
 const category = require('./category'); // rutas
-const {Product, Categories, product_categories, Pics} = require('../db.js'); //database
+const {Product, Categories, product_categories, Pics, Reviews} = require('../db.js'); //database
+
+
+////<========= Esto lo quiero poner en review.js pero no pude!
+
+//Obtener reviews
+router.get('/:idProducto/review', (req, res) => {
+	// Guard clauses
+	//	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+
+	const {idProducto} = req.params;
+	Reviews.findAll({where: {productId : idProducto}})
+		.then(data => {
+			res.status(200).send(data)
+		})
+		.catch(error => {
+			res.status(400).send('Algo salio mal ' + error)
+		})
+})
+
+//Modificar reviews
+router.put('/:idProducto/review/:idReview', async (req, res) => {
+	// Guard clauses
+	//	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+
+	const {idProducto,idReview} = req.params;
+	const {comment, qualification, creatorId} = req.body;
+
+	if (!comment || !qualification) res.status(400).send('Tiene que llenar al menos un campo')
+
+	const review = await Reviews.findOne({where: {id : idReview}})
+		try {
+			review.comment = comment ? comment : review.comment;
+			review.qualification = qualification ? qualification : review.comment;
+			await review.save()
+			const savedReview = await review.reload()
+			res.status(200).send(savedReview)
+		}
+		catch (error) {
+			res.status(400).send('Algo salio mal ' + error.message)
+		}
+	})
+
+
+//Crear review
+router.post('/:idProducto/review', (req,res) => {
+	// Guard clauses
+	//	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+
+	const {idProducto} = req.params
+	const {comment, qualification, creatorId} = req.body
+
+	Reviews.create({
+		comment: comment,
+		qualification: qualification,
+		productId: idProducto,
+		creatorId : creatorId
+		})
+		.then(data => {
+				res.status(200).send('Creado!')
+			})
+		.catch(error => {
+				res.status(400).send('Algo salio mal ' + error)
+			})
+});
+
+//Borrar review
+
+router.delete('/:idProducto/review/:idReview', (req,res) => {
+
+//	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+
+	const {idProducto, idReview} = req.params;
+	Reviews.destroy({where: {id : idReview}})
+
+		.then(response => {
+			if (response === 0) res.status(400).send('Hubo un problema')
+			res.status(200).send(`Review ${idReview} del producto ${idProducto} eliminada`);
+		})
+		.catch(error => {
+			res.status(400).send('Algo salio mal ' + error);
+		});
+});
+
+
+
+
+////<=======     hasta acá!
+
+
 
 router.get('/', (req, res, next) => {
 	Product.findAll({include: [Categories, Pics]})

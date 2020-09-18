@@ -12,6 +12,7 @@ import FormularioProducto from './Components/FormularioProducto/ProductForm.jsx'
 import FormularioCategoria from './Components/FormularioCategoria/FormularioCategoria.jsx';
 import AdminControlPanel from './Components/AdminControlPanel/AdminControlPanel.jsx';
 import UserProfile from './Components/UserProfile/UserProfile';
+import ResetPasswordForm from './Components/FormularioUsuario/ResetPasswordForm/ResetPasswordForm';
 import NotFound from './Components/NotFound/NotFound';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
@@ -24,16 +25,26 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		// Placeholder, crea admin
-		axios.post(`${urlBack}/createAdmin`);
+		// PLACEHOLDER ONLY, creates admin. Mail: 'admin@admin.com', Password: 'admin'
+		axios
+			.post(`${urlBack}/createAdmin`)
+			.then(response => console.log(response.data))
+			.catch(error => console.log(error.response.data));
 
+		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());
 		dispatch(allActions.productActions.getAllProducts());
 	}, []);
 
-	// Trae el carrito del usuario la primera vez que abe la página.
+	// Loguea al usuario con las cookies.
 	useEffect(() => {
-		if (user.id > 0) dispatch(allActions.cartActions.getUserCart(user.id));
+		axios
+			.get(`${urlBack}/auth/me`)
+			.then(user => {
+				dispatch(allActions.userActions.login(user.data));
+				dispatch(allActions.cartActions.getUserCart(user.data.id));
+			})
+			.catch(error => console.log(error)); // Se queda con el default de Guest
 	}, []);
 
 	return (
@@ -48,6 +59,7 @@ function App() {
 					<Route path="/search" component={Catalogo} />
 					<Route exact path="/producto/:id" component={Producto} />
 					<Route exact path="/user/:id" component={UserProfile} />
+					<Route exact path="/reset/:token" component={ResetPasswordForm} />
 					<Route
 						exact
 						path="/product_form"

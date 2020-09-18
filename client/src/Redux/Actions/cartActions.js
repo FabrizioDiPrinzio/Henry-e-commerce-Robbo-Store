@@ -27,16 +27,15 @@ export const postUserCart = userId => dispatch => {
 		.catch(err => dispatch(onError(err.response.data)));
 };
 
-export const editGuestCart = (product, orderlines) => dispatch => {
-	const index = orderlines.findIndex(order => order.productId === product.productId);
-	console.log('orderlines: ', orderlines);
-	console.log('product: ', product);
-	console.log('index: ', index);
+export const editGuestCart = (productValues, orderlines, robot, modifyProducts) => dispatch => {
+	const index = orderlines.findIndex(order => order.productId === productValues.productId);
 
-	if (index < 0) orderlines.push(product);
-	else orderlines[index] = product;
+	// Orderlines
+	if (index < 0) orderlines.push(productValues);
+	if (productValues.quantity === 0) orderlines.splice(index, 1);
+	else orderlines[index] = productValues;
 
-	dispatch({type: actionTypes.EDIT_GUEST_CART, payload: orderlines});
+	dispatch({type: actionTypes.EDIT_GUEST_CART, payload: {orderlines, robot, modifyProducts}});
 };
 
 export const emptyCart = () => dispatch => {

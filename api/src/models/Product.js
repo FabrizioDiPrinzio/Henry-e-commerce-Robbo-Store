@@ -14,7 +14,7 @@ module.exports = sequelize => {
 			allowNull: false,
 			unique: true,
 			validate: {
-					isString(value) {
+				isString(value) {
 					if (typeof value !== 'string') throw new Error('Name must be a string!!!!');
 				}
 			}
@@ -51,6 +51,11 @@ module.exports = sequelize => {
 					if (typeof value !== 'string') throw new Error('Description must be a string!!!!');
 				}
 			}
+		},
+
+		averageQualification: {
+			type: DataTypes.FLOAT,
+			defaultValue: 0
 		}
 	});
 };

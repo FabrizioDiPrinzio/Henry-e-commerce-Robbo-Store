@@ -24,26 +24,22 @@ import Purchase_order from './Components/Purchase_order/Purchase_order.jsx';
 
 // =========== FIN DE IMPORTS ============
 
-
-
 // ======== Inicializando el uso de algunas propiedades de Bootstrap que usan Jquery ======= //
 
 // inicia el uso de los popovers
-$(function () {
-  $('[data-toggle="popover"]').popover()
-})
+$(function() {
+	$('[data-toggle="popover"]').popover();
+});
 
-
-// inicia el uso de los tooltip 
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
+// inicia el uso de los tooltip
+$(function() {
+	$('[data-toggle="tooltip"]').tooltip();
+});
 
 // inicia los collapse
-$('.collapse').collapse()
+$('.collapse').collapse();
 
 // ================================== Fin de jquery ======================================= //
-
 
 const urlBack = process.env.REACT_APP_API_URL;
 
@@ -72,9 +68,6 @@ function App() {
 				dispatch(allActions.cartActions.getUserCart(user.data.id));
 			})
 			.catch(error => console.log(error)); // Se queda con el default de Guest
-
-
-
 	}, []);
 
 	return (

@@ -3,7 +3,6 @@ const passport = require('passport');
 // import all routers;
 const productRouter = require('./product.js');
 const user = require('./user.js');
-const review = require('./review.js');
 const purchase_orders = require('./purchase_orders.js');
 const category = require('./category.js');
 const auth = require('./auth');

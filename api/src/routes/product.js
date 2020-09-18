@@ -143,16 +143,17 @@ router.get('/:productId/review', (req, res) => {
 });
 
 //Crear review
-router.post('/:productId/review', (req, res) => {
+router.post('/:productId/review', async (req, res) => {
 	const {productId} = req.params;
 	const {comment, qualification, creatorId} = req.body;
 
 	// Guard clauses
 	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
 
-	// const yaExiste = Reviews.findOne({where: {creatorId, productId}});
+	const yaExiste = await Reviews.findOne({where: {creatorId, productId}});
+	console.log(yaExiste);
 
-	// if (yaExiste) return res.status(400).send('Solo puedes crear una reseña por producto');
+	if (yaExiste) return res.status(400).send('Solo puedes crear una reseña por producto');
 
 	Reviews.create({comment, qualification, productId, creatorId})
 		.then(data => {

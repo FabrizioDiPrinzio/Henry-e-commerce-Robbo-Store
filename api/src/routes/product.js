@@ -191,19 +191,25 @@ router.put('/:productId/review/:idReview', async (req, res) => {
 
 //Borrar review
 
-router.delete('/:productId/review/:idReview', (req, res) => {
+router.delete('/:productId/review/:idReview', async (req, res) => {
 	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
 
 	const {productId, idReview} = req.params;
 
-	Reviews.destroy({where: {id: idReview, productId}})
-		.then(response => {
-			if (response === 0) return res.status(404).send('No encontramos la review');
-			return res.status(200).send(`Review ${idReview} del producto ${productId} eliminada`);
-		})
-		.catch(error => {
-			return res.status(400).send('Algo salio mal ' + error);
-		});
+	try {
+		const review = await Reviews.findOne({where: {id: idReview, productId}});
+
+		if (!review) return res.status(404).send('No encontramos la review');
+		if (review.creatorId !== req.user.id && req.user.rol !== 'Admin') {
+			return res.status(400).send('No puedes borrar la review de otra persona');
+		}
+
+		await review.destroy();
+
+		return res.send('Review eliminada');
+	} catch (error) {
+		return res.status(400).send(error.message);
+	}
 });
 
 module.exports = router;

@@ -15,21 +15,21 @@ const star= <svg width="3em" height="2em" viewBox="0 0 16 16" class="bi bi-star"
 export default function Review({robotId}) {
 
     const user= useSelector(state => state.user)
-
     const [reviews, setReview] = useState([]);
     const [newReview, setnewReview] = useState('');
-
     const [qualification, setQualification] = useState(null);
-
 
     useEffect(() => {
 		axios
 			.get(`${urlBack}/products/${robotId}/review`)
 			.then(response => {
 				setReview(response.data);
-				console.log(response)
 			})
     }, [robotId]);
+
+    // useEffect(() => {
+    //   setnewReview();
+    // }, [] );
 
     function resetComment() {
 		setnewReview('')

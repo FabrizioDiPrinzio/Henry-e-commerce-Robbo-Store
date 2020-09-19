@@ -13,3 +13,9 @@
     margin-top: 10px;
     border-radius: 4px;
 }
+
+.
+btnCont {
+  display: flex;
+  flex-direction: row;
+}

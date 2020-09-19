@@ -16,6 +16,10 @@ export default function ForgotPasswordForm() {
 
 	// ------------ Functionality ---------
 
+	const onEnterKey = e => {
+		if (e.key === 'Enter') handleSend(e);
+	};
+
 	const handleInputChange = event => {
 		if (error) setError('');
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
@@ -47,6 +51,7 @@ export default function ForgotPasswordForm() {
 				value={inputValues.email}
 				placeholder="Email"
 				onChange={handleInputChange}
+				onKeyPress={onEnterKey}
 			/>
 			<br />
 

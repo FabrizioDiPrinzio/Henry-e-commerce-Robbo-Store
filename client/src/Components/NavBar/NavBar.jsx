@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import Menu from './Menu/Menu.jsx';
 import Modal from 'react-bootstrap/Modal';
@@ -28,6 +28,7 @@ export default function NavBar() {
 	const [search, setSearch] = useState({query: ''});
 	const [showModal, setShowModal] = useState(false);
 	const [statusChanged, setStatusChanged] = useState(false);
+	const [redirect, setRedirect] = useState(false);
 
 	useEffect(
 		() => {
@@ -36,7 +37,13 @@ export default function NavBar() {
 		[user.id]
 	);
 
+	useEffect(() => setRedirect(false), [redirect]);
+
 	// ----- Functionality ----
+	const onEnterKey = e => {
+		if (e.key === 'Enter') setRedirect(true);
+	};
+
 	const handleInputChange = event =>
 		setSearch({...search, [event.target.name]: event.target.value});
 
@@ -59,7 +66,8 @@ export default function NavBar() {
 						{userButton}
 					</button>
 					{user.rol === 'Guest' &&
-					!statusChanged && (
+					!statusChanged &&
+					showModal && (
 						<Modal show={showModal} onHide={hideModals}>
 							<UserForm />
 						</Modal>
@@ -100,10 +108,12 @@ export default function NavBar() {
 						type="text"
 						placeholder="Buscar..."
 						onChange={handleInputChange}
+						onKeyPress={onEnterKey}
 					/>
 					<Link to={`/search?query=${search.query}`}>
 						<button className="SearchBtn">{searchButton}</button>
 					</Link>
+					{redirect && <Redirect to={`/search?query=${search.query}`} />}
 				</div>
 			</div>
 		</div>

@@ -28,6 +28,10 @@ export default function RegisterForm() {
 	const revealPassword = () => setHidePassword(!hidePassword);
 	const revealConfirmedPassword = () => setHideConfirmedPassword(!hideConfirmedPassword);
 
+	const onEnterKey = e => {
+		if (e.key === 'Enter') handleRegister(e);
+	};
+
 	const handleInputChange = event => {
 		if (error) setError('');
 		if (registered) setRegistered('');
@@ -68,6 +72,7 @@ export default function RegisterForm() {
 				value={inputValues.name}
 				placeholder="Nombre de Usuario"
 				onChange={handleInputChange}
+				onKeyPress={onEnterKey}
 			/>
 			<br />
 
@@ -81,6 +86,7 @@ export default function RegisterForm() {
 				value={inputValues.email}
 				placeholder="Email"
 				onChange={handleInputChange}
+				onKeyPress={onEnterKey}
 			/>
 			<br />
 
@@ -93,6 +99,7 @@ export default function RegisterForm() {
 					placeholder="Contraseña"
 					value={inputValues.password}
 					onChange={handleInputChange}
+					onKeyPress={onEnterKey}
 				/>
 				{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
 				{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}

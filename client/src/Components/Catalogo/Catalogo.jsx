@@ -59,7 +59,7 @@ export default function Catalogo(props) {
 						</li>
 					))}
 			</ul>
-			{!robots && <h1>No contamos con ningún robot de ese tipo :(</h1>}
+			{!robots && params && <h1>No contamos con ningún robot de ese tipo :(</h1>}
 		</div>
 	);
 }

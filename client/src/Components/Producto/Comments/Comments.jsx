@@ -1,4 +1,4 @@
-import React, {useState, useEffect,useRef} from 'react';
+import React, {useState} from 'react';
 import './Comments.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';

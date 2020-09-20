@@ -41,9 +41,11 @@ export default function Producto() {
 							{robot.stock > 0 ? `Stock: ${robot.stock} unidades` : 'Out of stock!'}
 						</li>
 					</ul>
-				</div>
-			</div>
-			<Review robotId={robot.id}/>
+				</div>	
+				<div className="Reviews">
+					<Review robotId={robot.id}/>
+				</div>			
+			</div>			
 		</div>
 	);
 }

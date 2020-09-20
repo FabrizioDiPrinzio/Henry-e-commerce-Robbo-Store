@@ -38,7 +38,7 @@ export default function ProductCard({robot}) {
 
 		if (robot.stock <= carrito.quantity || loading === true) return alert('Sin stock!');
 
-		const changes = {
+		const productValues = {
 			productId: robot.id,
 			quantity: carrito.quantity + 1,
 			price: (carrito.quantity + 1) * robot.price
@@ -47,14 +47,21 @@ export default function ProductCard({robot}) {
 		setLoading(true);
 
 		if (user.rol === 'Guest') {
-			dispatch(allActions.cartActions.editGuestCart(changes, orderlines));
+			dispatch(
+				allActions.cartActions.editGuestCart(
+					productValues,
+					orderlines,
+					robot,
+					productValues.quantity === 1 ? 'AddToProducts' : 'No changes'
+				)
+			);
 			setLoading(false);
 			e.target.style.opacity = '1';
 			alert('Agregado');
 		}
 		else {
 			axios
-				.put(`${urlBack}/user/${user.id}/cart`, changes)
+				.put(`${urlBack}/user/${user.id}/cart`, productValues)
 				.then(() => {
 					setLoading(false);
 					e.target.style.opacity = '1';
@@ -85,7 +92,14 @@ export default function ProductCard({robot}) {
 			setLoading(true);
 
 			if (user.rol === 'Guest') {
-				dispatch(allActions.cartActions.editGuestCart(changes, orderlines));
+				dispatch(
+					allActions.cartActions.editGuestCart(
+						changes,
+						orderlines,
+						robot,
+						changes.quantity === 0 ? 'RemoveFromProducts' : 'No changes'
+					)
+				);
 				setLoading(false);
 				e.target.style.opacity = '1';
 				alert('Quitado');

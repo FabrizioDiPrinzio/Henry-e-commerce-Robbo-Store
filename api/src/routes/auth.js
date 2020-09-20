@@ -20,6 +20,50 @@ router.get('/me', (req, res) => {
 	else return res.status(401).send('No estás logeado');
 });
 
+// El usuario solicita el email para resetear la contraseña
+router.post('/forgot', async (req, res) => {
+	const {email} = req.body;
+
+	try {
+		const user = await User.findOne({where: {email}});
+		if (!user) return res.status(404).send('No hay usuarios registrados con ese email');
+
+		const salt = await User.generateSalt();
+
+		user.forgotPasswordToken = salt;
+		await user.save();
+
+		setTimeout(() => {
+			user.forgotPasswordToken = null;
+			user.save();
+		}, 3600000); // Caduca en una hora
+
+		return res.send(salt);
+	} catch (error) {
+		return res.sendStatus(500);
+	}
+});
+
+// El usuario resetea la contraseña
+router.patch('/reset', async (req, res) => {
+	const {email, password, token} = req.body;
+
+	if (!email || !password || !token) return res.status(400).send('Faltan parámetros');
+
+	try {
+		const user = await User.findOne({where: {email, forgotPasswordToken: token}});
+		if (!user) return res.status(400).send('Token inválida');
+
+		user.password = password;
+		user.forgotPasswordToken = null;
+		await user.save();
+
+		return res.status(200).send('Contraseña actualizada con éxito');
+	} catch (error) {
+		res.status(500).send(error);
+	}
+});
+
 router.post('/promote/:id', async (req, res) => {
 	const {id} = req.params;
 

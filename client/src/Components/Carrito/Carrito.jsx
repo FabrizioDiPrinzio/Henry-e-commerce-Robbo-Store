@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {allActions} from '../../Redux/Actions/actions.js';
+import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 import './Carrito.css';
 import ProductCard from '../Product Card/ProductCard.jsx';
 import FormularioDatosEnvio from './formularioDatosEnvio/FormularioDatosEnvio.jsx';
@@ -10,9 +9,7 @@ export default function Carrito() {
 	// Redux
 	const user = useSelector(state => state.user);
 	const productsInCart = useSelector(state => state.cart.currentCart.products);
-	const cartId = useSelector(state => state.cart.currentCart.id);
 	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
-	const dispatch = useDispatch();
 
 	// React Hooks
 	const [formularioState, setFormulario] = useState({visibility: false});
@@ -23,13 +20,6 @@ export default function Carrito() {
 		orderlines &&
 		orderlines.length > 0 &&
 		orderlines.reduce((previous, current) => ({price: previous.price + current.price}));
-
-	useEffect(
-		() => {
-			dispatch(allActions.cartActions.getUserCart());
-		},
-		[cartId]
-	);
 
 	const handleSend = () => {
 		if (user.rol === 'Guest') return alert('Debes iniciar sesión para continuar con la compra');

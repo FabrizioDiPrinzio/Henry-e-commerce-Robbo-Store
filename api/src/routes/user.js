@@ -39,8 +39,8 @@ router.post('/signup', (req, res) => {
 			.then(response => {
 				return res.status(201).send(response);
 			})
-			.catch(err => {
-				return res.status(400).send(err.message);
+			.catch(() => {
+				return res.status(400).send('Ya existe otro usuario con ese email');
 			});
 	}
 });
@@ -102,7 +102,6 @@ router.get('/:userId/cart', (req, res) => {
 
 	// Guard clauses
 	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
-	console.log(req.user);
 	if (req.user.id !== Number(userId) && req.user.rol !== 'Admin') {
 		return res.status(401).send('No puedes ver el carrito de otra persona');
 	}
@@ -118,12 +117,6 @@ router.get('/:userId/cart', (req, res) => {
 
 router.post('/:userId/cart', async (req, res) => {
 	const {userId} = req.params;
-
-	// Guard clauses
-	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
-	if (req.user.id !== Number(userId) && req.user.rol !== 'Admin') {
-		return res.status(401).send('No puedes crear el carrito de otra persona');
-	}
 
 	const {
 		status,

@@ -3,7 +3,6 @@ const passport = require('passport');
 // import all routers;
 const productRouter = require('./product.js');
 const user = require('./user.js');
-const review = require('./review.js');
 const purchase_orders = require('./purchase_orders.js');
 const category = require('./category.js');
 const auth = require('./auth');
@@ -50,9 +49,9 @@ app.post('/createAdmin', async (req, res) => {
 			email: 'admin@admin.com',
 			password: 'admin'
 		});
-		return console.log('Creado: ', admin.name);
+		return res.send('Admin creado');
 	} catch (error) {
-		/*Para que no crashee*/
+		return res.status(400).send('Ya existe el admin');
 	}
 });
 

@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import Menu from './Menu/Menu.jsx';
 import Modal from 'react-bootstrap/Modal';
 import UserOptions from './UserOptions/UserOptions';
+import UserForm from '../FormularioUsuario/UserForm';
+import {cartButton, userButton, searchButton, success} from '../../multimedia/SVGs.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import './navBar.css';
-import UserForm from '../FormularioUsuario/UserForm';
 // ------- Fin de imports --------------
 
 document.addEventListener('scroll', e => {
@@ -26,17 +27,30 @@ export default function NavBar() {
 	// React Hooks
 	const [search, setSearch] = useState({query: ''});
 	const [showModal, setShowModal] = useState(false);
+	const [statusChanged, setStatusChanged] = useState(false);
+	const [redirect, setRedirect] = useState(false);
 
 	useEffect(
 		() => {
-			setShowModal(false); // Closes modals whenever a user logs in or out
+			setStatusChanged(true); // Closes modals whenever a user logs in or out
 		},
 		[user.id]
 	);
 
+	useEffect(() => setRedirect(false), [redirect]);
+
 	// ----- Functionality ----
+	const onEnterKey = e => {
+		if (e.key === 'Enter') setRedirect(true);
+	};
+
 	const handleInputChange = event =>
 		setSearch({...search, [event.target.name]: event.target.value});
+
+	const hideModals = () => {
+		setShowModal(!showModal);
+		setStatusChanged(false);
+	};
 
 	return (
 		<div className="navBarContainer">
@@ -48,48 +62,39 @@ export default function NavBar() {
 				<span className="espacioBlanco"> </span>
 				<span className="welcome"> Bienvenido, {user.name || 'visitante'}! </span>
 				<div>
-					<button className="UserBtn" onClick={() => setShowModal(!showModal)}>
-						<svg
-							width="2em"
-							height="2em"
-							viewBox="0 0 16 16"
-							className="bi bi-person"
-							fill="white"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								fillRule="evenodd"
-								d="M10 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm6 5c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"
-							/>
-						</svg>
+					<button className="UserBtn" onClick={hideModals}>
+						{userButton}
 					</button>
-					{user.rol === 'Guest' && (
-						<Modal show={showModal} onHide={() => setShowModal(!showModal)}>
+					{user.rol === 'Guest' &&
+					!statusChanged &&
+					showModal && (
+						<Modal show={showModal} onHide={hideModals}>
 							<UserForm />
 						</Modal>
 					)}
-					{user.rol !== 'Guest' && (
-						<Modal show={showModal} onHide={() => setShowModal(!showModal)}>
+					{user.rol !== 'Guest' &&
+					!statusChanged && (
+						<Modal show={showModal} onHide={hideModals}>
 							<UserOptions />
 						</Modal>
 					)}
 
+					{statusChanged && (
+						<Modal show={showModal} onHide={hideModals}>
+							{user.rol === 'Guest' && (
+								<div className="success"> {success} ¡Sesión cerrada! </div>
+							)}
+							{user.rol !== 'Guest' && (
+								<div className="success">
+									{' '}
+									{success} ¡Bienvenido, {user.name}!{' '}
+								</div>
+							)}
+						</Modal>
+					)}
+
 					<Link to="/carrito">
-						<button className="CartBtn">
-							<svg
-								width="2em"
-								height="2em"
-								viewBox="0 0 16 16"
-								className="bi bi-cart2"
-								fill="white"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fillRule="evenodd"
-									d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"
-								/>
-							</svg>
-						</button>
+						<button className="CartBtn">{cartButton}</button>
 					</Link>
 				</div>
 			</nav>
@@ -103,28 +108,12 @@ export default function NavBar() {
 						type="text"
 						placeholder="Buscar..."
 						onChange={handleInputChange}
+						onKeyPress={onEnterKey}
 					/>
 					<Link to={`/search?query=${search.query}`}>
-						<button className="SearchBtn">
-							<svg
-								width="1.5em"
-								height="1.5em"
-								viewBox="0 0 16 16"
-								className="bi bi-search"
-								fill="currentColor"
-								xmlns="http://www.w3.org/2000/svg"
-							>
-								<path
-									fillRule="evenodd"
-									d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"
-								/>
-								<path
-									fillRule="evenodd"
-									d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"
-								/>
-							</svg>
-						</button>
+						<button className="SearchBtn">{searchButton}</button>
 					</Link>
+					{redirect && <Redirect to={`/search?query=${search.query}`} />}
 				</div>
 			</div>
 		</div>

@@ -84,6 +84,27 @@ User.prototype.correctPassword = function(enteredPassword) {
 	return User.encryptPassword(enteredPassword, this.salt()) === this.password();
 };
 
+// ================= Review Averages =================== //
+
+const calculateAverageQualification = async review => {
+	const productId = review.productId;
+	const totalReviews = await Reviews.findAll({where: {productId}});
+
+	const addedScore = totalReviews.reduce((previous, current) => ({
+		qualification: previous.qualification + current.qualification
+	}));
+
+	const average = addedScore.qualification / totalReviews.length;
+
+	const product = await Product.findByPk(productId);
+
+	product.averageQualification = average;
+	await product.save();
+};
+
+Reviews.afterCreate(calculateAverageQualification);
+Reviews.afterUpdate(calculateAverageQualification);
+
 // ================= Exporting the models =============== //
 
 module.exports = {

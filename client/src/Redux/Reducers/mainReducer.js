@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {persistReducer} from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import storageSession from 'redux-persist/lib/storage/session';
 
 import categoryReducer from './categoryReducer';
 import productReducer from './productReducer';
@@ -10,8 +10,8 @@ import userReducer from './userReducer';
 
 const persistConfig = {
 	key: 'root',
-	storage,
-	whitelist: ['cart', 'user']
+	storage: storageSession,
+	whitelist: ['cart']
 };
 
 const rootReducer = combineReducers({

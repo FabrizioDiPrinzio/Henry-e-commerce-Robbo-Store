@@ -88,6 +88,11 @@ export default function ProductFormFunction() {
 		},
 		[products, lastError]
 	);
+	
+	// Lets you add an image with the enter key without needing to click the button.
+	const onImageEnterKey = e => {
+		if (e.key === 'Enter') handleAddImg(e);
+	};
 
 	// Updates the state when something is written in the forms
 	const handleInputChange = event => {
@@ -281,10 +286,11 @@ export default function ProductFormFunction() {
 													autocomplete="off"
 													value={newImage}
 													onChange={e=>setnewImage(e.target.value)}
+													onKeyPress={onImageEnterKey}
 		                      placeholder="URL de la imagen"
 												/>
 												{' '}
-		                    <button onClick={handleAddImg} className="submitBtn">Agregar imagen</button>
+		                    <button onClick={handleAddImg} className="submitBtn" type="button" >Agregar imagen</button>
 		                    </Form.Group>
 		                </Form>
 		            </Col>
@@ -308,6 +314,7 @@ export default function ProductFormFunction() {
 	                            <td>
 																<button
 																	className="deleteBtn"
+																	type="button"
 																	value={image}
 																	onClick={handleDeleteImg}>
 																	Eliminar

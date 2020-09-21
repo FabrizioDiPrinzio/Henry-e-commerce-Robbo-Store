@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useSelector } from 'react-redux'
 import './Comments.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
@@ -11,13 +12,20 @@ const star= <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi-star-fil
 
 export default function Comment({info}) {
 
+  // =========================  Redux State ============================== //
+
+  const currentUser = useSelector(state => state.user)
+
+
+  // ===================  React Component State ========================== //
+
   const [comentario, setComentario] = useState(info.comment);
-  const [user, setUser] = useState (info.creatorId);
   const [qualification, setQualification] = useState (info.qualification);
   const [editedComment, setEditedComment] = useState(info.comment);
   const [stateEditar, setStateEdit] = useState({
 		edit: 'editClose'
 	});
+  const creatorId = info.creatorId
 
   const date = info.createdAt.slice(0,10);
 
@@ -74,11 +82,13 @@ export default function Comment({info}) {
           <div >
             <div>Calificación: {stars.map( i => i)}</div>
           </div>
-          <div>Usuario: {`${user}`} </div>
+          <div>Usuario: {`${creatorId}`} </div>
           <div>
             <div>Fecha: {date}</div>
             <div>Comentario: {`${comentario}`}</div>
             </div>
+
+            { creatorId === currentUser.id &&
             <div class="btnCont">
               <button onClick={clickHandle} className="editBtn">
                 <svg
@@ -103,7 +113,11 @@ export default function Comment({info}) {
                 </svg>
               </button>
             </div>
-            </div>
+            }
+
+          </div>
+
+            { creatorId === currentUser.id &&
             <div className={stateEditar.edit}>
               <textarea
               className="texto"
@@ -118,6 +132,8 @@ export default function Comment({info}) {
 						    Aceptar
 					    </button>
             </div>
+            }
+
         </div>
     )
 }

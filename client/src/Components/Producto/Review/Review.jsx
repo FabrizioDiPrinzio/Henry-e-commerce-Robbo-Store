@@ -90,8 +90,8 @@ export default function Review({robotId}) {
                 </div>
             </div>
             <div className="datos">
-            {reviews.map(comment =>
-            <Comments info={comment}/>
+            {reviews.map(review =>
+            <Comments info={review}/>
             )}
             </div>
         </form>

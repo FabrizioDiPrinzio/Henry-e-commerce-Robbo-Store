@@ -82,7 +82,7 @@ export default function UserFormAdmin(props) {
 					<button type="submit" className="editBtn" value="Edit" onClick={clickHandle}>
 						{editButton}
 					</button>
-					<button type="submit" className="deleteBtn" value="Delete" onClick={handleDelete}>
+					<button type="submit" className="UserFromLine-deleteBtn" value="Delete" onClick={handleDelete}>
 						{deleteButton}
 					</button>
 				</div>

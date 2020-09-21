@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 // import {useSelector, useDispatch} from 'react-redux';
 // import {allActions} from '../../../../Redux/Actions/actions.js'
@@ -113,7 +114,7 @@ export default function FormFormAdmin(props) {
 
 			<table>
 				<tr className="orderFormLine" onClick={clickHandle}>
-					<td className="productInputTag" id={id}>{id}</td>
+					<td className="productInputTag" id={id}><Link to={`/purchase_order/${id}`}>{id}</Link></td>
 					<td className="productInputTag" id={recipient_name}>{orderName(recipient_name)}</td>
 					<td className="productInputTag" id={status}>{status}</td>
 					<td className="productInputTag" id={shipping_type}>{orderShipping(shipping_type)}</td>

@@ -200,7 +200,7 @@ export default function ProductFormFunction() {
 
 	return (
 		<div>
-			<form className="form">
+			<form className="prodForm">
 				<h3 className="titulo">Agregar producto</h3>
 				<div className="">
 					<div className="inpt">
@@ -274,7 +274,7 @@ export default function ProductFormFunction() {
 				</div>
 
 				<div className="picsTable">
-	        <Container>
+	        <Container class="picsCont">
 	            <Row>
 		            <Col>
 		                <h5>Agregar Imagen</h5>
@@ -300,9 +300,9 @@ export default function ProductFormFunction() {
 		            <Col>
 			            <Table>
 		                <thead>
-	                    <tr>
+	                    <tr class="picsTableRow">
 	                      <th>Imagen</th>
-												<th>Url</th>
+												{/*<th>Url</th>*/}
 	                      <th>Eliminar</th>
 	                    </tr>
 		                </thead>
@@ -310,7 +310,7 @@ export default function ProductFormFunction() {
 	                    {images.map(image =>(
 	                        <tr key={image}>
 	                            <td><img className="prodImg" src={image}></img></td>
-															<td className="imgUrl">{image}</td>
+															{/*<td className="imgUrl">{image}</td>*/}
 	                            <td>
 																<button
 																	className="deleteBtn"

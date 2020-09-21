@@ -54,7 +54,6 @@ export default function Producto() {
 
 				<Carousel 
 				className="carItems"
-				wrap={true} 
 				activeIndex={index} 
 				onSelect={handleSelect}>
 
@@ -79,13 +78,16 @@ export default function Producto() {
 
 				<div className="infoCard">
 					<h3 className="productTitle">{robot.name}</h3>
+					<hr />
 					<p className="infoCardDesc">{robot.description}</p>
-					<ul className="infoCardData">
-						<li className="">U$S{robot.price}</li>
-						<li className="">
-							{robot.stock > 0 ? `Stock: ${robot.stock} unidades` : 'Out of stock!'}
-						</li>
-					</ul>
+					<hr />
+					<div className="infoCardData">
+						<span className="">Price U$S: {robot.price} | </span>
+						<span className="">
+							{robot.stock > 0 ? `Stock: ${robot.stock} units left` : 'Out of stock!'}
+						</span>
+					</div>
+					<hr />
 					{user.rol === 'Admin' && (
 						<div>
 							<button type="submit" className="editProdBtn" value="Editar" onClick={() => setShowModal(!showModal)}>

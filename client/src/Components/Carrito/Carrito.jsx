@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
-import './Carrito.css';
 import ProductCard from '../Product Card/ProductCard.jsx';
 import FormularioDatosEnvio from './formularioDatosEnvio/FormularioDatosEnvio.jsx';
+import UserForm from '../FormularioUsuario/UserForm';
+import Modal from 'react-bootstrap/Modal';
+import './Carrito.css';
 // Fin de imports
 
 export default function Carrito() {
@@ -13,8 +15,11 @@ export default function Carrito() {
 
 	// React Hooks
 	const [formularioState, setFormulario] = useState({visibility: false});
+	const [showModal, setShowModal] = useState(false);
 
 	// ------------- Funcionalidad -----------
+
+	const hideModals = () => setShowModal(!showModal);
 
 	const total =
 		orderlines &&
@@ -22,7 +27,7 @@ export default function Carrito() {
 		orderlines.reduce((previous, current) => ({price: previous.price + current.price}));
 
 	const handleSend = () => {
-		if (user.rol === 'Guest') return alert('Debes iniciar sesión para continuar con la compra');
+		if (user.rol === 'Guest') return setShowModal(true);
 		else
 			setFormulario({...formularioState, visibility: formularioState.visibility ? false : true});
 	};
@@ -54,6 +59,10 @@ export default function Carrito() {
 			<button className="btnComprar" onClick={handleSend}>
 				Comprar
 			</button>
+
+			<Modal show={showModal} onHide={hideModals}>
+				<UserForm />
+			</Modal>
 
 			<div>{formularioState.visibility && <FormularioDatosEnvio />}</div>
 		</div>

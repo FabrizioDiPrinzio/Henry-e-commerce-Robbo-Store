@@ -41,6 +41,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .texto{
  width: 200px;
  height: 100px;
@@ -49,4 +50,14 @@
  align-content: center;
 }
 
-
+.comment-editBtn {
+  width: 100%;
+  text-align: center;
+  margin: 0px;
+  background: #617CC7;
+  border-radius: 4px;
+  border: solid #617CC7;
+  color: white;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-// import {allActions} from '../../Redux/Actions/actions';
-// import {useSelector, useDispatch} from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.css';
 import './UserForm.css';
 import RegisterForm from './RegisterForm/RegisterForm';
@@ -8,7 +6,7 @@ import LoginForm from './LoginForm/LoginForm';
 import ForgotPasswordForm from './ForgotPasswordForm/ForgotPasswordForm';
 //------ Fin de imports -----
 
-export default function FormularioCategoria() {
+export default function UserForm() {
 	const [showForm, setShowForm] = useState('Login');
 
 	return (

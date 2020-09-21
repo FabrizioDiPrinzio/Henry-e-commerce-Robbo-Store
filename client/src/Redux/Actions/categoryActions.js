@@ -22,8 +22,7 @@ export const getAllCategories = () => dispatch => {
 			});
 		})
 		.catch(error => {
-			const errorMsg = error.response.data;
-			dispatch(errorActionCreator(errorMsg));
+			dispatch(errorActionCreator(error));
 		});
 };
 // ============================================================================ The function above is maybe the only usefull function

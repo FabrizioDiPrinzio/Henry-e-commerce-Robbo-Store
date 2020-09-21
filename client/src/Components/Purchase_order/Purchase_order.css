@@ -59,6 +59,9 @@
 
 #selectStatus {
 	height: 30px;
+	width: 100%;
+	margin-top: 5px;
+	text-align: center;
 	font-weight: bold;
 	padding-left: 15px;
 	padding-right: 15px;

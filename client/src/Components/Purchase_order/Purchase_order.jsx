@@ -101,14 +101,6 @@ export default function Purchase_order(props) {
 						userRol === 'Admin' && 
 
 						<form className="orderStatusSelector" onSubmit={handleSubmit}  >
-							<select id="selectStatus" value={purchaseOrderData.status} onChange={handleStatusChange}>
-								<option value= "enCarrito"> En Carrito </option>
-								<option value="creada"> Creada </option>
-								<option value="pagada"> Pagada </option>
-								<option value="entregada"> Entregada </option>
-								<option value="rechazada"> Rrechazada </option>
-							</select>
-
 
 							<OverlayTrigger overlay={<Tooltip id="tooltip-SubmitStatus">{`${alertMessage}`}</Tooltip>}>
 
@@ -119,7 +111,15 @@ export default function Purchase_order(props) {
 							</button>
 
 							</OverlayTrigger>
+							
 
+							<select id="selectStatus" value={purchaseOrderData.status} onChange={handleStatusChange}>
+								<option value= "enCarrito"> En Carrito </option>
+								<option value="creada"> Creada </option>
+								<option value="pagada"> Pagada </option>
+								<option value="entregada"> Entregada </option>
+								<option value="rechazada"> Rrechazada </option>
+							</select>
 
 						</form>
 						}

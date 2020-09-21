@@ -27,11 +27,11 @@ export default function UserFormAdmin() {
 			<h2> Panel de Control de Usuarios </h2>
 			<div className="userTableTitleContainer">
 				<div className="userTableTitle">
-					<h5>Nombre</h5>
-					<h5>Email</h5>
-					<h5>Password</h5>
-					<h5>Rol</h5>
-					<h5>Action</h5>
+					<h5 class="userTableTitlelabel">Nombre</h5>
+					<h5 class="userTableTitlelabel">Email</h5>
+					<h5 class="userTableTitlelabel">Password</h5>
+					<h5 class="userTableTitlelabel">Rol</h5>
+					<h5 class="userTableTitlelabel">Action</h5>
 				</div>
 			</div>
 			<div className="userListContainer">

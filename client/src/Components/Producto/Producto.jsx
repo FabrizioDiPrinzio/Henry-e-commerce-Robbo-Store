@@ -51,23 +51,34 @@ export default function Producto() {
 	return (
 		<div className="productContainer">
 			<div className="productCont2">
-				<h3 className="productTitle">{robot.name}</h3>
-				<Carousel className="carItems" activeIndex={index} onSelect={handleSelect}>
+
+				<Carousel 
+				className="carItems"
+				wrap={true} 
+				activeIndex={index} 
+				onSelect={handleSelect}>
+
 					{pics.map(image => (
-						<Carousel.Item className="">
+						<Carousel.Item className="productCarouselItem">
 							<img
 							//d-block w-100
-								className="productImg h-100"
+								className="productImg"
 								src={image}
 								alt={pics.indexOf(image)}
 							/>
+							{/*
 							<Carousel.Caption className="carCap">
 								<h4></h4>
 							</Carousel.Caption>
+							*/}
 						</Carousel.Item>
 					))}
+
 				</Carousel>
+
+
 				<div className="infoCard">
+					<h3 className="productTitle">{robot.name}</h3>
 					<p className="infoCardDesc">{robot.description}</p>
 					<ul className="infoCardData">
 						<li className="">U$S{robot.price}</li>

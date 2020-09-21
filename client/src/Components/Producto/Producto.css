@@ -9,7 +9,7 @@
 }
 
 .productContainer {
-  max-width: 400px;
+  max-width: 800px;
   margin: auto;
   margin-top: 80px;
   display: flex;
@@ -30,11 +30,19 @@
   background-color: white;
   display: flex;
   justify-content: center;
-  align-self: center
+  align-self: center;
+  box-shadow: 0 0 25px 0 rgba(0,0,0,0.2);
+  border-radius: 15px;
 }
 
 .productImg {
-  margin-bottom: 10px
+  margin-bottom: 10px;
+  height: 500px;
+  object-fit: cover;
+}
+
+.productCarouselItem {
+  height: 90vh;
 }
 
 .carousel-control-next {

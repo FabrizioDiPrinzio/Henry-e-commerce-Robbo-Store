@@ -1,9 +1,10 @@
-import React, {useState, useEffect, useRef, useCallback} from 'react';
+import React, {useState, useRef} from 'react';
 import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
+import axios from 'axios';
+import {success, failure} from '../../multimedia/SVGs';
 import './FormularioCategoria.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import axios from 'axios';
 //------ Fin de imports -----
 
 const urlBack = process.env.REACT_APP_API_URL;
@@ -18,12 +19,13 @@ export default function FormularioCategoria() {
 
 	const [inputValues, setInputValues] = useState({id: 0, name: '', description: ''});
 	const [selectedCategoryId, setSelectedCategoryId] = useState(0);
+	const [successMessage, setSuccessMessage] = useState('');
+	const [errorMessage, setErrorMessage] = useState('');
 	const lista = useRef(0);
 
 	// ==================== auxiliary function ==================== //
 
-	const axiosPetitionHandler = response => {
-		alert(response.statusText);
+	const resetFields = () => {
 		setSelectedCategoryId(0);
 		lista.current.value = 0;
 		setInputValues({id: 0, name: '', description: ''});
@@ -34,6 +36,8 @@ export default function FormularioCategoria() {
 	// ================== component event handlers ================ //
 
 	const handleInputChange = event => {
+		if (successMessage) setSuccessMessage('');
+		if (errorMessage) setErrorMessage('');
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
 
@@ -56,8 +60,11 @@ export default function FormularioCategoria() {
 
 		axios
 			.post(`${urlBack}/products/category`, {...inputValues, id: null})
-			.then(response => axiosPetitionHandler(response))
-			.catch(error => alert('No se pudo crear la categoria: ' + error.response.data));
+			.then(() => {
+				setSuccessMessage('Categoría agregada');
+				resetFields();
+			})
+			.catch(error => setErrorMessage('No se pudo crear la categoria: ' + error.response.data));
 	};
 
 	// Deletes the selected category
@@ -66,8 +73,13 @@ export default function FormularioCategoria() {
 
 		axios
 			.delete(`${urlBack}/products/category/${selectedCategoryId}`)
-			.then(response => axiosPetitionHandler(response))
-			.catch(error => alert('No se pudo eliminar la categoria: ' + error.response.data));
+			.then(() => {
+				setSuccessMessage('Categoría eliminada');
+				resetFields();
+			})
+			.catch(error =>
+				setErrorMessage('No se pudo eliminar la categoria: ' + error.response.data)
+			);
 	};
 
 	// Edits the selected category
@@ -76,8 +88,11 @@ export default function FormularioCategoria() {
 
 		axios
 			.put(`${urlBack}/products/category/${selectedCategoryId}`, inputValues)
-			.then(response => axiosPetitionHandler(response))
-			.catch(error => alert('No se pudo editar la categoria: ' + error.response.data));
+			.then(() => {
+				setSuccessMessage('Categoría editada');
+				resetFields();
+			})
+			.catch(error => setErrorMessage('No se pudo editar la categoria: ' + error.response.data));
 	};
 
 	return (
@@ -134,6 +149,16 @@ export default function FormularioCategoria() {
 						>
 							Eliminar
 						</button>
+						{errorMessage && (
+							<div className="error">
+								{failure} {errorMessage} <br />
+							</div>
+						)}
+						{successMessage && (
+							<div className="success">
+								{success} {successMessage} <br />
+							</div>
+						)}
 					</div>
 				</div>
 			</div>

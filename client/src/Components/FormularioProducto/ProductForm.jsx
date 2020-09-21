@@ -3,7 +3,7 @@ import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import './ProductForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import {Button, Row,Container,Col, Form,Table} from 'react-bootstrap';
+import {Row,Container,Col, Form,Table} from 'react-bootstrap';
 //------ Fin de imports -----
 
 const {productActions} = allActions;

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import './Producto.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Review from './Review/Review.jsx';
 import Axios from 'axios';
 // =========== FIN DE IMPORTS ============
 
@@ -40,8 +41,11 @@ export default function Producto() {
 							{robot.stock > 0 ? `Stock: ${robot.stock} unidades` : 'Out of stock!'}
 						</li>
 					</ul>
-				</div>
-			</div>
+				</div>	
+				<div className="Reviews">
+					<Review robotId={robot.id}/>
+				</div>			
+			</div>			
 		</div>
 	);
 }

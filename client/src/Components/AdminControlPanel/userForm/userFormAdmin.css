@@ -31,6 +31,10 @@
   color: white;
 }
 
+.userTableTitle > h5 {
+  color: white;
+}
+
 .userTableTitle {
   margin-top: 8px;
 }

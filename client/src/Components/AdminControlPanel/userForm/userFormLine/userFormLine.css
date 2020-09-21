@@ -2,6 +2,8 @@
   max-width: 800px;
   display: grid;
   grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
+  padding-left: 15px;
+  padding-right: 15px;
   overflow: hidden;
   margin-left: 10px;
   height: 35px;
@@ -30,7 +32,6 @@
 }
 
 .inputTag {
-  width: 120px;
 }
 
 .editBtn {

@@ -8,7 +8,7 @@ import {Row,Container,Col, Form,Table} from 'react-bootstrap';
 
 const {productActions} = allActions;
 
-export default function ProductFormFunction() {
+export default function ProductFormFunction({preSelected}) {
 	// Redux
 	const categories = useSelector(state => state.categories.allCategories);
 	const productStore = useSelector(state => state.products);
@@ -60,6 +60,16 @@ export default function ProductFormFunction() {
 	}
 
 	// ------------  Functionality ----------------------
+
+	// If a preSelected bot comes in props
+	useEffect(
+		() => {
+			if (preSelected) {
+				const eventWrapper = {target: {}}
+				eventWrapper.target.value = preSelected.id;
+				handleSelectChange(eventWrapper);
+			}
+		}, [])
 
 	// Creates category checkboxes
 	useEffect(
@@ -272,62 +282,52 @@ export default function ProductFormFunction() {
 						);
 					})}
 				</div>
+				<hr />
 
 				<div className="picsTable">
-	        <Container class="picsCont">
-	            <Row>
-		            <Col>
-		                <h5>Agregar Imagen</h5>
-		                <Form>
-		                    <Form.Group controlId="fromChechbox" >
-		                    <input
-		                    	className=" "
-													type="text"
-													autocomplete="off"
-													value={newImage}
-													onChange={e=>setnewImage(e.target.value)}
-													onKeyPress={onImageEnterKey}
-		                      placeholder="URL de la imagen"
-												/>
-												{' '}
-		                    <button onClick={handleAddImg} className="submitBtn" type="button" >Agregar imagen</button>
-		                    </Form.Group>
-		                </Form>
-		            </Col>
-	            </Row>
-	            <br/>
-	            <Row>
-		            <Col>
-			            <Table>
-		                <thead>
-	                    <tr class="picsTableRow">
-	                      <th>Imagen</th>
-												{/*<th>Url</th>*/}
-	                      <th>Eliminar</th>
-	                    </tr>
-		                </thead>
-		                <tbody>
-	                    {images.map(image =>(
-	                        <tr key={image}>
-	                            <td><img className="prodImg" src={image}></img></td>
-															{/*<td className="imgUrl">{image}</td>*/}
-	                            <td>
-																<button
-																	className="deleteBtn"
-																	type="button"
-																	value={image}
-																	onClick={handleDeleteImg}>
-																	Eliminar
-																</button>
-															</td>
-		                        </tr>
-													))}
-			                </tbody>
-										</Table>
-			            </Col>
-		            </Row>
-		        </Container>
-		    </div>
+					<h5>Agregar Imagen</h5>
+					<div className="inpt">
+						<form>
+								<input
+								className="imageInput"
+								type="text"
+								autocomplete="off"
+								value={newImage}
+								onChange={e=>setnewImage(e.target.value)}
+								onKeyPress={onImageEnterKey}
+								placeholder="URL de la imagen"/>
+								{' '}
+								<button onClick={handleAddImg} className="submitBtn" type="button" >Agregar imagen</button>
+						</form>
+						<br/>
+						<Table>
+							<thead>
+								<tr class="picsTableRow">
+									<th>Imagen</th>
+									{/*<th>Url</th>*/}
+									<th>Eliminar</th>
+								</tr>
+							</thead>
+							<tbody>
+								{images.map(image =>(
+								<tr key={image}>
+									<td><img className="prodImg" src={image}></img></td>
+									{/*<td className="imgUrl">{image}</td>*/}
+									<td>
+										<button
+										className="deleteBtn"
+										type="button"
+										value={image}
+										onClick={handleDeleteImg}>
+											Eliminar
+										</button>
+									</td>
+								</tr>
+								))}
+							</tbody>
+						</Table>
+					</div>
+				</div>
 
 				<button onClick={handleAdd} className="submitBtn">
 					Agregar producto
@@ -337,7 +337,7 @@ export default function ProductFormFunction() {
 					<div className={'botonOpcion'}>
 						<h4 className="titulo">Editar / Eliminar producto</h4>
 
-						<select ref={lista} id="select" defaultValue="0" onChange={handleSelectChange}>
+						<select className="product-form-control" ref={lista} id="select" defaultValue={preSelected ? preSelected.id : '0'} onChange={handleSelectChange} size='6'>
 							<option value="0">Robots...</option>
 							{products.map(product => {
 								return (
@@ -347,7 +347,8 @@ export default function ProductFormFunction() {
 								);
 							})}
 						</select>
-						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
+
+						<button type="submit" className="editBtn2" value="Editar" onClick={handleEdit}>
 							Editar
 						</button>
 						<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>

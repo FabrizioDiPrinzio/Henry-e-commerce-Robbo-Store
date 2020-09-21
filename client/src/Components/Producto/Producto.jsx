@@ -75,13 +75,21 @@ export default function Producto() {
 							{robot.stock > 0 ? `Stock: ${robot.stock} unidades` : 'Out of stock!'}
 						</li>
 					</ul>
-					{user.rol !=='Guest' && (
+					{user.rol === 'Admin' && (
 						<div>
 							<button type="submit" className="editProdBtn" value="Editar" onClick={() => setShowModal(!showModal)}>
 									Editar
 							</button>
-							<Modal show={showModal} onHide={() => setShowModal(!showModal)}>
-								<ProductForm />
+							<Modal 
+							show={showModal}
+							onHide={() => setShowModal(!showModal)}
+							size="lg"
+							aria-labelledby="contained-modal-title-vcenter"
+							centered
+							>
+								<div className='container'>
+									<ProductForm preSelected={robot} />
+								</div>
 							</Modal>
 						</div>
 					)}
@@ -91,7 +99,6 @@ export default function Producto() {
 					<Review robotId={robot.id}/>
 				</div>			
 			</div>			
-
 		</div>
 	);
 };

@@ -8,9 +8,8 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormFormAdmin(props) {
-// 	const productsInCart = useSelector(state => state.cart.currentCart.products);
-// 	const dispatch = useDispatch();
-
+	// 	const productsInCart = useSelector(state => state.cart.currentCart.products);
+	// 	const dispatch = useDispatch();
 
 	// React Hooks
 	const {
@@ -45,33 +44,35 @@ export default function FormFormAdmin(props) {
 	// 	createdAt
 	// });
 
-	const orderDate = createdAt.slice(0,10);
+	const orderDate = createdAt.slice(0, 10);
 
 	const orderName = name => {
-		if(name) {
+		if (name) {
 			return recipient_name + ' ' + recipient_lastname;
-		} else {
-			return ' ------- '
 		}
-	}
+		else {
+			return ' ------- ';
+		}
+	};
 
 	const orderShipping = name => {
-		if(name) {
+		if (name) {
 			return shipping_type;
-		} else {
-			return ' ------- '
 		}
-	}
+		else {
+			return ' ------- ';
+		}
+	};
 
 	const reducer = arr => {
-  	var acc = 0;
-  	for(let i = 0; i<arr.length; i++) {
-    	acc += arr[i].price;
-  	}
-  return acc;
-	}
+		var acc = 0;
+		for (let i = 0; i < arr.length; i++) {
+			acc += arr[i].price;
+		}
+		return acc;
+	};
 
-	const orderPrice = reducer(orderlines)
+	const orderPrice = reducer(orderlines);
 
 	const [stateDisplay, setStateDisplay] = useState({
 		display: 'displayClose'
@@ -95,58 +96,74 @@ export default function FormFormAdmin(props) {
 		});
 	};
 
-	// const handleSelectChange = event => {
-	// 	setInputValues({...inputValues, status: event.target.value});
-	// };
-
-	// const handleEdit = event => {
- 	// 	event.preventDefault();
-	//
-	// 	axios
-	// 		.put(`${urlBack}/orders/${id}`, inputValues)
-	// 		.then(() => alert('Se realizaron los cambios'))
-	// 		.catch(err => alert(err.response.data));
-	// };
-
 	return (
-		<div className='lineOrder'>
-
+		<div className="lineOrder">
 			<table>
 				<tr className="orderFormLine" onClick={clickHandle}>
-					<td className="productInputTag" id={id}>{id}</td>
-					<td className="productInputTag" id={recipient_name}>{orderName(recipient_name)}</td>
-					<td className="productInputTag" id={status}>{status}</td>
-					<td className="productInputTag" id={shipping_type}>{orderShipping(shipping_type)}</td>
-					<td className="productInputTag" id={orderDate}>{orderDate}</td>
-					<td className="productInputTag" id={orderPrice}>${orderPrice}</td>
+					<td className="productInputTag" id={id}>
+						{id}
+					</td>
+					<td className="productInputTag" id={recipient_name}>
+						{orderName(recipient_name)}
+					</td>
+					<td className="productInputTag" id={status}>
+						{status}
+					</td>
+					<td className="productInputTag" id={shipping_type}>
+						{orderShipping(shipping_type)}
+					</td>
+					<td className="productInputTag" id={orderDate}>
+						{orderDate}
+					</td>
+					<td className="productInputTag" id={orderPrice}>
+						${orderPrice}
+					</td>
 				</tr>
 			</table>
 
-				<div className={stateDisplay.display}>
-
-					<table className="tablaOrders">
-					<tr className= "orderTitle">
-						<td className="productInputTag" id="prodId">Id Producto</td>
-						<td className="productInputTag" id="prodName">Producto</td>
-						<td className="productInputTag" id="prodPrice">Precio unit.</td>
-						<td className="productInputTag" id="quantity">Cantidad</td>
-						<td className="productInputTag" id="subTotal">Sub-Total</td>
+			<div className={stateDisplay.display}>
+				<table className="tablaOrders">
+					<tr className="orderTitle">
+						<td className="productInputTag" id="prodId">
+							Id Producto
+						</td>
+						<td className="productInputTag" id="prodName">
+							Producto
+						</td>
+						<td className="productInputTag" id="prodPrice">
+							Precio unit.
+						</td>
+						<td className="productInputTag" id="quantity">
+							Cantidad
+						</td>
+						<td className="productInputTag" id="subTotal">
+							Sub-Total
+						</td>
 					</tr>
-						{products &&
-							products.map(prod => (
+					{products &&
+						products.map(prod => (
 							<tr className="orderContent">
-								<td className="productInputTag" id="prodId">{prod.id}</td>
-								<td className="productInputTag" id="prodName">{prod.name}</td>
-								<td className="productInputTag" id="prodPrice">{prod.price}</td>
-								<td className="productInputTag" id="quantity">{prod.orderline.quantity}</td>
-								<td className="productInputTag" id="subTotal">{prod.price*prod.orderline.quantity}</td>
+								<td className="productInputTag" id="prodId">
+									{prod.id}
+								</td>
+								<td className="productInputTag" id="prodName">
+									{prod.name}
+								</td>
+								<td className="productInputTag" id="prodPrice">
+									{prod.price}
+								</td>
+								<td className="productInputTag" id="quantity">
+									{prod.orderline.quantity}
+								</td>
+								<td className="productInputTag" id="subTotal">
+									{prod.price * prod.orderline.quantity}
+								</td>
 							</tr>
-							))}
-					</table>
+						))}
+				</table>
 
-					<div>
-					</div>
-				</div>
+				<div />
+			</div>
 		</div>
 	);
 }

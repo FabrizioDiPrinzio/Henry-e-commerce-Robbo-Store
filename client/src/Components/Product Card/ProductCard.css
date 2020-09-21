@@ -119,7 +119,7 @@
 	font-size: 30px;
 	font-weight: bold;
 	text-align: center;
-	/* background-color: white; */
+	background-color: white;
 	box-shadow: 3px 3px 2px 0 rgb(0, 0, 0, 0.2), inset 3px 3px 2px 0 rgb(240, 240, 240, 0.3);
 	display: inline-block;
 }
@@ -135,7 +135,7 @@
 .boton.rest {
 	margin-left: 5px;
 	background-color: var(--razzmatazz);
-	/* color: white; */
+	color: white;
 }
 
 .iconButtom {

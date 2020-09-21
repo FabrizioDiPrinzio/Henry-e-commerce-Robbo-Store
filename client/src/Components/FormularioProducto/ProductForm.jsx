@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
+import {Row, Container, Col, Form, Table} from 'react-bootstrap';
+import {success, failure} from '../../multimedia/SVGs';
 import './ProductForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import {Row,Container,Col, Form,Table} from 'react-bootstrap';
 //------ Fin de imports -----
 
 const {productActions} = allActions;
@@ -24,6 +25,8 @@ export default function ProductFormFunction() {
 	});
 	const [checkboxes, setCheckboxes] = useState([]);
 	const [selected, setSelected] = useState(0);
+	const [successMessage, setSuccessMessage] = useState('');
+	const [errorMessage, setErrorMessage] = useState('');
 	const lista = useRef(0);
 
 	const [images, setImages] = useState([]);
@@ -52,7 +55,7 @@ export default function ProductFormFunction() {
 
 	function resetImg() {
 		lista.current.value = 0;
-		setnewImage('')
+		setnewImage('');
 	}
 
 	function resetImages() {
@@ -76,19 +79,19 @@ export default function ProductFormFunction() {
 		[categories]
 	);
 
-	// Creates an alert after each successful or failed operation
+	// Creates an success or error message after each successful or failed operation
 	useEffect(
 		() => {
 			if (lastResponse) {
-				alert(lastResponse.message);
+				setSuccessMessage(lastResponse.message);
 				resetFields();
 				resetImages();
 			}
-			if (lastError) alert(lastError);
+			if (lastError) setErrorMessage(lastError);
 		},
 		[products, lastError]
 	);
-	
+
 	// Lets you add an image with the enter key without needing to click the button.
 	const onImageEnterKey = e => {
 		if (e.key === 'Enter') handleAddImg(e);
@@ -96,17 +99,24 @@ export default function ProductFormFunction() {
 
 	// Updates the state when something is written in the forms
 	const handleInputChange = event => {
+		if (successMessage) setSuccessMessage('');
+		if (errorMessage) setErrorMessage('');
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
 
 	// Updates the state when something is written in the numbers. Can't be a negative number.
 	const handleNumberChange = event => {
+		if (successMessage) setSuccessMessage('');
+		if (errorMessage) setErrorMessage('');
 		const value = parseInt(event.target.value);
 		setInputValues({...inputValues, [event.target.name]: value >= 0 ? value : 0});
 	};
 
 	// Sets which product is currently being selected
 	const handleSelectChange = event => {
+		if (successMessage) setSuccessMessage('');
+		if (errorMessage) setErrorMessage('');
+
 		// Unchecks all categories
 		resetCheckboxes();
 
@@ -116,9 +126,9 @@ export default function ProductFormFunction() {
 		if (selectedId > 0) {
 			const currentProduct = products.find(p => p.id === selectedId);
 			setInputValues(currentProduct);
-			const imagenes = currentProduct.pics.map(i=> {
+			const imagenes = currentProduct.pics.map(i => {
 				return i.imageUrl;
-			})
+			});
 			setImages(imagenes);
 
 			// If the product has a category, it is checked, else it is unchecked
@@ -157,11 +167,11 @@ export default function ProductFormFunction() {
 	};
 
 	const handleDeleteImg = event => {
-	  event.preventDefault();
+		event.preventDefault();
 
-	  const updatedTable = images.filter(i => i !== event.target.value);
-	  setImages(updatedTable);
-	}
+		const updatedTable = images.filter(i => i !== event.target.value);
+		setImages(updatedTable);
+	};
 
 	// Creates products
 	const handleAdd = event => {
@@ -242,7 +252,6 @@ export default function ProductFormFunction() {
 							onChange={handleNumberChange}
 						/>
 					</div>
-
 				</div>
 				<div className="inpt">
 					<label className="DescLab">Descripción:</label>
@@ -274,60 +283,64 @@ export default function ProductFormFunction() {
 				</div>
 
 				<div className="picsTable">
-	        <Container>
-	            <Row>
-		            <Col>
-		                <h5>Agregar Imagen</h5>
-		                <Form>
-		                    <Form.Group controlId="fromChechbox" >
-		                    <input
-		                    	className=" "
-													type="text"
-													autocomplete="off"
-													value={newImage}
-													onChange={e=>setnewImage(e.target.value)}
-													onKeyPress={onImageEnterKey}
-		                      placeholder="URL de la imagen"
-												/>
-												{' '}
-		                    <button onClick={handleAddImg} className="submitBtn" type="button" >Agregar imagen</button>
-		                    </Form.Group>
-		                </Form>
-		            </Col>
-	            </Row>
-	            <br/>
-	            <Row>
-		            <Col>
-			            <Table>
-		                <thead>
-	                    <tr>
-	                      <th>Imagen</th>
-												<th>Url</th>
-	                      <th>Eliminar</th>
-	                    </tr>
-		                </thead>
-		                <tbody>
-	                    {images.map(image =>(
-	                        <tr key={image}>
-	                            <td><img className="prodImg" src={image}></img></td>
-															<td className="imgUrl">{image}</td>
-	                            <td>
-																<button
-																	className="deleteBtn"
-																	type="button"
-																	value={image}
-																	onClick={handleDeleteImg}>
-																	Eliminar
-																</button>
-															</td>
-		                        </tr>
-													))}
-			                </tbody>
-										</Table>
-			            </Col>
-		            </Row>
-		        </Container>
-		    </div>
+					<Container>
+						<Row>
+							<Col>
+								<h5>Agregar Imagen</h5>
+								<Form>
+									<Form.Group controlId="fromChechbox">
+										<input
+											className=" "
+											type="text"
+											autocomplete="off"
+											value={newImage}
+											onChange={e => setnewImage(e.target.value)}
+											onKeyPress={onImageEnterKey}
+											placeholder="URL de la imagen"
+										/>{' '}
+										<button onClick={handleAddImg} className="submitBtn" type="button">
+											Agregar imagen
+										</button>
+									</Form.Group>
+								</Form>
+							</Col>
+						</Row>
+						<br />
+						<Row>
+							<Col>
+								<Table>
+									<thead>
+										<tr>
+											<th>Imagen</th>
+											<th>Url</th>
+											<th>Eliminar</th>
+										</tr>
+									</thead>
+									<tbody>
+										{images.map(image => (
+											<tr key={image}>
+												<td>
+													<img className="prodImg" src={image} />
+												</td>
+												<td className="imgUrl">{image}</td>
+												<td>
+													<button
+														className="deleteBtn"
+														type="button"
+														value={image}
+														onClick={handleDeleteImg}
+													>
+														Eliminar
+													</button>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</Table>
+							</Col>
+						</Row>
+					</Container>
+				</div>
 
 				<button onClick={handleAdd} className="submitBtn">
 					Agregar producto
@@ -350,13 +363,27 @@ export default function ProductFormFunction() {
 						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
 							Editar
 						</button>
-						<button type="submit" className="deleteBtn" value="Eliminar" onClick={handleDelete}>
+						<button
+							type="submit"
+							className="deleteBtn"
+							value="Eliminar"
+							onClick={handleDelete}
+						>
 							Eliminar
 						</button>
 					</div>
+					{errorMessage && (
+						<div className="error">
+							{failure} {errorMessage} <br />
+						</div>
+					)}
+					{successMessage && (
+						<div className="success">
+							{success} {successMessage} <br />
+						</div>
+					)}
 				</div>
 			</form>
-
-	</div>
+		</div>
 	);
 }

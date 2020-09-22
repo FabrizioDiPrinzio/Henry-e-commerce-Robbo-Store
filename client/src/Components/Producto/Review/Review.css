@@ -7,38 +7,48 @@
     --ksu-purple: #563488ff;
     --razzmatazz: #d53467ff
 }
-.Review {
-    max-width: 800px
+
+.review {
+    max-width: 800px;
 }
 
-.rev-box {
+.review > form {
+  text-align: right;
+}
+
+.reviewsHeader {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: left;
+}
+
+.reviewTextarea {
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px 0 rgba(0,0,0,0.75);
+  padding: 7px;
+  height: 100px;
   width: 100%;
-  text-align: left;
 }
 
-h5 {
-    color:var(--ksu-purple);
-}
-.form {
-    color: var(--ksu-purple);
-    margin: auto;
-    margin-top: 100px;
-    max-width: var(--max-width);
-}
-
-.submitBtn {
-    width: 100px;
-    background: #563488ff;
+.reviewSubmitBtn {
+    transition: 0.2s;
+    background: var(--ksu-purple);
     border-radius: 4px;
-    border: 4px solid #563488ff;
+    border: none;
     color:white;
-    margin:10px 5px 0 10px;
+    margin: 0;
+    padding: 3px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 7px;
+    margin-bottom: 7px;
     justify-content: center;
     align-items: center;
 }
-div.stars{
-    width: 100%;
-    display: inline-block;
+
+.reviewSubmitBtn:hover {
+  box-shadow: 0px 0px 6px 0 rgba(0,0,0,0.5);
+  text-shadow: 0 0 5px white;
 }
 
 .starEmpty{
@@ -55,8 +65,8 @@ input.star{
 
 label.star {
   float: right;
-  padding: 10px;
-  font-size: 36px;
+  padding: 3px;
+  font-size: 1.2em;
   color: #444;
   transition: all .2s;
 }
@@ -85,9 +95,3 @@ label.star:before{
   content:'\f006';
   font-family: FontAwesome;
 }
-
-.Texto{
-  height: 100px;
-  width: 100%;
-}
-

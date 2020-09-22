@@ -61,10 +61,10 @@ export default function Review({robotId}) {
 
 	return (
 
-    <div className="Review">
-        <h5>Agregar Comentario</h5>
-        <form className="Reviews">
-            <div className="cont">
+    <div className="review">
+        <form className="">
+        	<div className='reviewsHeader'>
+        		<h4 className='reviewTitle'>Agrega un Comentario: </h4>
                 <div className="stars">
                     <div>
                         <input className="star star-1" id="star-1" value="5" type="radio" name="star" onClick={handleQualification}/>
@@ -78,35 +78,37 @@ export default function Review({robotId}) {
                         <input className="star star-5" id="star-5"  value="1" type="radio" name="star" onClick={handleQualification} />
                         <label className="star star-5" for="star-5"></label>
                     </div>
-                    <div className="rev-box">
-                        <textarea
-                        className="Texto"
-                        col="30"
-                        name="review"
-                        value={newReview}
-                        placeholder="Agregue su comentario"
-                        onChange={e => {
-									if (errorMessage) setErrorMessage('');
-									setnewReview(e.target.value);
-								}}/>
-                    </div>
-                    <button onClick={handleAdd} className="submitBtn">
-                        Agregar
-                    </button>
-                </div>
-            </div>
-            <div className="datos">
-            {reviews.map(review =>
-            <Comments info={review}/>
-            )}
-            </div>
-            {errorMessage && (
-				<div className="error">
-					{failure} {errorMessage} <br />
 				</div>
-			)}
+			</div>
+
+			<textarea
+			className="reviewTextarea"
+			col="30"
+			name="review"
+			value={newReview}
+			placeholder="Agregue su comentario"
+			onChange={e => {
+				if (errorMessage) setErrorMessage('');
+				setnewReview(e.target.value);
+			}}/>
+
+			<button onClick={handleAdd} className="reviewSubmitBtn">
+			    Agregar
+			</button>
+			<hr />
         </form>
+
+		<div className="datos">
+        	<h4 className='reviewTitle'>Comentarios: </h4>
+			{reviews.map(review =>
+				<Comments info={review}/>
+            )}
+		</div>
+		{errorMessage && (
+			<div className="error">
+				{failure} {errorMessage} <br />
+			</div>
+		)}
     </div>
-    
     )
 }

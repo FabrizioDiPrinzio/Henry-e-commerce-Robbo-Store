@@ -1,7 +1,8 @@
 import React, {useState, useRef} from 'react';
+import {Redirect} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from '../../../Redux/Actions/actions';
-import {openEye, closedEye, success, failure} from '../../../multimedia/SVGs';
+import {openEye, closedEye, success, failure, googleIcon} from '../../../multimedia/SVGs';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../UserForm.css';
 import axios from 'axios';
@@ -22,6 +23,8 @@ export default function LoginForm() {
 		email: null,
 		password: null
 	});
+	const [redirect, setRedirect] = useState(false);
+	const [google, setGoogle] = useState('');
 
 	const formulario = useRef(0);
 
@@ -37,6 +40,16 @@ export default function LoginForm() {
 		if (error) setError('');
 		if (loggedIn) setLoggedIn('');
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
+	};
+
+	const handleGoogle = () => {
+		axios
+			.get(`${urlBack}/auth/google`)
+			.then(success => {
+				setGoogle(success.data);
+				setRedirect(true);
+			})
+			.catch(err => console.log(err.message));
 	};
 
 	const handleLogin = async event => {
@@ -68,6 +81,10 @@ export default function LoginForm() {
 
 	return (
 		<form className="form" onSubmit={handleLogin} ref={formulario}>
+			<a href="#" onClick={handleGoogle}>
+				{googleIcon} Inicia sesión con Google
+			</a>
+			{redirect && <Redirect to={`${google}`} />}
 			<h3 className="titulo">Iniciar sesión</h3>
 			<br />
 

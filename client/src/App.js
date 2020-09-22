@@ -52,7 +52,7 @@ function App() {
 		axios
 			.post(`${urlBack}/createAdmin`)
 			.then(response => console.log(response.data))
-			.catch(error => console.log(error.response.data));
+			.catch(error => console.log(error.response ? error.response.data : error));
 
 		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());

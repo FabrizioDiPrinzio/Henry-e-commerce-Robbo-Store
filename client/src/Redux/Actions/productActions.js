@@ -31,7 +31,7 @@ export const postProduct = (product, categories) => dispatch => {
 			if (categories.length) dispatch(modifyProductCategories(res.data.id, categories));
 			else dispatch(getAllProducts());
 		})
-		.catch(err => dispatch(catchError( err)));
+		.catch(err => dispatch(catchError(err)));
 };
 
 export const deleteProduct = productId => dispatch => {
@@ -81,6 +81,6 @@ export const modifyProductCategories = (productId, categories) => dispatch => {
 };
 
 export const catchError = err => dispatch => {
-	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.response.data});
+	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.response ? err.response.data : err});
 	dispatch({type: actionTypes.CLEAN_MESSAGES});
 };

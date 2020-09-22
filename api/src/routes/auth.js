@@ -3,8 +3,22 @@ const router = express.Router();
 const passport = require('passport');
 const {User} = require('../db');
 
+// Local login
 router.post('/login', passport.authenticate('local'), (req, res) => {
 	res.send(req.user);
+});
+
+// Google login
+router.get(
+	'/google',
+	passport.authenticate('google', {
+		scope: ['profile', 'email']
+	})
+);
+
+router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
+	console.log('reached redirect');
+	res.send('Llegaste al redirect!!!');
 });
 
 router.post('/logout', (req, res) => {

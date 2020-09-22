@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 import {useSelector} from 'react-redux';
+import {editButton, star} from '../../multimedia/SVGs';
 import './Producto.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Review from './Review/Review.jsx';
@@ -44,9 +45,24 @@ export default function Producto() {
 			</h1>
 		);
 
-  const handleSelect = (selectedIndex, e) => {
-    setIndex(selectedIndex);
-  };
+	const handleSelect = (selectedIndex, e) => {
+		setIndex(selectedIndex);
+	};
+
+
+	const showStars = num => {
+		var arr = [];
+		for (let i = 0; i < num; i++) {
+			arr.push(star);
+		}
+		return arr;
+	};
+
+	const stars = showStars(`${robot.averageQualification}`);
+
+
+
+
 
 	return (
 		<div className="productContainer">
@@ -60,13 +76,12 @@ export default function Producto() {
 					{pics.map(image => (
 						<Carousel.Item className="productCarouselItem">
 							<img
-							//d-block w-100
-								className="productImg"
-								src={image}
-								alt={pics.indexOf(image)}
+							className="productImg"
+							src={image}
+							alt={pics.indexOf(image)}
 							/>
 							{/*
-							<Carousel.Caption className="carCap">
+							<Carousel.Caption className="">
 								<h4></h4>
 							</Carousel.Caption>
 							*/}
@@ -77,41 +92,55 @@ export default function Producto() {
 
 
 				<div className="infoCard">
-					<h3 className="productTitle">{robot.name}</h3>
-					<hr />
-					<p className="infoCardDesc">{robot.description}</p>
-					<hr />
-					<div className="infoCardData">
-						<span className="">Price U$S: {robot.price} | </span>
-						<span className="">
-							{robot.stock > 0 ? `Stock: ${robot.stock} units left` : 'Out of stock!'}
-						</span>
-					</div>
-					<hr />
-					{user.rol === 'Admin' && (
-						<div>
-							<button type="submit" className="editProdBtn" value="Editar" onClick={() => setShowModal(!showModal)}>
-									Editar
-							</button>
-							<Modal 
-							show={showModal}
-							onHide={() => setShowModal(!showModal)}
-							size="lg"
-							aria-labelledby="contained-modal-title-vcenter"
-							centered
-							>
-								<div className='container'>
-									<ProductForm preSelected={robot} />
-								</div>
-							</Modal>
-						</div>
-					)}
 
-				</div>	
-				<div className="Reviews">
-					<Review robotId={robot.id}/>
-				</div>			
-			</div>			
+					<div className='infoCardHeader'>
+						<h3 className="productTitle">
+							{robot.name}{' '}{' '}
+							{user.rol === 'Admin' && (
+							<button type="submit" className="editProdBtn" value="Editar" onClick={() => setShowModal(!showModal)}>
+								{editButton}
+							</button>
+							)}
+							<hr/>
+						</h3>
+						<div className='starQualification'>
+							<div>{stars.map( i => i)}</div>
+							| {`${robot.averageQualification} / 5`}
+						</div>
+						<p className="infoCardDescription">{robot.description}</p>
+						<div className="infoCardData">
+							<span className="">
+								Price U$S: {robot.price}
+							</span>
+							<br />
+							<span className="">
+								{robot.stock > 0 ? `Stock: ${robot.stock} units left` : 'Out of stock!'}
+							</span>
+						</div>
+					</div>
+
+					<div className='reviewContainer'>
+						<Review robotId={robot.id}/>
+					</div>			
+		
+				</div>
+
+			</div>
+
+			{user.rol === 'Admin' && (
+				<Modal 
+				show={showModal}
+				onHide={() => setShowModal(!showModal)}
+				size="lg"
+				aria-labelledby="contained-modal-title-vcenter"
+				centered
+				>
+					<div className='container'>
+						<ProductForm preSelected={robot} />
+					</div>
+				</Modal>
+			)}
+
 		</div>
 	);
 };

@@ -54,15 +54,6 @@ export default function LoginForm() {
 			const user = await axios.post(`${urlBack}/auth/login`, inputValues);
 
 			dispatch(allActions.userActions.login(user.data));
-
-			// Modifica el carrito del usuario ---> [for await... of] para iterar acciones asíncronas en un array.
-			for await (const order of orderlines) {
-				await axios
-					.put(`${urlBack}/user/${user.data.id}/cart`, order)
-					.catch(error => console.log(error));
-			}
-
-			dispatch(allActions.cartActions.getUserCart(user.data.id));
 			setLoggedIn('Iniciaste sesión con éxito!');
 		} catch (error) {
 			setError('Email o contraseña incorrectos');

@@ -45,6 +45,7 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 function App() {
 	const user = useSelector(state => state.user);
+	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -59,16 +60,47 @@ function App() {
 		dispatch(allActions.productActions.getAllProducts());
 	}, []);
 
+	// // Añade el carrito de guest al de usuario cuando se loguea
+	// useEffect(
+	// 	() => {
+	// 		// Modifica el carrito del usuario ---> [for await... of] para iterar acciones asíncronas en un array.
+	// 		async () => {
+	// 			for await (const order of orderlines) {
+	// 				axios
+	// 					.put(`${urlBack}/user/${user.id}/cart`, order)
+	// 					.catch(error => console.log(error));
+	// 			}
+
+	// 			dispatch(allActions.cartActions.getUserCart(user.id));
+	// 		};
+	// 	},
+	// 	[user]
+	// );
+
 	// Loguea al usuario con las cookies.
-	useEffect(() => {
-		axios
-			.get(`${urlBack}/auth/me`)
-			.then(user => {
-				dispatch(allActions.userActions.login(user.data));
-				dispatch(allActions.cartActions.getUserCart(user.data.id));
-			})
-			.catch(error => console.log(error)); // Se queda con el default de Guest
-	}, []);
+	useEffect(
+		() => {
+			const addGuestCart = async () => {
+				try {
+					const usuario = await axios.get(`${urlBack}/auth/me`);
+
+					for await (const order of orderlines) {
+						axios
+							.put(`${urlBack}/user/${usuario.data.id}/cart`, order)
+							.catch(error => console.log(error));
+					}
+
+					dispatch(allActions.userActions.login(usuario.data));
+					dispatch(allActions.cartActions.getUserCart(usuario.data.id));
+				} catch (error) {
+					console.log(error);
+				}
+			};
+
+			addGuestCart();
+		},
+		[user.id]
+	);
 
 	return (
 		<div>

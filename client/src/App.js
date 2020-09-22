@@ -21,7 +21,8 @@ import NotFound from './Components/NotFound/NotFound';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
 import Purchase_order from './Components/Purchase_order/Purchase_order.jsx';
-
+import OAuthSuccess from './Components/OAuth/OAuthSuccess';
+import Welcome from './Components/OAuth/Welcome';
 // =========== FIN DE IMPORTS ============
 
 // ======== Inicializando el uso de algunas propiedades de Bootstrap que usan Jquery ======= //
@@ -92,9 +93,12 @@ function App() {
 				<Route exact path="/" component={Home} />
 				<Switch>
 					<Route exact path="/" component={Catalogo} />
+					<Route exact path="/welcome" component={Welcome} />
 					<Route exact path="/categories/:categoria" component={Catalogo} />
+					<Route exact path="/search" component={Catalogo} />
 					<Route exact path="/carrito" component={Carrito} />
-					<Route path="/search" component={Catalogo} />
+					<Route exact path="/oauth/success" component={OAuthSuccess} />
+					<Route exact path="/auth/google/failure" />
 					<Route exact path="/producto/:id" component={Producto} />
 					<Route exact path="/user/:id" component={UserProfile} />
 					<Route exact path="/purchase_order/:purchaseOrderId" component={Purchase_order} />

@@ -11,15 +11,16 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 // Google login
 router.get(
 	'/google',
-	passport.authenticate('google', {
-		scope: ['profile', 'email']
-	})
+	passport.authenticate('google', {scope: ['profile', 'email'], display: 'popup'})
 );
 
-router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-	console.log('reached redirect');
-	res.redirect('http://localhost:3000');
-});
+router.get(
+	'/google/redirect',
+	passport.authenticate('google', {
+		successRedirect: 'http://localhost:3000/oauth/success',
+		failureRedirect: 'http://localhost:3000/oauth/failure'
+	})
+);
 
 router.post('/logout', (req, res) => {
 	if (req.isAuthenticated()) {

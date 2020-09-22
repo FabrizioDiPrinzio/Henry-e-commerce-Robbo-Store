@@ -1,5 +1,4 @@
 import React, {useState, useRef} from 'react';
-import {Redirect} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from '../../../Redux/Actions/actions';
 import {openEye, closedEye, success, failure, googleIcon} from '../../../multimedia/SVGs';
@@ -23,8 +22,6 @@ export default function LoginForm() {
 		email: null,
 		password: null
 	});
-	const [redirect, setRedirect] = useState(false);
-	const [google, setGoogle] = useState('');
 
 	const formulario = useRef(0);
 
@@ -60,10 +57,13 @@ export default function LoginForm() {
 		}
 	};
 
+	const popup = () => window.open(`${urlBack}/auth/google`, '', 'height=500, width=500');
+
 	return (
 		<form className="form" onSubmit={handleLogin} ref={formulario}>
-			<a href={`${urlBack}/auth/google`}>{googleIcon} Inicia sesión con Google</a>
-			{redirect && <Redirect to={`${google}`} />}
+			<a href="#" onClick={popup}>
+				{googleIcon} Inicia sesión con Google
+			</a>
 			<h3 className="titulo">Iniciar sesión</h3>
 			<br />
 

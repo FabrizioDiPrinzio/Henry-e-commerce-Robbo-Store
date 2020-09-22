@@ -12,6 +12,14 @@ router.get('/', (req, res, next) => {
 		.catch(next);
 });
 
+router.get('/pages/', (req, res, next) => {
+	Product.findAll({include: [Categories, Pics]})
+		.then(products => {
+			res.send(products);
+		})
+		.catch(next);
+});
+
 router.post('/', async (req, res) => {
 	const {name, price, stock, image, description} = req.body;
 	if (!name || !price || typeof stock !== 'number' || !image || !description)

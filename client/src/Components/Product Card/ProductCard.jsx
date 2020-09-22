@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
-import './ProductCard.css';
 import {useSelector, useDispatch} from 'react-redux';
 import {allActions} from '../../Redux/Actions/actions';
 import axios from 'axios';
+import {exclamationMark} from '../../multimedia/SVGs';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import './ProductCard.css';
 // =========== FIN DE IMPORTS ============
 
 const urlBack = process.env.REACT_APP_API_URL;
@@ -21,6 +24,7 @@ export default function ProductCard({robot}) {
 
 	const [carrito, setCarrito] = useState({quantity: currentRobot ? currentRobot.quantity : 0});
 	const [loading, setLoading] = useState(false);
+	const [showTooltips, setShowTooltips] = useState(false);
 
 	useEffect(
 		() => {
@@ -33,10 +37,8 @@ export default function ProductCard({robot}) {
 
 	const handleClickAdd = e => {
 		e.preventDefault();
-		e.persist();
-		e.target.style.opacity = '0.1';
 
-		if (robot.stock <= carrito.quantity || loading === true) return alert('Sin stock!');
+		if (robot.stock <= carrito.quantity || loading === true) return;
 
 		const productValues = {
 			productId: robot.id,
@@ -56,30 +58,23 @@ export default function ProductCard({robot}) {
 				)
 			);
 			setLoading(false);
-			e.target.style.opacity = '1';
-			alert('Agregado');
 		}
 		else {
 			axios
 				.put(`${urlBack}/user/${user.id}/cart`, productValues)
 				.then(() => {
 					setLoading(false);
-					e.target.style.opacity = '1';
-					alert('Agregado');
 					dispatch(allActions.cartActions.getUserCart(user.id));
 				})
 				.catch(error => {
 					setLoading(false);
 					alert(error.response.data);
-					e.target.style.opacity = '1';
 				});
 		}
 	};
 
 	const handleClickRemove = e => {
 		e.preventDefault();
-		e.persist();
-		e.target.style.opacity = '0.1';
 
 		const changes = {
 			productId: robot.id,
@@ -88,7 +83,6 @@ export default function ProductCard({robot}) {
 		};
 
 		if (carrito.quantity > 0 && loading === false) {
-			e.target.style.opacity = '0.1';
 			setLoading(true);
 
 			if (user.rol === 'Guest') {
@@ -101,22 +95,17 @@ export default function ProductCard({robot}) {
 					)
 				);
 				setLoading(false);
-				e.target.style.opacity = '1';
-				alert('Quitado');
 			}
 			else {
 				axios
 					.put(`${urlBack}/user/${user.id}/cart`, changes)
 					.then(() => {
-						e.target.style.opacity = '1';
 						setLoading(false);
-						alert('Quitado');
 						dispatch(allActions.cartActions.getUserCart(user.id));
 					})
 					.catch(error => {
 						alert(error.response.data);
 						setLoading(false);
-						e.target.style.opacity = '1';
 					});
 			}
 		}
@@ -149,16 +138,55 @@ export default function ProductCard({robot}) {
 					<input type="text" className="cant" value={carrito.quantity} readOnly />
 				</div>
 				<div className="botones">
-					<div className="butonContainer">
-						<div className="boton add" onClick={handleClickAdd}>
-							<div className="iconButtom">+</div>
+					<OverlayTrigger
+						show={robot.stock <= carrito.quantity && showTooltips}
+						overlay={
+							<Tooltip id="disabledAdd">{exclamationMark} No queda más stock!</Tooltip>
+						}
+					>
+						<div className="butonContainer">
+							<div
+								className={`boton add ${robot.stock <= carrito.quantity || loading
+									? 'disabledAdd'
+									: ''}`}
+								onClick={handleClickAdd}
+							>
+								<div
+									className="iconButtom"
+									onMouseEnter={() => {
+										if (robot.stock <= carrito.quantity) setShowTooltips(true);
+									}}
+									onMouseLeave={() => setShowTooltips(false)}
+								>
+									+
+								</div>
+							</div>
 						</div>
-					</div>
-					<div className="butonContainer">
-						<div className="boton rest" onClick={handleClickRemove}>
-							<div className="iconButtom">-</div>
+					</OverlayTrigger>
+					<OverlayTrigger
+						show={carrito.quantity === 0 && showTooltips}
+						overlay={
+							<Tooltip id="disabledAdd">
+								{exclamationMark} No tienes ninguno en el carrito!
+							</Tooltip>
+						}
+					>
+						<div className="butonContainer">
+							<div className="boton rest" onClick={handleClickRemove}>
+								<div
+									className={`iconButtom ${carrito.quantity === 0
+										? 'disabledRemove'
+										: ''}`}
+									onMouseEnter={() => {
+										if (carrito.quantity === 0) setShowTooltips(true);
+									}}
+									onMouseLeave={() => setShowTooltips(false)}
+								>
+									-
+								</div>
+							</div>
 						</div>
-					</div>
+					</OverlayTrigger>
 				</div>
 			</div>
 		</div>

@@ -12,13 +12,14 @@
   overflow: hidden;
   border: 3px solid var(--baby-blue-eyes);
   background-color: white;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px 10px 10px 10px;
   border-width: 3px 3px 3px 3px;
   display: flex;
   justify-content: center;
   align-items: center;
   max-width: 800px;
   width: 90vw;
+  margin-top: 7px;
 }
 
 .orderFormLine:hover {

@@ -1,17 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {allActions} from '../../../Redux/Actions/actions.js';
+import axios from 'axios';
+import {success, failure} from '../../../multimedia/SVGs';
 import 'bootstrap/dist/css/bootstrap.css';
 import './FormularioDatosEnvio.css';
-import axios from 'axios';
+// ========= Fin de Imports ============
 
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function FormularioDatosEnvio() {
+	// Redux
 	const currentCart = useSelector(state => state.cart.currentCart);
 	const userId = useSelector(state => state.user.id);
 	const dispatch = useDispatch();
 
+	// React Hooks
 	const [inputValues, setInputValues] = useState({
 		recipient_name: '',
 		recipient_lastname: '',
@@ -22,6 +26,8 @@ export default function FormularioDatosEnvio() {
 		phone_number: 0,
 		shipping_type: ''
 	});
+	const [successMessage, setSuccessMessage] = useState('');
+	const [errorMessage, setErrorMessage] = useState('');
 
 	useEffect(
 		() => {
@@ -40,8 +46,12 @@ export default function FormularioDatosEnvio() {
 	);
 
 	const handleInputChange = event => {
+		if (successMessage) setSuccessMessage('');
+		if (errorMessage) setErrorMessage('');
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
+
+	// ------------- Functionality -------------
 
 	const handleSend = event => {
 		event.preventDefault();
@@ -50,11 +60,9 @@ export default function FormularioDatosEnvio() {
 
 		axios
 			.put(`${urlBack}/orders/${currentCart.id}`, createdOrder)
-			.then(() => {
-				alert('Se realizaron los cambios');
-			})
+			.then(() => setSuccessMessage('Fomulario enviado con éxito'))
 			.then(() => dispatch(allActions.cartActions.postUserCart(userId)))
-			.catch(err => alert(err.response.data));
+			.catch(err => setErrorMessage(err.response.data));
 	};
 
 	return (
@@ -181,6 +189,16 @@ export default function FormularioDatosEnvio() {
 								Aceptar
 							</button>
 						</div>
+						{errorMessage && (
+							<div className="error">
+								{failure} {errorMessage} <br />
+							</div>
+						)}
+						{successMessage && (
+							<div className="success">
+								{success} {successMessage} <br />
+							</div>
+						)}
 					</form>
 				</div>
 			</div>

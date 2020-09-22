@@ -1,28 +1,26 @@
 import React, {useState, useEffect} from 'react';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import 'bootstrap/dist/css/bootstrap.css';
 import './userFormLine.css';
 import axios from 'axios';
-import {deleteButton, editButton} from '../../../../multimedia/SVGs';
+import {deleteButton, editButton, success} from '../../../../multimedia/SVGs';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function UserFormAdmin(props) {
 	//React Hooks
-	const {id, name, email, password, rol} = props.userInfo;
+	const {id, name, email, rol} = props.userInfo;
+	const [stateEdit, setStateEdit] = useState({edit: 'editClose'});
+	const [tooltip, setTooltip] = useState('');
 
 	const [inputValues, setInputValues] = useState({
 		id,
 		name,
 		email,
-		password,
-		rol
+		rol,
+		password: ''
 	});
-
-	const [stateEdit, setStateEdit] = useState({
-		edit: 'editClose'
-	});
-
-	//const [selectedId, setSelectedId] = useState(0);
 
 	// ----------- Funcionalidad ----------
 
@@ -47,7 +45,10 @@ export default function UserFormAdmin(props) {
 
 		axios
 			.put(`${urlBack}/user/${id}`, inputValues)
-			.then(() => alert('Se realizaron los cambios'))
+			.then(() => {
+				setTooltip('Se realizaron los cambios');
+				setTimeout(() => setTooltip(''), 3000);
+			})
 			.catch(err => alert(err.response.data));
 	};
 
@@ -56,10 +57,10 @@ export default function UserFormAdmin(props) {
 
 		axios
 			.delete(`${urlBack}/user/${id}`)
-			.then(response => {
-				alert(response.statusText);
+			.then(() => {
+				setTooltip('Se eliminó el usuario');
+				setTimeout(() => setTooltip(''), 3000);
 			})
-			//Algo para que se actualice
 			.catch(error => alert('No se pudo eliminar el usuario: ' + error.response.data));
 	};
 
@@ -72,19 +73,27 @@ export default function UserFormAdmin(props) {
 				<div className="inputTag" id={email}>
 					{email}
 				</div>
-				<div className="inputTag" id={password}>
-					{password}
-				</div>
 				<div className="inputTag" id={rol}>
 					{rol}
 				</div>
-				<div calssName="userActionContainer">
+				<div className="userActionContainer">
 					<button type="submit" className="editBtn" value="Edit" onClick={clickHandle}>
 						{editButton}
 					</button>
-					<button type="submit" className="deleteBtn" value="Delete" onClick={handleDelete}>
-						{deleteButton}
-					</button>
+
+					<OverlayTrigger
+						show={tooltip === 'Se eliminó el usuario'}
+						overlay={
+							<Tooltip>
+								{success} {tooltip}
+							</Tooltip>
+						}
+					>
+						<button type="submit" className="deleteBtn" value="Delete" onClick={handleDelete}>
+							{deleteButton}
+						</button>
+					</OverlayTrigger>
+
 				</div>
 			</ul>
 			<form className={stateEdit.edit}>
@@ -102,22 +111,23 @@ export default function UserFormAdmin(props) {
 					value={inputValues.email}
 					onChange={handleInputChange}
 				/>
-				<input
-					className="inputTag"
-					type="text"
-					name="password"
-					value={inputValues.password}
-					onChange={handleInputChange}
-				/>
-				{/*<input className="inputTag" type="text" id={rol} value={inputValues.rol} onChange={handleInputChange}></input>*/}
 				<select className="inputTag" defaultValue={rol} onChange={handleSelectChange}>
 					<option value="Usuario">Usuario</option>
 					<option value="Admin">Admin</option>
 				</select>
 				<div calssName="userActionContainer">
-					<button type="submit" className="editBtn" value="Edit" onClick={handleEdit}>
-						Aceptar
-					</button>
+					<OverlayTrigger
+						show={tooltip === 'Se realizaron los cambios'}
+						overlay={
+							<Tooltip>
+								{success} {tooltip}
+							</Tooltip>
+						}
+					>
+						<button type="submit" className="editBtn" value="Edit" onClick={handleEdit}>
+							Aceptar
+						</button>
+					</OverlayTrigger>
 				</div>
 			</form>
 		</div>

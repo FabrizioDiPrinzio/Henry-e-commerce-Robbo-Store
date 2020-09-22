@@ -3,35 +3,30 @@ import UserFormLine from './userFormLine/UserFormLine.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import './userFormAdmin.css';
 import axios from 'axios';
+// ------ Fin de imports -----------
 
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function UserFormAdmin() {
-	// const userList = useSelector(state => state.users)
-	// const dispatch = useDispatch()
-
+	// React Hooks
 	const [userList, setUserList] = useState([]);
 
+	// ----------------- Functionality -------------
 	useEffect(() => {
-		//dispatch(allActions.userActions.LO QUE SEA)
-
 		axios.get(`${urlBack}/user`).then(response => {
 			setUserList(response.data);
-			console.log(response.data);
 		});
 	}, []);
 
-	// const userList = useSelector(state => state.users)
 	return (
 		<div className="userFormAdmin">
 			<h2> Panel de Control de Usuarios </h2>
 			<div className="userTableTitleContainer">
 				<div className="userTableTitle">
-					<h5 class="userTableTitlelabel">Nombre</h5>
-					<h5 class="userTableTitlelabel">Email</h5>
-					<h5 class="userTableTitlelabel">Password</h5>
-					<h5 class="userTableTitlelabel">Rol</h5>
-					<h5 class="userTableTitlelabel">Action</h5>
+					<h4>Nombre</h4>
+					<h4>Email</h4>
+					<h4>Rol</h4>
+					<h4>Action</h4>
 				</div>
 			</div>
 			<div className="userListContainer">

@@ -10,41 +10,57 @@ import axios from 'axios';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Review({robotId}) {
-	const user = useSelector(state => state.user);
-	const [reviews, setReview] = useState([]);
-	const [newReview, setnewReview] = useState('');
+
+// ========================== Redux State ======================== //
+
+	const currentUser = useSelector(state => state.user);
+
+
+// ====================== React Component State ================== //
+	
+	const [reviews, setReviews] = useState([]);
+	const [newReview, setNewReview] = useState('');
 	const [qualification, setQualification] = useState(null);
 	const [errorMessage, setErrorMessage] = useState('');
 
 	useEffect(
 		() => {
 			axios.get(`${urlBack}/products/${robotId}/review`).then(response => {
-				setReview(response.data);
-			});
+				setReviews(response.data); 
+				// response.data tiene la info de la review y una propiedad creator.
+				// creatror es un objeto con las propiedades del usuario que creó la review 
+				});
 		},
 		[robotId]
 	);
+
+// ======================== Utility Functions ====================== //
 
 	function resetQualification() {
 		setQualification();
 	}
 
 	function resetComment() {
-		setnewReview('');
+		setNewReview('');
 	}
+
+
+// ========================== Event Hnadlers ======================= //
 
 	const handleQualification = event => {
 		if (errorMessage) setErrorMessage('');
+
 		const star = parseInt(event.target.value);
 		setQualification(star);
 	};
 
 	const handleAdd = event => {
 		event.preventDefault();
+		
 		const addReview = {
 			comment: newReview,
 			qualification: qualification,
-			creatorId: user.id
+			creatorId: currentUser.id
 		};
 		axios
 			.post(`${urlBack}/products/${robotId}/review`, addReview)
@@ -52,7 +68,7 @@ export default function Review({robotId}) {
 				console.log('La review se ha agregado correctamente');
 				console.log(response.data);
 				const current = [...reviews, response.data];
-				setReview(current);
+				setReviews(current);
 				resetComment();
 				resetQualification();
 			})
@@ -60,7 +76,6 @@ export default function Review({robotId}) {
 	};
 
 	return (
-
     <div className="review">
         <form className="">
         	<div className='reviewsHeader'>
@@ -89,7 +104,7 @@ export default function Review({robotId}) {
 			placeholder="Agregue su comentario"
 			onChange={e => {
 				if (errorMessage) setErrorMessage('');
-				setnewReview(e.target.value);
+				setNewReview(e.target.value);
 			}}/>
 
 			<button onClick={handleAdd} className="reviewSubmitBtn">

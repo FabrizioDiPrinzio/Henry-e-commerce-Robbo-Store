@@ -20,6 +20,7 @@ export default function Producto() {
 
 	const currentUser = useSelector(state => state.user);
 	const currentCart = useSelector(state => state.cart.currentCart);
+	const productStore = useSelector(state => state.products);
 	const dispatch = useDispatch();
 
 
@@ -43,9 +44,8 @@ export default function Producto() {
 				alert(err);
 			})
 		},
-		[id]
+		[ id, productStore ]
 	);
-
 
 
 	// ===================== Utility Functions ====================== //
@@ -191,8 +191,8 @@ export default function Producto() {
 			{currentUser.rol === 'Admin' && (
 				<Modal 
 				show={showModal}
-				onHide={() => setShowModal(!showModal)}
-				size="lg"
+				onHide={() => {setShowModal(!showModal)}}
+				size="xl"
 				aria-labelledby="contained-modal-title-vcenter"
 				centered
 				>

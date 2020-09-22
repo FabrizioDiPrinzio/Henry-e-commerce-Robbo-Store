@@ -12,6 +12,7 @@
 
 .productContainer {
   max-width: 800px;
+  min-width: 300px;
   margin: auto;
   margin-top: 80px;
   display: flex;
@@ -56,9 +57,7 @@
 }
 
 
-
-
-/* ===============  Product Info ==================== */
+/* ===================  Product Info ==================== */
 
 .infoCard {
 /*  background-color: var(--glaucous);*/
@@ -76,10 +75,10 @@
   background-color: var(--glaucous);
   margin-top: 25px;
   margin-bottom: 25px;
-  padding: 7px;
+  padding: 12px;
   padding-right: 9px;
   padding-left: 9px;
-  border-radius: 15px;
+  border-radius: 22px;
   box-shadow: 0 0 15px 0px rgba(0,0,0,0.45);
 
 }
@@ -117,6 +116,27 @@
   font-size: 1.2em;
 }
 
+/* ================  Buy Button  =================== */
+
+.bigBuyButton {
+  transition: 0.15s;
+  background-color: var(--razzmatazz);
+  width: 100%;
+  border: none;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  border-radius: 22px;
+  box-shadow: 0 0 15px 0px rgba(0,0,0,0.45);
+  color: white;
+  padding-top: 5px;
+}
+
+.bigBuyButton:hover {
+  text-shadow: 0 0 7px white;
+  box-shadow: 0 0 33px 0 rgba(0,0,0,0.66)
+}
+
+
 /* ===================  Review  ===================== */
 
 .reviewContainer {
@@ -124,8 +144,9 @@
   margin-top: 25px;
   margin-bottom: 25px;
   padding: 7px;
+  padding-top: 15px;
   padding-right: 9px;
   padding-left: 9px;
-  border-radius: 15px;
+  border-radius: 22px;
   box-shadow: 0 0 15px 0px rgba(0,0,0,0.45);
 }

@@ -119,6 +119,10 @@ export default function Producto() {
 						</div>
 					</div>
 
+					<button className='bigBuyButton'>
+						<h4>¡ Agregar al Carrito !</h4>
+					</button>
+
 					<div className='reviewContainer'>
 						<Review robotId={robot.id}/>
 					</div>			

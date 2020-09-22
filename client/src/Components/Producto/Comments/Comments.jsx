@@ -38,7 +38,7 @@ export default function Comment({info}) {
 
 		setStateEdit({
 			...stateEditar,
-			edit: stateEditar.edit === 'editClose' ? 'editOpen' : 'editClose'
+			edit: stateEditar.edit === 'editClose' ? 'commentEditOpen' : 'editClose'
 		});
 	};
 
@@ -80,34 +80,41 @@ export default function Comment({info}) {
 	const stars = showStars(`${qualification}`);
 
     return(
-      <div>
-        <div className="Comment">
-          <div >
-            <div>Calificación: {stars.map( i => i)}</div>
-          </div>
-          <div>Usuario: {`${creatorId}`} </div>
-          <div>
-            <div>Fecha: {date}</div>
-            <div>Comentario: {`${comentario}`}</div>
-            </div>
+    	<div className="comment">
+    		<div className='commentHeader'>
+
+				<div className='userNameContainer'>
+
+					Comentario de: {`${creatorId}`}
+
+					{ creatorId === currentUser.id &&
+            		<div class="btnCont">
+            		  <button onClick={clickHandle} className="comment-editBtn">
+            		   {editButton} 
+            		  </button>
+            		  <button  value={`${info.id}`} onClick={handleDelete} className="comment-deleteBtn">
+            		    {trashCan} 
+            		  </button>
+            		</div>
+            		}
+				</div>
+
+				<div>
+					| {stars.map( i => i)}
+          		</div>
+				<div className='commentDate'>{date}</div>
+			</div>
+			<hr />
+			<div>
+				{`${comentario}`}
+			</div>
+
 
             { creatorId === currentUser.id &&
-            <div class="btnCont">
-              <button onClick={clickHandle} className="comment-editBtn">
-               {editButton} 
-              </button>
-              <button  value={`${info.id}`} onClick={handleDelete} className="deleteBtn comment-editBtn">
-                {trashCan} 
-              </button>
-            </div>
-            }
 
-          </div>
-
-            { creatorId === currentUser.id &&
             <div className={stateEditar.edit}>
               <textarea
-              className="texto"
+              className="commentTextArea"
               readonly
               col="30"
               name="review"
@@ -119,8 +126,8 @@ export default function Comment({info}) {
 						setEditedComment(e.target.value);
 			  }}
               />
-              <button type="submit" className="addEdit comment-addEdit" value="Edit" onClick={handleEdit}>
-				Aceptar
+              <button type="submit" className="reviewSubmitBtn" value="Edit" onClick={handleEdit}>
+				Editar Comentario
 			  </button>
 			  {errorMessage && (
 			  	<div className="error">
@@ -135,6 +142,6 @@ export default function Comment({info}) {
             </div>
             }
 
-        </div>
+    	</div>
     )
 }

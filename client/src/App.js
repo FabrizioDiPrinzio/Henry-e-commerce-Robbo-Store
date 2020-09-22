@@ -60,24 +60,7 @@ function App() {
 		dispatch(allActions.productActions.getAllProducts());
 	}, []);
 
-	// // Añade el carrito de guest al de usuario cuando se loguea
-	// useEffect(
-	// 	() => {
-	// 		// Modifica el carrito del usuario ---> [for await... of] para iterar acciones asíncronas en un array.
-	// 		async () => {
-	// 			for await (const order of orderlines) {
-	// 				axios
-	// 					.put(`${urlBack}/user/${user.id}/cart`, order)
-	// 					.catch(error => console.log(error));
-	// 			}
-
-	// 			dispatch(allActions.cartActions.getUserCart(user.id));
-	// 		};
-	// 	},
-	// 	[user]
-	// );
-
-	// Loguea al usuario con las cookies.
+	// Loguea al usuario con las cookies y le añade el carrito de guest
 	useEffect(
 		() => {
 			const addGuestCart = async () => {
@@ -93,7 +76,7 @@ function App() {
 					dispatch(allActions.userActions.login(usuario.data));
 					dispatch(allActions.cartActions.getUserCart(usuario.data.id));
 				} catch (error) {
-					console.log(error);
+					console.log(error.response.data); // Se queda con el carrito del guest
 				}
 			};
 

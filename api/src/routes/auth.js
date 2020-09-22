@@ -18,7 +18,7 @@ router.get(
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
 	console.log('reached redirect');
-	res.send('Llegaste al redirect!!!');
+	res.redirect('http://localhost:3000');
 });
 
 router.post('/logout', (req, res) => {

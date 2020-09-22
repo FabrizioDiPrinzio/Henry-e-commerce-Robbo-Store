@@ -42,16 +42,6 @@ export default function LoginForm() {
 		setInputValues({...inputValues, [event.target.name]: event.target.value});
 	};
 
-	const handleGoogle = () => {
-		axios
-			.get(`${urlBack}/auth/google`)
-			.then(success => {
-				setGoogle(success.data);
-				setRedirect(true);
-			})
-			.catch(err => console.log(err.message));
-	};
-
 	const handleLogin = async event => {
 		event.preventDefault();
 
@@ -81,9 +71,7 @@ export default function LoginForm() {
 
 	return (
 		<form className="form" onSubmit={handleLogin} ref={formulario}>
-			<a href="#" onClick={handleGoogle}>
-				{googleIcon} Inicia sesión con Google
-			</a>
+			<a href={`${urlBack}/auth/google`}>{googleIcon} Inicia sesión con Google</a>
 			{redirect && <Redirect to={`${google}`} />}
 			<h3 className="titulo">Iniciar sesión</h3>
 			<br />

@@ -3,11 +3,11 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export const getAllProducts = () => dispatch => {
+export const getAllProducts = (pag) => dispatch => {
 	axios
-		.get(`${urlBack}/products`)
+		.get(`${urlBack}/products/pag/?p=&{pag}`)
 		.then(res => {
-			const products = res.data;
+			const products = res.data.data;
 
 			dispatch({type: actionTypes.GET_ALL_PRODUCTS, payload: products});
 
@@ -24,7 +24,7 @@ export const getAllProducts = () => dispatch => {
 
 export const postProduct = (product, categories) => dispatch => {
 	axios
-		.post(`${urlBack}/products`, product)
+		.post(`${urlBack}/products/`, product)
 		.then(res => {
 			dispatch({type: actionTypes.POST_PRODUCT, payload: res.data});
 

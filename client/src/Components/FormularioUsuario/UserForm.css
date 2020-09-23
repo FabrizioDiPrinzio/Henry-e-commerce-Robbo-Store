@@ -6,6 +6,9 @@
 	--razzmatazz: #d53467ff;
 	--success: rgb(45, 177, 5);
 	--error: rgb(197, 0, 0);
+	--google: rgb(105, 105, 105);
+	--github: #333333;
+	--facebook: #4066b1;
 }
 
 .formContainer {
@@ -20,6 +23,54 @@
 	margin: 0px;
 }
 
+#googleBtn {
+	background: white;
+	border-radius: 4px;
+	border: 1px solid var(--google);
+	color: var(--google);
+	margin: 10px 5px 0 10px;
+	justify-content: center;
+	align-items: center;
+	padding-left: 7%;
+	padding-right: 2%;
+	width: 66%;
+	height: 33px;
+}
+
+#githubBtn {
+	color: white;
+	background: var(--github);
+	border-radius: 4px;
+	border: 1px solid var(--github);
+	margin: 10px 5px 0 10px;
+	justify-content: center;
+	align-items: center;
+	padding-left: 7%;
+	padding-right: 3%;
+	width: 66%;
+	height: 33px;
+}
+
+#facebookBtn {
+	color: white;
+	background: var(--facebook);
+	border-radius: 4px;
+	border: 1px solid var(--facebook);
+	margin: 10px 5px 0 10px;
+	justify-content: center;
+	align-items: center;
+	padding-left: 7%;
+	padding-right: 3%;
+	width: 66%;
+	height: 33px;
+}
+
+.button-wrapper {
+	position: relative;
+	display: flex;
+	width: 350px;
+}
+
 .password-wrapper {
 	position: relative;
 	display: flex;
@@ -27,13 +78,19 @@
 	width: 350px;
 }
 
-i {
+.oauth-logo {
+	position: absolute;
+	top: 30%;
+	left: 4.5%;
+}
+
+.eye {
 	position: absolute;
 	top: 15%;
 	right: 3%;
 }
 
-i:hover {
+.eye:hover {
 	color: var(--razzmatazz);
 	cursor: pointer;
 }

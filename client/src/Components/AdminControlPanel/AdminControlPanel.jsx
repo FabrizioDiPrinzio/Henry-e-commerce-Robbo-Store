@@ -11,14 +11,14 @@ export default function controlPanel() {
 		<div className="controlPanel">
 			<div className="centerColumn">
 				<Link to="/product_form">
-					<h3>Product Form</h3>
+					<h3>Formulario de Productos</h3>
 				</Link>
 				<Link to="/category_form">
-					<h3>Category Form</h3>
+					<h3>Formulario de Categorías</h3>
 				</Link>
-				<h1> Control Panel </h1>
+				<h1>Panel de Control</h1>
 				<UserFormAdmin />
-				<h1> Purchase Order Panel </h1>
+				<h2>Ordenes de Compra</h2>
 				<PurchaseOrderForm />
 			</div>
 		</div>

@@ -9,6 +9,7 @@ const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 // ============= Fin de imports ==============
 
 const {User} = require('./db.js');
@@ -17,7 +18,9 @@ const {
 	googleClientID,
 	googleClientSecret,
 	githubClientID,
-	githubClientSecret
+	githubClientSecret,
+	facebookClientID,
+	facebookClientSecret
 } = process.env;
 
 const server = express();
@@ -93,7 +96,6 @@ passport.use(
 			callbackURL: '/auth/github/redirect'
 		},
 		async (accessToken, refreshToken, profile, done) => {
-			console.log(profile);
 			try {
 				const [user, created] = await User.findOrCreate({
 					where: {githubId: profile.id},
@@ -101,6 +103,34 @@ passport.use(
 						name: profile.displayName,
 						email: profile.emails ? profile.emails[0].value : null
 					}
+				});
+
+				// On error
+				if (!user) return done(null, false, {message: 'No pudimos loguearte con esa cuenta'});
+
+				// On success
+				return done(null, user);
+			} catch (error) {
+				done(error);
+			}
+		}
+	)
+);
+
+passport.use(
+	new FacebookStrategy(
+		{
+			clientID: facebookClientID,
+			clientSecret: facebookClientSecret,
+			callbackURL: '/auth/facebook/redirect',
+			profileFields: ['id', 'emails', 'displayName']
+		},
+		async (accessToken, refreshToken, profile, done) => {
+			console.log('Facebook profile: ', profile);
+			try {
+				const [user, created] = await User.findOrCreate({
+					where: {facebookId: profile.id},
+					defaults: {name: profile.displayName, email: profile.emails[0].value}
 				});
 
 				// On error

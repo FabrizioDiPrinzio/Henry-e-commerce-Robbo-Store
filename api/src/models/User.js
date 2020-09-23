@@ -46,6 +46,10 @@ module.exports = sequelize => {
 				type: DataTypes.STRING
 			},
 
+			facebookId: {
+				type: DataTypes.STRING
+			},
+
 			password: {
 				type: DataTypes.STRING,
 				get() {
@@ -67,10 +71,11 @@ module.exports = sequelize => {
 		{
 			validate: {
 				OAuthOrPassword() {
-					if (!this.googleId && !this.githubId && !this.password) {
+					if (!this.googleId && !this.githubId && !this.facebookId && !this.password) {
 						throw new Error('Si no iniciaste sesión con un tercero debes incluir una contraseña'); // prettier-ignore
 					}
 				},
+
 				githubOrEmail() {
 					if (!this.email && !this.githubId) {
 						throw new Error('Debes proveer un email si no te autenticaste con Github');

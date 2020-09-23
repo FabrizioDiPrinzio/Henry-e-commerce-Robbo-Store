@@ -8,6 +8,7 @@
 	--error: rgb(197, 0, 0);
 	--google: rgb(105, 105, 105);
 	--github: #333333;
+	--facebook: #4066b1;
 }
 
 .formContainer {
@@ -32,6 +33,8 @@
 	align-items: center;
 	padding-left: 7%;
 	padding-right: 2%;
+	width: 66%;
+	height: 33px;
 }
 
 #githubBtn {
@@ -44,6 +47,22 @@
 	align-items: center;
 	padding-left: 7%;
 	padding-right: 3%;
+	width: 66%;
+	height: 33px;
+}
+
+#facebookBtn {
+	color: white;
+	background: var(--facebook);
+	border-radius: 4px;
+	border: 1px solid var(--facebook);
+	margin: 10px 5px 0 10px;
+	justify-content: center;
+	align-items: center;
+	padding-left: 7%;
+	padding-right: 3%;
+	width: 66%;
+	height: 33px;
 }
 
 .button-wrapper {
@@ -61,8 +80,8 @@
 
 .oauth-logo {
 	position: absolute;
-	top: 24%;
-	left: 4%;
+	top: 30%;
+	left: 4.5%;
 }
 
 .eye {

@@ -22,6 +22,14 @@ router.get(
 	passport.authenticate('github', {successRedirect: 'http://localhost:3000/oauth/success'})
 );
 
+// Facebook login
+router.get('/facebook', passport.authenticate('facebook', {scope: ['email'], display: 'popup'}));
+
+router.get(
+	'/facebook/redirect',
+	passport.authenticate('facebook', {successRedirect: 'http://localhost:3000/oauth/success'})
+);
+
 // Local login
 router.post('/login', passport.authenticate('local'), (req, res) => {
 	res.send(req.user);

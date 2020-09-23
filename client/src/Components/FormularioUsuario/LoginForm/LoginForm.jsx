@@ -10,7 +10,8 @@ import {
 	success,
 	failure,
 	googleIcon,
-	githubIcon
+	githubIcon,
+	facebookIcon
 } from '../../../multimedia/SVGs';
 //------ Fin de imports -----
 
@@ -138,6 +139,11 @@ export default function LoginForm() {
 			<div className="button-wrapper">
 				<button value="github" id="githubBtn" onClick={popup}>
 					<i className="oauth-logo">{githubIcon}</i> Inicia sesión con Github
+				</button>
+			</div>
+			<div className="button-wrapper">
+				<button value="facebook" id="facebookBtn" onClick={popup}>
+					<i className="oauth-logo">{facebookIcon}</i> Inicia sesión con Facebook
 				</button>
 			</div>
 			<br />

@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {allActions} from '../../Redux/Actions/actions';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Table} from 'react-bootstrap';
 import {success, failure} from '../../multimedia/SVGs';
 import './ProductForm.css';
@@ -8,13 +7,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
 //------ Fin de imports -----
 
-const {productActions} = allActions;
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductFormFunction({preSelected}) {
 	// Redux
 	const categories = useSelector(state => state.categories.allCategories);
-	const dispatch = useDispatch();
 
 	// React Hooks
 	const [inputValues, setInputValues] = useState({
@@ -53,11 +50,6 @@ export default function ProductFormFunction({preSelected}) {
 			c.modified = false;
 			return c;
 		});
-	}
-
-	function resetImg() {
-		lista.current.value = 0;
-		setnewImage('');
 	}
 
 	function resetImages() {
@@ -172,7 +164,7 @@ export default function ProductFormFunction({preSelected}) {
 	const handleAddImg = event => {
 		event.preventDefault();
 		images.push(newImage);
-		resetImg();
+		setnewImage('');
 	};
 
 	const handleDeleteImg = event => {
@@ -230,14 +222,30 @@ export default function ProductFormFunction({preSelected}) {
 	};
 
 	// Edits the selected product
-	const handleEdit = event => {
+	const handleEdit = async event => {
 		event.preventDefault();
 
 		const changedState = {...inputValues, image: images};
 
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
-		dispatch(productActions.putProduct(selected, changedState, modifiedCategories));
+		try {
+			const changedProduct = await axios.put(`${urlBack}/products/${selected}`, changedState);
+
+			for await (const cat of modifiedCategories) {
+				if (cat.add)
+					axios.post(`${urlBack}/products/${changedProduct.data.id}/category/${cat.id}`);
+				if (!cat.add)
+					axios.delete(`${urlBack}/products/${changedProduct.data.id}/category/${cat.id}`);
+			}
+
+			setSuccessMessage('El producto fue editado existosamente');
+			resetFields();
+			resetImages();
+			setUpdate(!update);
+		} catch (error) {
+			setErrorMessage(error.response.data);
+		}
 	};
 
 	return (

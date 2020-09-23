@@ -1,10 +1,17 @@
 import React, {useState, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from '../../../Redux/Actions/actions';
-import {openEye, closedEye, success, failure, googleIcon} from '../../../multimedia/SVGs';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../UserForm.css';
 import axios from 'axios';
+import {
+	openEye,
+	closedEye,
+	success,
+	failure,
+	googleIcon,
+	githubIcon
+} from '../../../multimedia/SVGs';
 //------ Fin de imports -----
 
 const urlBack = process.env.REACT_APP_API_URL;
@@ -125,9 +132,15 @@ export default function LoginForm() {
 
 			<div className="button-wrapper">
 				<button value="google" id="googleBtn" onClick={popup}>
-					<i className="logo">{googleIcon}</i> Inicia sesión con Google
+					<i className="oauth-logo">{googleIcon}</i> Inicia sesión con Google
 				</button>
 			</div>
+			<div className="button-wrapper">
+				<button value="github" id="githubBtn" onClick={popup}>
+					<i className="oauth-logo">{githubIcon}</i> Inicia sesión con Github
+				</button>
+			</div>
+			<br />
 		</form>
 	);
 }

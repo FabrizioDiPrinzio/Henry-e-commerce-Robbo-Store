@@ -32,7 +32,6 @@ module.exports = sequelize => {
 
 			email: {
 				type: DataTypes.STRING,
-				allowNull: false,
 				unique: true,
 				validate: {
 					isEmail: true
@@ -40,6 +39,10 @@ module.exports = sequelize => {
 			},
 
 			googleId: {
+				type: DataTypes.STRING
+			},
+
+			githubId: {
 				type: DataTypes.STRING
 			},
 
@@ -63,9 +66,14 @@ module.exports = sequelize => {
 		},
 		{
 			validate: {
-				signInWithThirdPartiesOrCreateNewAccount() {
-					if (!this.googleId && !this.password) {
+				OAuthOrPassword() {
+					if (!this.googleId && !this.githubId && !this.password) {
 						throw new Error('Si no iniciaste sesión con un tercero debes incluir una contraseña'); // prettier-ignore
+					}
+				},
+				githubOrEmail() {
+					if (!this.email && !this.githubId) {
+						throw new Error('Debes proveer un email si no te autenticaste con Github');
 					}
 				}
 			}

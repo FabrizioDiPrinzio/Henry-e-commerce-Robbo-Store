@@ -8,10 +8,17 @@ const passport = require('passport');
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GitHubStrategy = require('passport-github2').Strategy;
 // ============= Fin de imports ==============
 
 const {User} = require('./db.js');
-const {passportSecret, googleClientID, googleClientSecret} = process.env;
+const {
+	passportSecret,
+	googleClientID,
+	googleClientSecret,
+	githubClientID,
+	githubClientSecret
+} = process.env;
 
 const server = express();
 
@@ -66,6 +73,36 @@ passport.use(
 					where: {googleId: profile.id},
 					defaults: {name: profile.displayName, email: profile.emails[0].value}
 				});
+				// On error
+				if (!user) return done(null, false, {message: 'No pudimos loguearte con esa cuenta'});
+
+				// On success
+				return done(null, user);
+			} catch (error) {
+				done(error);
+			}
+		}
+	)
+);
+
+passport.use(
+	new GitHubStrategy(
+		{
+			clientID: githubClientID,
+			clientSecret: githubClientSecret,
+			callbackURL: '/auth/github/redirect'
+		},
+		async (accessToken, refreshToken, profile, done) => {
+			console.log(profile);
+			try {
+				const [user, created] = await User.findOrCreate({
+					where: {githubId: profile.id},
+					defaults: {
+						name: profile.displayName,
+						email: profile.emails ? profile.emails[0].value : null
+					}
+				});
+
 				// On error
 				if (!user) return done(null, false, {message: 'No pudimos loguearte con esa cuenta'});
 

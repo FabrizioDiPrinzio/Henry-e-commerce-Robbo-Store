@@ -5,7 +5,7 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 export const getAllProducts = (pag) => dispatch => {
 	axios
-		.get(`${urlBack}/products/pag/?p=&{pag}`)
+		.get(`${urlBack}/products/pag/?p=${pag}`)
 		.then(res => {
 			const products = res.data.data;
 

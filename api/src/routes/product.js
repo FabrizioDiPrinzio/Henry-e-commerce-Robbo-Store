@@ -16,8 +16,8 @@ router.get('/', (req, res, next) => {
 
 router.get('/pag/', (req, res, next) => {
 	const {p} = req.query;
-	const firstIndex = ( p - 1 ) * 7;
-	const lastIndex = firstIndex + 7;
+	const firstIndex = ( p - 1 ) * 2;
+	const lastIndex = firstIndex + 2;
 	Product.findAll({include: [Categories, Pics]})
 		.then(data => {
 			const result = {

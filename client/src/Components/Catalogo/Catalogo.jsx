@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
+import {allActions} from '../../Redux/Actions/actions.js';
 import ProductCard from '../Product Card/ProductCard.jsx';
 import axios from 'axios';
 import './Catalogo.css';
@@ -12,13 +13,30 @@ export default function Catalogo(props) {
 
 	// React hooks
 	const [robots, setRobots] = useState([]);
+	const [pag, setPag] = useState(1)
+	const [loadingPage, setLoadingPage] = useState(false)
 	const {categoria} = useParams();
 	const params = new URLSearchParams(props.location.search).get('query');
+	const dispatch = useDispatch()
+
+	const handleCargarMas = event => {
+		event.preventDefault();
+		if (!loadingPage){
+				setLoadingPage(true)
+				let lastPage = pag;
+				console.log('me acabo de ejecutar!!!!!!!!!')
+				let nextPage = pag + 1;
+				dispatch(allActions.productActions.getAllProducts(nextPage))
+			} else {
+				console.log('ya esta cargando!!!!!!!!!!!!!!!!')
+			}
+	}
 
 	useEffect(
 		() => {
 			// Main page, returns ALL products
-			if (!categoria && !params) setRobots(products);
+			let prevPages = robots;
+			if (!categoria && !params) setRobots(prevPages.concat(products));
 		},
 		[products]
 	);
@@ -58,6 +76,7 @@ export default function Catalogo(props) {
 							<ProductCard robot={bot} />
 						</li>
 					))}
+			<button onClick={handleCargarMas} > Cargar más </button>
 			</ul>
 			{!robots && params && <h1>No contamos con ningún robot de ese tipo :(</h1>}
 		</div>

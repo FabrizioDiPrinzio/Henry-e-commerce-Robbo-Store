@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export const getAllProducts = (pag) => dispatch => {
+export const getAllProducts = (pag=1) => dispatch => {
 	axios
 		.get(`${urlBack}/products/pag/?p=${pag}`)
 		.then(res => {
@@ -86,3 +86,7 @@ export const catchError = err => dispatch => {
 	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.response.data});
 	dispatch({type: actionTypes.CLEAN_MESSAGES});
 };
+
+export const cleanProduct = () => dispatch => {
+	dispatch({type: actionTypes.CLEAN_PRODUCTS});
+}

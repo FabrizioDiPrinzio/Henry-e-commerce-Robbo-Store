@@ -56,7 +56,6 @@ function App() {
 
 		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());
-		dispatch(allActions.productActions.getAllProducts(1));
 	}, []);
 
 	// Loguea al usuario con las cookies.

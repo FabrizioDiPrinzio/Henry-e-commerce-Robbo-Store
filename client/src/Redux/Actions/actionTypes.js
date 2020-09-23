@@ -34,6 +34,8 @@ export const REMOVED_CATEGORY = 'REMOVED_CATEGORY';
 
 export const PRODUCTS_ERROR = 'PRODUCTS_ERROR';
 
+export const CLEAN_PRODUCTS = 'CLEAN_PRODUCTS';
+
 // ------------------ Cart Actions -------------------
 
 export const GET_USER_CART = 'GET_USER_CART';

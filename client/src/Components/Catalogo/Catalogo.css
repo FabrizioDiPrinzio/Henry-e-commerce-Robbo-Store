@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow&display=swap');
+
+:root {
+	--max-width: 700px;
+	--beau-blue: #d2e3f9ff;
+	--baby-blue-eyes: #98b7f0ff;
+	--glaucous: #617cc7ff;
+	--ksu-purple: #563488ff;
+	--razzmatazz: #d53467ff;
+}
+
 .catalogo {
 	align-items: center;
 	text-align: center;
@@ -21,4 +32,17 @@
 	margin: 0px;
 	margin-top: 10px;
 	margin-bottom: 10px;
+}
+
+.cargarMas {
+	padding: 5px 10px 5px 10px;
+	width: 50%;
+	max-width: 300px;
+	margin: auto;
+	border: none;
+	color: white;
+	font-family: 'Tomorrow', sans-serif;
+	background-color: var(--glaucous);
+	border-radius: 10px;
+	box-shadow: 5px 0 5px 0 rgba(30,30,30,0.2)
 }

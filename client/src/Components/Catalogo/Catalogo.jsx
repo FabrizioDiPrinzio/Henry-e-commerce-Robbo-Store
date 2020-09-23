@@ -9,11 +9,11 @@ import './Catalogo.css';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Catalogo(props) {
-	const products = useSelector(state => state.products.allProducts);
-
+	let products = useSelector(state => state.products.allProducts);
+	let actualPage = useSelector(state => state.products.actualPage)
 	// React hooks
 	const [robots, setRobots] = useState([]);
-	const [pag, setPag] = useState(1)
+	const [pag, setPag] = useState(actualPage)
 	const [loadingPage, setLoadingPage] = useState(false)
 	const {categoria} = useParams();
 	const params = new URLSearchParams(props.location.search).get('query');
@@ -24,12 +24,10 @@ export default function Catalogo(props) {
 		if (!loadingPage){
 				setLoadingPage(true)
 				let lastPage = pag;
-				console.log('me acabo de ejecutar!!!!!!!!!')
 				let nextPage = pag + 1;
+				setPag(pag + 1)
 				dispatch(allActions.productActions.getAllProducts(nextPage))
-			} else {
-				console.log('ya esta cargando!!!!!!!!!!!!!!!!')
-			}
+			} 
 	}
 
 	useEffect(
@@ -37,6 +35,7 @@ export default function Catalogo(props) {
 			// Main page, returns ALL products
 			let prevPages = robots;
 			if (!categoria && !params) setRobots(prevPages.concat(products));
+			setLoadingPage(false);
 		},
 		[products]
 	);
@@ -76,7 +75,8 @@ export default function Catalogo(props) {
 							<ProductCard robot={bot} />
 						</li>
 					))}
-			<button onClick={handleCargarMas} > Cargar más </button>
+			<button className="cargarMas" onClick={handleCargarMas} > Cargar más productos </button>
+			<li> Mostrando {robots.length} items </li>
 			</ul>
 			{!robots && params && <h1>No contamos con ningún robot de ese tipo :(</h1>}
 		</div>

@@ -20,12 +20,20 @@ router.get('/pag/', (req, res, next) => {
 	const lastIndex = firstIndex + 2;
 	Product.findAll({include: [Categories, Pics]})
 		.then(data => {
+			const productos = data.slice(firstIndex,lastIndex);
 			const result = {
-				prevPage: parseInt(p) < 2 ? null : parseInt(p) - 1,
-				currentPage: parseInt(p),
-				nextPage: parseInt(p) + 1,
+					prevPage: parseInt(p) < 2 ? null : parseInt(p) - 1,
+					currentPage: parseInt(p),
+					nextPage: parseInt(p) + 1,
 			}
-			result.data = data.splice(firstIndex,lastIndex)
+			result.data = productos
+			if (result.data.length < 1) {
+				result = {
+					prevPage: result.prevPage - 1,
+					currentPage: result.currentPage - 1 ,
+					nextPage: result.nextPage - 1 
+				}
+			}
 			res.send(result);
 		})
 });

@@ -23,7 +23,7 @@ app.use('/orders', purchase_orders);
 app.use('/auth', auth);
 
 app.get('/', (req, res) => {
-	res.send('Hola');
+	res.send('Estas en index, no en redirect');
 });
 
 app.get('/search', (req, res) => {

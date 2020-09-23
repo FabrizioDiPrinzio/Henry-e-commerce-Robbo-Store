@@ -3,6 +3,34 @@ const router = express.Router();
 const passport = require('passport');
 const {User} = require('../db');
 
+// Google login
+router.get(
+	'/google',
+	passport.authenticate('google', {scope: ['profile', 'email'], display: 'popup'})
+);
+
+router.get(
+	'/google/redirect',
+	passport.authenticate('google', {successRedirect: 'http://localhost:3000/oauth/success'})
+);
+
+// Github login
+router.get('/github', passport.authenticate('github', {scope: ['user:email'], display: 'popup'}));
+
+router.get(
+	'/github/redirect',
+	passport.authenticate('github', {successRedirect: 'http://localhost:3000/oauth/success'})
+);
+
+// Facebook login
+router.get('/facebook', passport.authenticate('facebook', {scope: ['email'], display: 'popup'}));
+
+router.get(
+	'/facebook/redirect',
+	passport.authenticate('facebook', {successRedirect: 'http://localhost:3000/oauth/success'})
+);
+
+// Local login
 router.post('/login', passport.authenticate('local'), (req, res) => {
 	res.send(req.user);
 });

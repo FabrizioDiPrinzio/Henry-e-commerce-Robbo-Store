@@ -9,62 +9,89 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export default function Review({robotId}) {
-	const user = useSelector(state => state.user);
-	const [reviews, setReview] = useState([]);
-	const [newReview, setnewReview] = useState('');
+export default function Review({robotId, superReload}) {
+
+// ========================== Redux State ======================== //
+
+	const currentUser = useSelector(state => state.user);
+
+
+// ====================== React Component State ================== //
+
+	const [reviews, setReviews] = useState([]);
+	const [newReview, setNewReview] = useState('');
 	const [qualification, setQualification] = useState(null);
 	const [errorMessage, setErrorMessage] = useState('');
+	
+	const [reloadData, setReloadData] = useState(false)
 
 	useEffect(
 		() => {
-			axios.get(`${urlBack}/products/${robotId}/review`).then(response => {
-				setReview(response.data);
-			});
+			axios.get(`${urlBack}/products/${robotId}/review`)
+			.then(response => {
+			setReviews(response.data);
+			// response.data tiene la info de la review y una propiedad creator.
+			// creatror es un objeto con las propiedades del usuario que creó la review 
+			}).catch(err => {
+				alert('hubo un error al cargar la review');
+				console.log(err);
+			})
+
 		},
-		[robotId]
+		[reloadData]
 	);
+
+// ======================== Utility Functions ====================== //
 
 	function resetQualification() {
 		setQualification();
 	}
 
 	function resetComment() {
-		setnewReview('');
+		setNewReview('');
 	}
+
+	function superMegaReload() {
+		superReload();
+		setReloadData(!reloadData)
+
+	}
+
+
+// ========================== Event Hnadlers ======================= //
 
 	const handleQualification = event => {
 		if (errorMessage) setErrorMessage('');
+
 		const star = parseInt(event.target.value);
 		setQualification(star);
 	};
 
 	const handleAdd = event => {
 		event.preventDefault();
+		
 		const addReview = {
 			comment: newReview,
 			qualification: qualification,
-			creatorId: user.id
+			creatorId: currentUser.id
 		};
+
 		axios
 			.post(`${urlBack}/products/${robotId}/review`, addReview)
 			.then(response => {
 				console.log('La review se ha agregado correctamente');
-				console.log(response.data);
-				const current = [...reviews, response.data];
-				setReview(current);
 				resetComment();
 				resetQualification();
+				superMegaReload();
 			})
 			.catch(error => setErrorMessage('No se pudo crear la review: ' + error.response.data));
 	};
 
 	return (
-
-    <div className="Review">
-        <h5>Agregar Comentario</h5>
-        <form className="Reviews">
-            <div className="cont">
+    <div className="review">
+        <form className="">
+        	<div className='reviewsHeader'>
+        		<h4 className='reviewTitle'>Agrega un Comentario: </h4>
                 <div className="stars">
                     <div>
                         <input className="star star-1" id="star-1" value="5" type="radio" name="star" onClick={handleQualification}/>
@@ -78,35 +105,38 @@ export default function Review({robotId}) {
                         <input className="star star-5" id="star-5"  value="1" type="radio" name="star" onClick={handleQualification} />
                         <label className="star star-5" for="star-5"></label>
                     </div>
-                    <div className="rev-box">
-                        <textarea
-                        className="Texto"
-                        col="30"
-                        name="review"
-                        value={newReview}
-                        placeholder="Agregue su comentario"
-                        onChange={e => {
-									if (errorMessage) setErrorMessage('');
-									setnewReview(e.target.value);
-								}}/>
-                    </div>
-                    <button onClick={handleAdd} className="submitBtn">
-                        Agregar
-                    </button>
-                </div>
-            </div>
-            <div className="datos">
-            {reviews.map(review =>
-            <Comments info={review}/>
-            )}
-            </div>
-            {errorMessage && (
-				<div className="error">
-					{failure} {errorMessage} <br />
 				</div>
-			)}
+			</div>
+
+			<textarea
+			className="reviewTextarea"
+			col="30"
+			name="review"
+			value={newReview}
+			placeholder="Agregue su comentario"
+			onChange={e => {
+				e.preventDefault();
+				if (errorMessage) setErrorMessage('');
+				setNewReview(e.target.value);
+			}}/>
+
+			<button onClick={handleAdd} className="reviewSubmitBtn">
+			    Agregar
+			</button>
+			<hr />
         </form>
+
+		<div className="datos">
+        	<h4 className='reviewTitle'>Comentarios: </h4>
+			{reviews.map(review =>
+				<Comments key={review.id} info={review} superMegaReload={superMegaReload}/>
+            )}
+		</div>
+		{errorMessage && (
+			<div className="error">
+				{failure} {errorMessage} <br />
+			</div>
+		)}
     </div>
-    
     )
 }

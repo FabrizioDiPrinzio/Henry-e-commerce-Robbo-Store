@@ -21,7 +21,8 @@ import NotFound from './Components/NotFound/NotFound';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Carrito from './Components/Carrito/Carrito.jsx';
 import Purchase_order from './Components/Purchase_order/Purchase_order.jsx';
-
+import OAuthSuccess from './Components/OAuth/OAuthSuccess';
+import Welcome from './Components/OAuth/Welcome';
 // =========== FIN DE IMPORTS ============
 
 // ======== Inicializando el uso de algunas propiedades de Bootstrap que usan Jquery ======= //
@@ -45,6 +46,7 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 function App() {
 	const user = useSelector(state => state.user);
+	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -52,23 +54,37 @@ function App() {
 		axios
 			.post(`${urlBack}/createAdmin`)
 			.then(response => console.log(response.data))
-			.catch(error => console.log(error.response.data));
+			.catch(error => console.log(error.response ? error.response.data : error));
 
 		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());
-		dispatch(allActions.productActions.getAllProducts());
+		dispatch(allActions.productActions.getAllProducts(1));
 	}, []);
 
-	// Loguea al usuario con las cookies.
-	useEffect(() => {
-		axios
-			.get(`${urlBack}/auth/me`)
-			.then(user => {
-				dispatch(allActions.userActions.login(user.data));
-				dispatch(allActions.cartActions.getUserCart(user.data.id));
-			})
-			.catch(error => console.log(error)); // Se queda con el default de Guest
-	}, []);
+	// Loguea al usuario con las cookies y le añade el carrito de guest
+	useEffect(
+		() => {
+			const addGuestCart = async () => {
+				try {
+					const usuario = await axios.get(`${urlBack}/auth/me`);
+
+					for await (const order of orderlines) {
+						axios
+							.put(`${urlBack}/user/${usuario.data.id}/cart`, order)
+							.catch(error => console.log(error));
+					}
+
+					dispatch(allActions.userActions.login(usuario.data));
+					dispatch(allActions.cartActions.getUserCart(usuario.data.id));
+				} catch (error) {
+					console.log(error.response.data); // Se queda con el carrito del guest
+				}
+			};
+
+			addGuestCart();
+		},
+		[user.id]
+	);
 
 	return (
 		<div>
@@ -77,9 +93,11 @@ function App() {
 				<Route exact path="/" component={Home} />
 				<Switch>
 					<Route exact path="/" component={Catalogo} />
+					<Route exact path="/welcome" component={Welcome} />
 					<Route exact path="/categories/:categoria" component={Catalogo} />
+					<Route exact path="/search" component={Catalogo} />
 					<Route exact path="/carrito" component={Carrito} />
-					<Route path="/search" component={Catalogo} />
+					<Route exact path="/oauth/success" component={OAuthSuccess} />
 					<Route exact path="/producto/:id" component={Producto} />
 					<Route exact path="/user/:id" component={UserProfile} />
 					<Route exact path="/purchase_order/:purchaseOrderId" component={Purchase_order} />

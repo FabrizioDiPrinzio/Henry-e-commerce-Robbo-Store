@@ -17,18 +17,6 @@ export const getAllProducts = (pag = 1) => dispatch => {
 		.catch(err => dispatch(catchError(err)));
 };
 
-export const postProduct = (product, categories) => dispatch => {
-	axios
-		.post(`${urlBack}/products/`, product)
-		.then(res => {
-			dispatch({type: actionTypes.POST_PRODUCT, payload: res.data});
-
-			if (categories.length) dispatch(modifyProductCategories(res.data.id, categories));
-			else dispatch(getAllProducts());
-		})
-		.catch(err => dispatch(catchError(err)));
-};
-
 export const putProduct = (productId, body, categories) => dispatch => {
 	axios
 		.put(`${urlBack}/products/${productId}`, body) // hace la petición con los parametros pasados

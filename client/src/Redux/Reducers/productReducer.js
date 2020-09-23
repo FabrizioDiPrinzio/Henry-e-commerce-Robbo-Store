@@ -14,19 +14,6 @@ export default function productReducer(state = initialState, action) {
 				allProducts: state.allProducts.concat(action.payload.products)
 			};
 
-		case actionTypes.GET_PRODUCT:
-			return;
-
-		case actionTypes.POST_PRODUCT:
-			return {
-				...state,
-				lastResponse: {
-					response: action.payload,
-					message: 'El producto fue agregado exitosamente'
-				},
-				lastError: null
-			};
-
 		case actionTypes.PUT_PRODUCT:
 			return {
 				...state,

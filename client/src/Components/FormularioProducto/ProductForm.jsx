@@ -14,8 +14,6 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function ProductFormFunction({preSelected}) {
 	// Redux
 	const categories = useSelector(state => state.categories.allCategories);
-	const productStore = useSelector(state => state.products);
-	const {lastResponse, lastError} = productStore;
 	const dispatch = useDispatch();
 
 	// React Hooks
@@ -103,19 +101,6 @@ export default function ProductFormFunction({preSelected}) {
 		[categories]
 	);
 
-	// Creates an success or error message after each successful or failed operation
-	useEffect(
-		() => {
-			if (lastResponse) {
-				setSuccessMessage(lastResponse.message);
-				resetFields();
-				resetImages();
-			}
-			if (lastError) setErrorMessage(lastError);
-		},
-		[products, lastError]
-	);
-
 	// Lets you add an image with the enter key without needing to click the button.
 	const onImageEnterKey = e => {
 		if (e.key === 'Enter') handleAddImg(e);
@@ -198,7 +183,7 @@ export default function ProductFormFunction({preSelected}) {
 	};
 
 	// Creates products
-	const handleAdd = event => {
+	const handleAdd = async event => {
 		event.preventDefault();
 
 		const changedState = {...inputValues, image: images, id: null};
@@ -206,12 +191,27 @@ export default function ProductFormFunction({preSelected}) {
 		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
 		const checkedCategories = checkboxes.map(c => {
 			if (c.add) c.modified = true;
+			if (!c.add) c.modified = false;
 			return c;
 		});
 
 		const modifiedCategories = checkedCategories.filter(cat => cat.modified);
 
-		dispatch(productActions.postProduct(changedState, modifiedCategories));
+		try {
+			// Creates the new product
+			const newProduct = await axios.post(`${urlBack}/products`, changedState);
+
+			for await (const cat of modifiedCategories) {
+				axios.post(`${urlBack}/products/${newProduct.data.id}/category/${cat.id}`);
+			}
+
+			setSuccessMessage('El producto se agregó existosamente');
+			resetFields();
+			resetImages();
+			setUpdate(!update);
+		} catch (error) {
+			setErrorMessage(error.response.data);
+		}
 	};
 
 	// Deletes the selected product

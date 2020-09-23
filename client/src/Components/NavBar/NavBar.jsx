@@ -12,6 +12,8 @@ import './navBar.css';
 
 document.addEventListener('scroll', e => {
 	const searchBar = document.querySelector('.SearchBarContainer');
+	if (!searchBar) return // when apps crashes navbar does not exist and stacks an error
+
 	if (window.scrollY > 55) {
 		searchBar.style.top = '0';
 	}

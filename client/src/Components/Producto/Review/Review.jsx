@@ -9,7 +9,7 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export default function Review({robotId}) {
+export default function Review({robotId, superReload}) {
 
 // ========================== Redux State ======================== //
 
@@ -17,21 +17,28 @@ export default function Review({robotId}) {
 
 
 // ====================== React Component State ================== //
-	
+
 	const [reviews, setReviews] = useState([]);
 	const [newReview, setNewReview] = useState('');
 	const [qualification, setQualification] = useState(null);
 	const [errorMessage, setErrorMessage] = useState('');
+	
+	const [reloadData, setReloadData] = useState(false)
 
 	useEffect(
 		() => {
-			axios.get(`${urlBack}/products/${robotId}/review`).then(response => {
-				setReviews(response.data); 
-				// response.data tiene la info de la review y una propiedad creator.
-				// creatror es un objeto con las propiedades del usuario que creó la review 
-				});
+			axios.get(`${urlBack}/products/${robotId}/review`)
+			.then(response => {
+			setReviews(response.data);
+			// response.data tiene la info de la review y una propiedad creator.
+			// creatror es un objeto con las propiedades del usuario que creó la review 
+			}).catch(err => {
+				alert('hubo un error al cargar la review');
+				console.log(err);
+			})
+
 		},
-		[robotId]
+		[reloadData]
 	);
 
 // ======================== Utility Functions ====================== //
@@ -42,6 +49,12 @@ export default function Review({robotId}) {
 
 	function resetComment() {
 		setNewReview('');
+	}
+
+	function superMegaReload() {
+		superReload();
+		setReloadData(!reloadData)
+
 	}
 
 
@@ -62,15 +75,14 @@ export default function Review({robotId}) {
 			qualification: qualification,
 			creatorId: currentUser.id
 		};
+
 		axios
 			.post(`${urlBack}/products/${robotId}/review`, addReview)
 			.then(response => {
 				console.log('La review se ha agregado correctamente');
-				console.log(response.data);
-				const current = [...reviews, response.data];
-				setReviews(current);
 				resetComment();
 				resetQualification();
+				superMegaReload();
 			})
 			.catch(error => setErrorMessage('No se pudo crear la review: ' + error.response.data));
 	};
@@ -103,6 +115,7 @@ export default function Review({robotId}) {
 			value={newReview}
 			placeholder="Agregue su comentario"
 			onChange={e => {
+				e.preventDefault();
 				if (errorMessage) setErrorMessage('');
 				setNewReview(e.target.value);
 			}}/>
@@ -116,7 +129,7 @@ export default function Review({robotId}) {
 		<div className="datos">
         	<h4 className='reviewTitle'>Comentarios: </h4>
 			{reviews.map(review =>
-				<Comments info={review}/>
+				<Comments key={review.id} info={review} superMegaReload={superMegaReload}/>
             )}
 		</div>
 		{errorMessage && (

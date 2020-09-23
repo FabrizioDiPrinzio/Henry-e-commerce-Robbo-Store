@@ -31,6 +31,7 @@ export default function Producto() {
 	const {id} = useParams();
 	const [showModal, setShowModal] = useState(false);
 	const [index, setIndex] = useState(0); // carousel Image Index
+	const [reloadData, setReloadData] = useState(false)
 
 	useEffect(
 		() => {
@@ -44,7 +45,7 @@ export default function Producto() {
 				alert(err);
 			})
 		},
-		[ id, productStore ]
+		[ id, productStore, reloadData ]
 	);
 
 
@@ -60,7 +61,10 @@ export default function Producto() {
 	};
 	const stars = showStars(`${robot.averageQualification}`);
 
-
+	const superReload = () => {
+		console.log('super Reload ha sido invocada')
+		setReloadData(!reloadData)
+	};
 
 
 	// ======================= Event Hnadlers ======================= //
@@ -181,7 +185,7 @@ export default function Producto() {
 					</button>
 
 					<div className='reviewContainer'>
-						<Review robotId={robot.id}/>
+						<Review robotId={id} superReload={superReload}/>
 					</div>			
 		
 				</div>

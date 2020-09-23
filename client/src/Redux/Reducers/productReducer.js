@@ -2,6 +2,7 @@ import * as actionTypes from '../Actions/actionTypes';
 
 const initialState = {
 	allProducts: [],
+	actualPage: 1,
 	lastResponse: null,
 	lastError: null
 };
@@ -11,7 +12,8 @@ export default function productReducer(state = initialState, action) {
 		case actionTypes.GET_ALL_PRODUCTS:
 			return {
 				...state,
-				allProducts: action.payload
+				allProducts: action.payload.products,
+				actualPage: action.payload.currentPage
 			};
 
 		case actionTypes.GET_PRODUCT:

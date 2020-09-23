@@ -12,6 +12,34 @@ router.get('/', (req, res, next) => {
 		.catch(next);
 });
 
+//paginación
+
+router.get('/pag/', (req, res, next) => {
+	const {p} = req.query;
+	const firstIndex = ( p - 1 ) * 2;
+	const lastIndex = firstIndex + 2;
+	Product.findAll({include: [Categories, Pics]})
+		.then(data => {
+			const productos = data.slice(firstIndex,lastIndex);
+			const result = {
+					prevPage: parseInt(p) < 2 ? null : parseInt(p) - 1,
+					currentPage: parseInt(p),
+					nextPage: parseInt(p) + 1,
+			}
+			result.data = productos
+			if (result.data.length < 1) {
+				result = {
+					prevPage: result.prevPage - 1,
+					currentPage: result.currentPage - 1 ,
+					nextPage: result.nextPage - 1 
+				}
+			}
+			res.send(result);
+		})
+});
+
+
+
 router.post('/', async (req, res) => {
 	const {name, price, stock, image, description} = req.body;
 	if (!name || !price || typeof stock !== 'number' || !image || !description)

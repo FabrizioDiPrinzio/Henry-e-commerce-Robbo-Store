@@ -12,13 +12,25 @@ router.get('/', (req, res, next) => {
 		.catch(next);
 });
 
-router.get('/pages/', (req, res, next) => {
+//paginación
+
+router.get('/pag/', (req, res, next) => {
+	const {p} = req.query;
+	const firstIndex = ( p - 1 ) * 7;
+	const lastIndex = firstIndex + 7;
 	Product.findAll({include: [Categories, Pics]})
-		.then(products => {
-			res.send(products);
+		.then(data => {
+			const result = {
+				prevPage: parseInt(p) < 2 ? null : parseInt(p) - 1,
+				currentPage: parseInt(p),
+				nextPage: parseInt(p) + 1,
+			}
+			result.data = data.splice(firstIndex,lastIndex)
+			res.send(result);
 		})
-		.catch(next);
 });
+
+
 
 router.post('/', async (req, res) => {
 	const {name, price, stock, image, description} = req.body;

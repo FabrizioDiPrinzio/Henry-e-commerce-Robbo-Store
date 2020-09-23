@@ -131,12 +131,14 @@ export default function Producto() {
 
 				<Carousel 
 				className="carItems"
-				activeIndex={index} 
+				activeIndex={index}
+
 				onSelect={handleSelect}>
 
 					{pics.map(image => (
-						<Carousel.Item className="productCarouselItem">
+						<Carousel.Item>
 							<img
+							// d-block w-100
 							className="productImg"
 							src={image}
 							alt={pics.indexOf(image)}

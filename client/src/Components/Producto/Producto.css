@@ -27,33 +27,37 @@
 /* ===========   Carousel  ============ */
 
 .carItems {
-  height: 400px;
-  margin: 0px;
-  overflow: hidden;
+  height: 500px;
+  text-align: center;
   background-color: white;
-  display: flex;
-  justify-content: center;
-  align-self: center;
   box-shadow: 0 3px 5px 0px rgba(0,0,0,0.33);
   border-radius: 30px 30px 0px 0px;
 }
 
-.productCarouselItem {
-  height: 90vh;
+.carousel-item {
+  height: 500px;
+}
+
+.carousel img {
+  margin: 0;
 }
 
 .productImg {
-  margin-bottom: 10px;
   height: 500px;
   object-fit: cover;
 }
 
 .carousel-control-next {
-  background-color: rgba(116, 69, 186,0.33);
+  background-color: var(--ksu-purple);
+  box-shadow: 0 0px 15px 0px rgba(0,0,0,0.66);
+  opacity: 1;
+  /*background-color: rgba(116, 69, 186,0.33);*/
 }
 
 .carousel-control-prev {
-  background-color: rgba(116, 69, 186,0.33);
+  background-color: var(--ksu-purple);
+  box-shadow: 0 0px 15px 0px rgba(0,0,0,0.66);
+  opacity: 1;
 }
 
 
@@ -66,7 +70,7 @@
   color: white;
   padding: 15px;
   border-radius: 0 0 30px 30px;
-  box-shadow: inset 0 0 15px 5px rgba(0,0,0,0.33);
+  box-shadow: inset 0 0 27px 3px rgba(0,0,0,0.45);
 }
 
 .infoCardHeader{

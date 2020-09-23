@@ -57,13 +57,15 @@ export default function LoginForm() {
 		}
 	};
 
-	const popup = () => window.open(`${urlBack}/auth/google`, '', 'height=500, width=500');
+	const popup = e => {
+		e.preventDefault();
+		const {value} = e.target;
+
+		window.open(`${urlBack}/auth/${value}`, '', 'height=500, width=500');
+	};
 
 	return (
 		<form className="form" onSubmit={handleLogin} ref={formulario}>
-			<a href="#" onClick={popup}>
-				{googleIcon} Inicia sesión con Google
-			</a>
 			<h3 className="titulo">Iniciar sesión</h3>
 			<br />
 
@@ -92,8 +94,16 @@ export default function LoginForm() {
 					onChange={handleInputChange}
 					onKeyPress={onEnterKey}
 				/>
-				{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
-				{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}
+				{hidePassword && (
+					<i className="eye" onClick={revealPassword}>
+						{openEye}
+					</i>
+				)}
+				{!hidePassword && (
+					<i className="eye" onClick={revealPassword}>
+						{closedEye}
+					</i>
+				)}
 			</div>
 
 			<button type="submit" className="addBtn" value="Enviar" onClick={handleLogin}>
@@ -112,6 +122,12 @@ export default function LoginForm() {
 					{success} {loggedIn} <br />
 				</div>
 			)}
+
+			<div className="button-wrapper">
+				<button value="google" id="googleBtn" onClick={popup}>
+					<i className="logo">{googleIcon}</i> Inicia sesión con Google
+				</button>
+			</div>
 		</form>
 	);
 }

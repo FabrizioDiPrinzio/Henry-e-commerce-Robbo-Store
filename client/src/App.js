@@ -98,7 +98,6 @@ function App() {
 					<Route exact path="/search" component={Catalogo} />
 					<Route exact path="/carrito" component={Carrito} />
 					<Route exact path="/oauth/success" component={OAuthSuccess} />
-					<Route exact path="/auth/google/failure" />
 					<Route exact path="/producto/:id" component={Producto} />
 					<Route exact path="/user/:id" component={UserProfile} />
 					<Route exact path="/purchase_order/:purchaseOrderId" component={Purchase_order} />

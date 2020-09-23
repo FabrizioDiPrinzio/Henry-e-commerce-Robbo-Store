@@ -20,13 +20,13 @@ export default function UserFormAdmin() {
 
 	return (
 		<div className="userFormAdmin">
-			<h2> Panel de Control de Usuarios </h2>
+			<h2>Usuarios</h2>
 			<div className="userTableTitleContainer">
 				<div className="userTableTitle">
 					<h4>Nombre</h4>
 					<h4>Email</h4>
 					<h4>Rol</h4>
-					<h4>Action</h4>
+					<h4>Editar/Eliminar</h4>
 				</div>
 			</div>
 			<div className="userListContainer">

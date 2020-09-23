@@ -1,19 +1,21 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {allActions} from '../../Redux/Actions/actions';
 import {useSelector, useDispatch} from 'react-redux';
-import {Row, Container, Col, Form, Table} from 'react-bootstrap';
+import {Table} from 'react-bootstrap';
 import {success, failure} from '../../multimedia/SVGs';
 import './ProductForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import axios from 'axios';
 //------ Fin de imports -----
 
 const {productActions} = allActions;
+const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductFormFunction({preSelected}) {
 	// Redux
 	const categories = useSelector(state => state.categories.allCategories);
 	const productStore = useSelector(state => state.products);
-	const {allProducts: products, lastResponse, lastError} = productStore;
+	const {lastResponse, lastError} = productStore;
 	const dispatch = useDispatch();
 
 	// React Hooks
@@ -23,6 +25,8 @@ export default function ProductFormFunction({preSelected}) {
 		stock: '',
 		description: ''
 	});
+	const [products, setProducts] = useState([]);
+	const [update, setUpdate] = useState(false);
 	const [checkboxes, setCheckboxes] = useState([]);
 	const [selected, setSelected] = useState(0);
 	const [successMessage, setSuccessMessage] = useState('');
@@ -64,15 +68,25 @@ export default function ProductFormFunction({preSelected}) {
 
 	// ------------  Functionality ----------------------
 
-	// If a preSelected bot comes in props
+	// Fetches the products from the backend
 	useEffect(
 		() => {
-			if (preSelected) {
-				const eventWrapper = {target: {}}
-				eventWrapper.target.value = preSelected.id;
-				handleSelectChange(eventWrapper);
-			}
-		}, [])
+			axios
+				.get(`${urlBack}/products`)
+				.then(res => setProducts(res.data))
+				.catch(err => console.log(err.response.data));
+		},
+		[update]
+	);
+
+	// If a preSelected bot comes in props
+	useEffect(() => {
+		if (preSelected) {
+			const eventWrapper = {target: {}};
+			eventWrapper.target.value = preSelected.id;
+			handleSelectChange(eventWrapper);
+		}
+	}, []);
 
 	// Creates category checkboxes
 	useEffect(
@@ -204,7 +218,15 @@ export default function ProductFormFunction({preSelected}) {
 	const handleDelete = event => {
 		event.preventDefault();
 
-		dispatch(productActions.deleteProduct(selected));
+		axios
+			.delete(`${urlBack}/products/${selected}`)
+			.then(() => {
+				setSuccessMessage('El producto se borró existosamente');
+				resetFields();
+				resetImages();
+				setUpdate(!update);
+			})
+			.catch(error => setErrorMessage(error.response.data));
 	};
 
 	// Edits the selected product
@@ -297,18 +319,20 @@ export default function ProductFormFunction({preSelected}) {
 					<h5>Agregar Imagen</h5>
 					<div className="inpt">
 						<form>
-								<input
+							<input
 								className="imageInput"
 								type="text"
 								autocomplete="off"
 								value={newImage}
-								onChange={e=>setnewImage(e.target.value)}
+								onChange={e => setnewImage(e.target.value)}
 								onKeyPress={onImageEnterKey}
-								placeholder="URL de la imagen"/>
-								{' '}
-								<button onClick={handleAddImg} className="submitBtn" type="button" >Agregar imagen</button>
+								placeholder="URL de la imagen"
+							/>{' '}
+							<button onClick={handleAddImg} className="submitBtn" type="button">
+								Agregar imagen
+							</button>
 						</form>
-						<br/>
+						<br />
 						<Table>
 							<thead>
 								<tr class="picsTableRow">
@@ -318,20 +342,23 @@ export default function ProductFormFunction({preSelected}) {
 								</tr>
 							</thead>
 							<tbody>
-								{images.map(image =>(
-								<tr key={image}>
-									<td><img className="prodImg" src={image}></img></td>
-									{/*<td className="imgUrl">{image}</td>*/}
-									<td>
-										<button
-										className="deleteBtn"
-										type="button"
-										value={image}
-										onClick={handleDeleteImg}>
-											Eliminar
-										</button>
-									</td>
-								</tr>
+								{images.map(image => (
+									<tr key={image}>
+										<td>
+											<img className="prodImg" src={image} />
+										</td>
+										{/*<td className="imgUrl">{image}</td>*/}
+										<td>
+											<button
+												className="deleteBtn"
+												type="button"
+												value={image}
+												onClick={handleDeleteImg}
+											>
+												Eliminar
+											</button>
+										</td>
+									</tr>
 								))}
 							</tbody>
 						</Table>
@@ -346,7 +373,14 @@ export default function ProductFormFunction({preSelected}) {
 					<div className={'botonOpcion'}>
 						<h4 className="titulo">Editar / Eliminar producto</h4>
 
-						<select className="product-form-control" ref={lista} id="select" defaultValue={preSelected ? preSelected.id : '0'} onChange={handleSelectChange} size='6'>
+						<select
+							className="product-form-control"
+							ref={lista}
+							id="select"
+							defaultValue={preSelected ? preSelected.id : '0'}
+							onChange={handleSelectChange}
+							size="6"
+						>
 							<option value="0">Robots...</option>
 							{products.map(product => {
 								return (

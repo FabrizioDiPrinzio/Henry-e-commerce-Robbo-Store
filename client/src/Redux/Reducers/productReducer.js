@@ -11,7 +11,7 @@ export default function productReducer(state = initialState, action) {
 		case actionTypes.GET_ALL_PRODUCTS:
 			return {
 				...state,
-				allProducts: state.allProducts.concat(action.payload.products),
+				allProducts: state.allProducts.concat(action.payload.products)
 			};
 
 		case actionTypes.GET_PRODUCT:
@@ -23,16 +23,6 @@ export default function productReducer(state = initialState, action) {
 				lastResponse: {
 					response: action.payload,
 					message: 'El producto fue agregado exitosamente'
-				},
-				lastError: null
-			};
-
-		case actionTypes.DELETE_PRODUCT:
-			return {
-				...state,
-				lastResponse: {
-					response: action.payload,
-					message: 'El producto fue borrado exitosamente'
 				},
 				lastError: null
 			};
@@ -54,17 +44,10 @@ export default function productReducer(state = initialState, action) {
 				lastError: action.payload
 			};
 
-		// case actionTypes.CLEAN_MESSAGES:
-		// 	return {
-		// 		...state,
-		// 		lastResponse: null,
-		// 		lastError: null
-		// 	};
-
 		case actionTypes.CLEAN_PRODUCTS:
 			return {
 				...state,
-				allProducts: [],
+				allProducts: []
 			};
 
 		default:

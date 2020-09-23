@@ -3,26 +3,19 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export const getAllProducts = (pag=1) => dispatch => {
+export const getAllProducts = (pag = 1) => dispatch => {
 	axios
 		.get(`${urlBack}/products/pag/?p=${pag}`)
 		.then(res => {
 			const payload = {
-				products : res.data.data,
-				currentPage : res.currentPage 
-			}
-				dispatch({type: actionTypes.GET_ALL_PRODUCTS, payload: payload});
-				dispatch({type: actionTypes.CLEAN_MESSAGES});
-			
+				products: res.data.data,
+				currentPage: res.currentPage
+			};
+			dispatch({type: actionTypes.GET_ALL_PRODUCTS, payload: payload});
+			dispatch({type: actionTypes.CLEAN_MESSAGES});
 		})
 		.catch(err => dispatch(catchError(err)));
 };
-
-// export const getProduct = () => dispatch => {
-// 	dispatch({
-// 		type: actionTypes.GET_PRODUCT
-// 	});
-// };
 
 export const postProduct = (product, categories) => dispatch => {
 	axios
@@ -32,17 +25,6 @@ export const postProduct = (product, categories) => dispatch => {
 
 			if (categories.length) dispatch(modifyProductCategories(res.data.id, categories));
 			else dispatch(getAllProducts());
-		})
-		.catch(err => dispatch(catchError(err)));
-};
-
-export const deleteProduct = productId => dispatch => {
-	axios
-		.delete(`${urlBack}/products/${productId}`)
-		.then(res => {
-			dispatch({type: actionTypes.DELETE_PRODUCT, payload: res.data});
-
-			dispatch(getAllProducts());
 		})
 		.catch(err => dispatch(catchError(err)));
 };
@@ -89,4 +71,4 @@ export const catchError = err => dispatch => {
 
 export const cleanProduct = () => dispatch => {
 	dispatch({type: actionTypes.CLEAN_PRODUCTS});
-}
+};

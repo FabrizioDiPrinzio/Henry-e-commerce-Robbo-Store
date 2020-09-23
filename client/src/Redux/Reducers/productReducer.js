@@ -12,7 +12,7 @@ export default function productReducer(state = initialState, action) {
 		case actionTypes.GET_ALL_PRODUCTS:
 			return {
 				...state,
-				allProducts: action.payload.products,
+				allProducts: state.allProducts.concat(action.payload.products),
 				actualPage: action.payload.currentPage
 			};
 

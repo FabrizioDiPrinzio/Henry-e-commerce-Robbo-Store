@@ -34,7 +34,7 @@ export default function Catalogo(props) {
 		() => {
 			// Main page, returns ALL products
 			let prevPages = robots;
-			if (!categoria && !params) setRobots(prevPages.concat(products));
+			if (!categoria && !params) setRobots(products);
 			setLoadingPage(false);
 		},
 		[products]

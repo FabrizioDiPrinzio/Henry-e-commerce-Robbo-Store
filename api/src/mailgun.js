@@ -6,7 +6,8 @@ const  data  = {
     from : 'RobboStore <sanchezlismairy@gmail.com>', 
     to : 'sanchezlismairy@gmail.com', 
     subject : ' Hola mundo', 
-    text :'¡Probando algo de genialidad Mailgun! ' 
+    text :'¡Probando algo de genialidad Mailgun!', 
+    html: '<div style="width: 500px; height: 400px: background: #ebebeb; color: red"> <p><b> Esto es un mensaje de prueba</p></div>'
 };
 
 mailgun.messages().send( data, function (error , body){    

@@ -58,7 +58,6 @@ function App() {
 
 		// Permanent
 		dispatch(allActions.categoryActions.getAllCategories());
-		dispatch(allActions.productActions.getAllProducts(1));
 	}, []);
 
 	// Loguea al usuario con las cookies y le añade el carrito de guest
@@ -77,7 +76,7 @@ function App() {
 					dispatch(allActions.userActions.login(usuario.data));
 					dispatch(allActions.cartActions.getUserCart(usuario.data.id));
 				} catch (error) {
-					console.log(error.response.data); // Se queda con el carrito del guest
+					console.log(error); // Se queda con el carrito del guest
 				}
 			};
 

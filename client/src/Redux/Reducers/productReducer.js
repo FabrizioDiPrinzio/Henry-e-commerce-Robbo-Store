@@ -2,7 +2,6 @@ import * as actionTypes from '../Actions/actionTypes';
 
 const initialState = {
 	allProducts: [],
-	actualPage: 1,
 	lastResponse: null,
 	lastError: null
 };
@@ -12,8 +11,7 @@ export default function productReducer(state = initialState, action) {
 		case actionTypes.GET_ALL_PRODUCTS:
 			return {
 				...state,
-				allProducts: action.payload.products,
-				actualPage: action.payload.currentPage
+				allProducts: state.allProducts.concat(action.payload.products),
 			};
 
 		case actionTypes.GET_PRODUCT:
@@ -56,11 +54,17 @@ export default function productReducer(state = initialState, action) {
 				lastError: action.payload
 			};
 
-		case actionTypes.CLEAN_MESSAGES:
+		// case actionTypes.CLEAN_MESSAGES:
+		// 	return {
+		// 		...state,
+		// 		lastResponse: null,
+		// 		lastError: null
+		// 	};
+
+		case actionTypes.CLEAN_PRODUCTS:
 			return {
 				...state,
-				lastResponse: null,
-				lastError: null
+				allProducts: [],
 			};
 
 		default:

@@ -10,32 +10,35 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Catalogo(props) {
 	let products = useSelector(state => state.products.allProducts);
-	let actualPage = useSelector(state => state.products.actualPage)
 	// React hooks
 	const [robots, setRobots] = useState([]);
-	const [pag, setPag] = useState(actualPage)
-	const [loadingPage, setLoadingPage] = useState(false)
+	const [pag, setPag] = useState(1)
 	const {categoria} = useParams();
 	const params = new URLSearchParams(props.location.search).get('query');
 	const dispatch = useDispatch()
 
 	const handleCargarMas = event => {
 		event.preventDefault();
-		if (!loadingPage){
-				setLoadingPage(true)
 				let lastPage = pag;
 				let nextPage = pag + 1;
 				setPag(pag + 1)
 				dispatch(allActions.productActions.getAllProducts(nextPage))
-			} 
 	}
 
 	useEffect(
 		() => {
-			// Main page, returns ALL products
+
+			dispatch(allActions.productActions.getAllProducts(1));
+			return () => {dispatch(allActions.productActions.cleanProduct())}
+		},
+		[]
+	);
+
+	useEffect(
+		() => {
+			// Main page, returns ALL products - or not All ...
 			let prevPages = robots;
-			if (!categoria && !params) setRobots(prevPages.concat(products));
-			setLoadingPage(false);
+			if (!categoria && !params) setRobots(products);
 		},
 		[products]
 	);

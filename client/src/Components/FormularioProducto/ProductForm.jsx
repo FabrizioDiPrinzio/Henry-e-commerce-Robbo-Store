@@ -29,6 +29,7 @@ export default function ProductFormFunction({preSelected}) {
 	const lista = useRef(0);
 
 	const [images, setImages] = useState([]);
+	const [mainImage, setMainImage] = useState('');
 	const [newImage, setnewImage] = useState('');
 
 	// Auxiliary functions
@@ -131,6 +132,7 @@ export default function ProductFormFunction({preSelected}) {
 				return i.imageUrl;
 			});
 			setImages(imagenes);
+			setMainImage(currentProduct.image);
 
 			// If the product has a category, it is checked, else it is unchecked
 			currentProduct.categories.map(productCategory => {
@@ -153,13 +155,16 @@ export default function ProductFormFunction({preSelected}) {
 	};
 
 	// Sets which categories are being checked
-	const handleChecks = event => {
+	const handleCategoryChecks = event => {
 		const checkbox = event.target;
 		const modifiedCategories = [...checkboxes];
 		modifiedCategories[checkbox.value].add = checkbox.checked;
 		modifiedCategories[checkbox.value].modified = !modifiedCategories[checkbox.value].modified;
 		setCheckboxes(modifiedCategories);
 	};
+
+	// Sets which is the main image
+	const handleImageRadios = event => setMainImage(event.target.value);
 
 	const handleAddImg = event => {
 		event.preventDefault();
@@ -178,7 +183,7 @@ export default function ProductFormFunction({preSelected}) {
 	const handleAdd = async event => {
 		event.preventDefault();
 
-		const changedState = {...inputValues, image: images, id: null};
+		const changedState = {...inputValues, images, mainImage: mainImage || images[0], id: null};
 
 		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
 		const checkedCategories = checkboxes.map(c => {
@@ -225,7 +230,7 @@ export default function ProductFormFunction({preSelected}) {
 	const handleEdit = async event => {
 		event.preventDefault();
 
-		const changedState = {...inputValues, image: images};
+		const changedState = {...inputValues, images, mainImage};
 
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
@@ -314,7 +319,7 @@ export default function ProductFormFunction({preSelected}) {
 									className="checks"
 									value={i}
 									checked={categoria.add}
-									onChange={handleChecks}
+									onChange={handleCategoryChecks}
 								/>
 								{categoria.name}
 							</label>
@@ -345,7 +350,7 @@ export default function ProductFormFunction({preSelected}) {
 							<thead>
 								<tr class="picsTableRow">
 									<th>Imagen</th>
-									{/*<th>Url</th>*/}
+									<th>Principal?</th>
 									<th>Eliminar</th>
 								</tr>
 							</thead>
@@ -355,7 +360,14 @@ export default function ProductFormFunction({preSelected}) {
 										<td>
 											<img className="prodImg" src={image} />
 										</td>
-										{/*<td className="imgUrl">{image}</td>*/}
+										<input
+											type="radio"
+											name="mainImage"
+											className="checks"
+											value={image}
+											checked={mainImage === image}
+											onChange={handleImageRadios}
+										/>
 										<td>
 											<button
 												className="deleteBtn"

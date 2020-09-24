@@ -3,9 +3,9 @@ const router = express.Router();
 const {Orderline, User, Purchase_order, Product} = require('../db.js');
 const {Op} = require('sequelize');
 
-let apiKey = '1f329c28bd5d533b74a297f71b1d5ee0-cb3791c4-3c5c3c83';
-let domain = 'sandbox0c3cd1b64bf049a0b1fc4ecac8fc8aae.mailgun.org';
-const mailgun = require('mailgun-js')({ apiKey, domain });
+var  apiKey  = '1f329c28bd5d533b74a297f71b1d5ee0-cb3791c4-3c5c3c83'; 
+var  domain  = 'sandbox0c3cd1b64bf049a0b1fc4ecac8fc8aae.mailgun.org'; 
+var mailgun = require ('mailgun-js') ({apiKey : apiKey , domain : domain}); 
 
 // Cart es Purchase_order con status "enCarrito", purchase_orders son las que tienen cualquier otro estado
 
@@ -108,16 +108,17 @@ router.put('/:id', async (req, res) => {
 
 		const savedOrder = await order.reload();
 
-		const data = {
-			from: 'RobboStore <sanchezlismairy@gmail.com>',
-			to: userEmail,
-			subject: ' Hola mundo',
-			text: '¡Probando algo de genialidad Mailgun!',
-			html: `<div style="width: 500px; height: 400px: background: #ebebeb; color: red"> <p><b> ${recipient_name} Esto es un mensaje de prueba</p></div>`
+		const  data  = {
+			from : 'RobboStore <sanchezlismairy@gmail.com>', 
+			to : userEmail, 
+			subject : 'test with user artur', 
+			text :'¡Probando algo de genialidad Mailgun! testss', 
+			html: `<div style="width: 500px; height: 400px: background: #ebebeb; color: red"> <p><b> Esto es un ${recipient_name} mensaje de prueba ${userEmail}</p></div>`
 	};
 
 	mailgun.messages().send(data, function (error, body) {
     if (error) {
+			console.log({ error })
 			return res.status(200).send({savedOrder, statusEmail: 'error'});
     }
 		return res.status(200).send({savedOrder, statusEmail: 'enviado'});

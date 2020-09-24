@@ -1,12 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
-import {allActions} from '../../Redux/Actions/actions';
+import { useSelector } from 'react-redux'
 import axios from 'axios';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './UserProfile.css';
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import Collapse from 'react-bootstrap/Collapse';
 // ======================== Fin de Imports ======================== //
 
@@ -61,7 +58,6 @@ export default function UserProfile() {
 	// ============================ react-bootstrap ================================= //
 	
 	const [openPurchaseHistory, setOpenPurchaseHistory] = useState(false); // Elemento desplegable (desplegado / no desplegado)
-	const [ alertMessage, setAlertMessage ] = useState('Selecciona Algun Status'); // mensaje del tooltip para cambiar el status
 
 
 	return (

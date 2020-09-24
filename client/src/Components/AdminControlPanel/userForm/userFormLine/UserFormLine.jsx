@@ -66,36 +66,42 @@ export default function UserFormAdmin(props) {
 
 	return (
 		<div>
-			<ul className="userFormLine">
-				<div className="inputTag" id={name}>
+		<div className="userTable">
+			<tr className="userTableTitle">
+				<th><h5>Nombre</h5></th>
+				<th><h5>Email</h5></th>
+				<th><h5>Rol</h5></th>
+				<th><h5>Editar/Eliminar</h5></th>
+			</tr>
+			<tr className="userFormLine">
+				<td className="inputTag" id={name}>
 					{name}
-				</div>
-				<div className="inputTag" id={email}>
+				</td>
+				<td className="inputTag" id={email}>
 					{email}
-				</div>
-				<div className="inputTag" id={rol}>
+				</td>
+				<td className="inputTag" id={rol}>
 					{rol}
-				</div>
-				<div className="userActionContainer">
-					<button type="submit" className="editBtn" value="Edit" onClick={clickHandle}>
+				</td>
+				<td className="userActionContainer">
+					<button type="submit" className="editUserBtn" value="Edit" onClick={clickHandle}>
 						{editButton}
 					</button>
-
-					<OverlayTrigger
-						show={tooltip === 'Se eliminó el usuario'}
-						overlay={
-							<Tooltip>
-								{success} {tooltip}
-							</Tooltip>
-						}
-					>
-						<button type="submit" className="deleteBtn" value="Delete" onClick={handleDelete}>
+						<OverlayTrigger
+							show={tooltip === 'Se eliminó el usuario'}
+							overlay={
+								<Tooltip>
+									{success} {tooltip}
+								</Tooltip>
+							}
+						>
+						<button type="submit" className="deleteUserBtn" value="Delete" onClick={handleDelete}>
 							{deleteButton}
 						</button>
 					</OverlayTrigger>
 
-				</div>
-			</ul>
+				</td>
+			</tr>
 			<form className={stateEdit.edit}>
 				<input
 					className="inputTag"
@@ -124,12 +130,13 @@ export default function UserFormAdmin(props) {
 							</Tooltip>
 						}
 					>
-						<button type="submit" className="editBtn" value="Edit" onClick={handleEdit}>
+						<button type="submit" className="editUserBtn" value="Edit" onClick={handleEdit}>
 							Aceptar
 						</button>
 					</OverlayTrigger>
 				</div>
 			</form>
+		</div>
 		</div>
 	);
 }

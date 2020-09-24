@@ -1,9 +1,15 @@
+.userTable {
+  max-width: 100%
+}
+
 .userFormLine {
-  max-width: 800px;
-  display: grid;
-  grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
-  padding-left: 15px;
-  padding-right: 15px;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-around;
+  /* display: grid;
+  grid-template-columns: 3fr 3fr 2fr 2fr 2fr; */
+  /* padding-left: 5%;
+  padding-right: 5%; */
   overflow: hidden;
   margin-left: 10px;
   height: 35px;
@@ -27,14 +33,18 @@
 }
 
 .userActionContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  width: auto;
+  display: flex;
+  justify-content: space-around;
+  /* grid-template-columns: 1fr 1fr; */
 }
 
 .inputTag {
+  text-align: center;
 }
 
-.editBtn {
+.editUserBtn {
+  margin: 5%;
   background: #617CC7;
   border-radius: 4px;
   border: solid #617CC7;
@@ -43,7 +53,8 @@
   align-items: center;
 }
 
-.UserFromLine-deleteBtn {
+.deleteUserBtn {
+  margin: 5%;
   background: #D53467;
   border-radius: 4px;
   border: solid #D53467;

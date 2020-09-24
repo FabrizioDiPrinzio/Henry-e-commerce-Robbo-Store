@@ -13,7 +13,7 @@
 }
 
 .userTableTitleContainer {
-	margin: 0;
+	width: 100%;
 	margin-top: 7px;
 	margin-bottom: 7px;
 	background-color: var(--ksu-purple);
@@ -23,11 +23,12 @@
 }
 
 .userTableTitle {
-	margin-left: 2%;
-	padding: 0px;
+	/* margin-left: 2%; */
 	height: auto;
-	display: grid;
-	grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
+	display:flex;
+	justify-content: space-around;
+	/* display: grid;
+	grid-template-columns: 3fr 3fr 2fr 2fr 2fr; */
 	color: white;
 }
 

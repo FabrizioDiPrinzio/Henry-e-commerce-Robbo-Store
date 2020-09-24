@@ -1,10 +1,18 @@
 import React, {useState, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from '../../../Redux/Actions/actions';
-import {openEye, closedEye, success, failure} from '../../../multimedia/SVGs';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../UserForm.css';
 import axios from 'axios';
+import {
+	openEye,
+	closedEye,
+	success,
+	failure,
+	googleIcon,
+	githubIcon,
+	facebookIcon
+} from '../../../multimedia/SVGs';
 //------ Fin de imports -----
 
 const urlBack = process.env.REACT_APP_API_URL;
@@ -51,19 +59,17 @@ export default function LoginForm() {
 			const user = await axios.post(`${urlBack}/auth/login`, inputValues);
 
 			dispatch(allActions.userActions.login(user.data));
-
-			// Modifica el carrito del usuario ---> [for await... of] para iterar acciones asíncronas en un array.
-			for await (const order of orderlines) {
-				await axios
-					.put(`${urlBack}/user/${user.data.id}/cart`, order)
-					.catch(error => console.log(error));
-			}
-
-			dispatch(allActions.cartActions.getUserCart(user.data.id));
 			setLoggedIn('Iniciaste sesión con éxito!');
 		} catch (error) {
 			setError('Email o contraseña incorrectos');
 		}
+	};
+
+	const popup = e => {
+		e.preventDefault();
+		const {value} = e.target;
+
+		window.open(`${urlBack}/auth/${value}`, '', 'height=500, width=500');
 	};
 
 	return (
@@ -96,8 +102,16 @@ export default function LoginForm() {
 					onChange={handleInputChange}
 					onKeyPress={onEnterKey}
 				/>
-				{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
-				{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}
+				{hidePassword && (
+					<i className="eye" onClick={revealPassword}>
+						{openEye}
+					</i>
+				)}
+				{!hidePassword && (
+					<i className="eye" onClick={revealPassword}>
+						{closedEye}
+					</i>
+				)}
 			</div>
 
 			<button type="submit" className="addBtn" value="Enviar" onClick={handleLogin}>
@@ -116,6 +130,23 @@ export default function LoginForm() {
 					{success} {loggedIn} <br />
 				</div>
 			)}
+
+			<div className="button-wrapper">
+				<button value="google" id="googleBtn" onClick={popup}>
+					<i className="oauth-logo">{googleIcon}</i> Inicia sesión con Google
+				</button>
+			</div>
+			<div className="button-wrapper">
+				<button value="github" id="githubBtn" onClick={popup}>
+					<i className="oauth-logo">{githubIcon}</i> Inicia sesión con Github
+				</button>
+			</div>
+			<div className="button-wrapper">
+				<button value="facebook" id="facebookBtn" onClick={popup}>
+					<i className="oauth-logo">{facebookIcon}</i> Inicia sesión con Facebook
+				</button>
+			</div>
+			<br />
 		</form>
 	);
 }

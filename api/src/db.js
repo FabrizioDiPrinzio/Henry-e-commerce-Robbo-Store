@@ -89,12 +89,17 @@ User.prototype.correctPassword = function(enteredPassword) {
 const calculateAverageQualification = async review => {
 	const productId = review.productId;
 	const totalReviews = await Reviews.findAll({where: {productId}});
+	let average = 0
 
-	const addedScore = totalReviews.reduce((previous, current) => ({
-		qualification: previous.qualification + current.qualification
-	}));
+	if (totalReviews.length > 0) {
+		
+		const addedScore = totalReviews.reduce((previous, current) => ({
+			qualification: previous.qualification + current.qualification
+		}));
+		
+		average = addedScore.qualification / totalReviews.length;
 
-	const average = addedScore.qualification / totalReviews.length;
+	}
 
 	const product = await Product.findByPk(productId);
 
@@ -104,6 +109,7 @@ const calculateAverageQualification = async review => {
 
 Reviews.afterCreate(calculateAverageQualification);
 Reviews.afterUpdate(calculateAverageQualification);
+Reviews.afterDestroy(calculateAverageQualification);
 
 // ================= Exporting the models =============== //
 

@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import {star, success, failure, editButton, trashCan} from '../../../multimedia/SVGs';
 import './Comments.css';
@@ -8,7 +9,7 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export default function Comment({info}) {
+export default function Comment({info, superMegaReload}) {
 
   // =========================  Redux State ============================== //
 
@@ -17,57 +18,45 @@ export default function Comment({info}) {
 
   // ===================  React Component State ========================== //
 
+  const reviewId = info.id;
+  const creatorId = info.creatorId;
+  const productId = info.productId;
+
   const [comentario, setComentario] = useState(info.comment);
   const [qualification, setQualification] = useState (info.qualification);
   const [editedComment, setEditedComment] = useState(info.comment);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [date, setDate] = useState(info.createdAt.slice(0, 10));
+  
   const [stateEditar, setStateEdit] = useState({
 		edit: 'editClose'
   });
-  const creatorId = info.creatorId
 
-	// ------------- Functionality ---------------
 
-	const date = info.createdAt.slice(0, 10);
+  const [reloadData, setReloadData] = useState(false);
 
-	const clickHandle = event => {
-		event.preventDefault();
-		if (successMessage) setSuccessMessage('');
-		if (errorMessage) setErrorMessage('');
 
-		setStateEdit({
-			...stateEditar,
-			edit: stateEditar.edit === 'editClose' ? 'editOpen' : 'editClose'
-		});
-	};
-
-	const handleDelete = event => {
-		event.preventDefault();
-		event.persist();
-
-		axios
-			.delete(`${urlBack}/products/productId/review/${info.id}`)
-			.then(() => {
-				setSuccessMessage('La review se ha eliminado correctamente');
+	useEffect(
+		() => {
+			axios.get(`${urlBack}/products/${productId}/review`)
+			.then(response => {
+				if (!response.data[0]) return;
+				const res = response.data.find(review => review.id === info.id)
+				setComentario(res.comment);
+				setQualification(res.qualification);
+				setEditedComment(res.comment);
+				setDate(res.createdAt.slice(0,10));
 			})
-			.catch(error => setErrorMessage('No se pudo eliminar la review: ' + error));
-	};
-
-	const handleEdit = event => {
-		event.preventDefault();
-		const editReview = {
-			comment: editedComment,
-			qualification: qualification
-		};
-
-		axios
-			.put(`${urlBack}/products/productId/review/${info.id}`, editReview)
-			.then(() => {
-				setSuccessMessage('La review se ha editado correctamente');
+			.catch(err => {
+				alert('Hubo un error revisa la consola');
+				console.log(err)
 			})
-			.catch(error => setErrorMessage('No se pudo editar la review: ' + error));
-	};
+		},
+		[reloadData]
+	);
+
+// ======================== Utility Fuctios =============================== //
 
 	const showStars = num => {
 		var arr = [];
@@ -79,62 +68,123 @@ export default function Comment({info}) {
 
 	const stars = showStars(`${qualification}`);
 
+	const ultraHiperMegaReload = () => {
+		superMegaReload();
+		setReloadData(!reloadData);
+	}
+
+// ========================= Event Handlers =============================== //
+
+	const handleDelete = event => {
+		event.preventDefault();
+		event.persist();
+
+		axios
+			.delete(`${urlBack}/products/${productId}/review/${reviewId}`)
+			.then(() => {
+				setSuccessMessage('La review se ha eliminado correctamente');
+				superMegaReload();
+			})
+			.catch(error => console.log('No se pudo eliminar la review: ' + error.response.data));
+	};
+
+	const editClickHandle = event => {
+		event.preventDefault();
+		if (successMessage) setSuccessMessage('');
+		if (errorMessage) setErrorMessage('');
+
+		setStateEdit({
+			...stateEditar,
+			edit: stateEditar.edit === 'editClose' ? 'commentEditOpen' : 'editClose'
+		});
+	};
+
+
+	const handleCommentTextarea = e => {
+		if (successMessage) setSuccessMessage('');
+		if (errorMessage) setErrorMessage('');
+		setEditedComment(e.target.value);
+	}
+
+
+	const handleEdit = event => {
+		event.preventDefault();
+
+		const editReview = {
+			comment: editedComment,
+			qualification: qualification,
+			creatorId: creatorId
+		};
+
+		axios.put(`${urlBack}/products/${productId}/review/${reviewId}`, editReview)
+		.then(() => {
+			setSuccessMessage('La review se ha editado correctamente');
+			ultraHiperMegaReload();
+		})
+		.catch(error => setErrorMessage('No se pudo editar la review: ' + error.response.data));
+	};
+
     return(
-      <div>
-        <div className="Comment">
-          <div >
-            <div>Calificación: {stars.map( i => i)}</div>
-          </div>
-          <div>Usuario: {`${creatorId}`} </div>
-          <div>
-            <div>Fecha: {date}</div>
-            <div>Comentario: {`${comentario}`}</div>
-            </div>
+    	<div className="comment">
+    		<div className='commentHeader'>
+
+				<div className='userNameContainer'>
+
+					<Link to='#'><strong> {`${info.creator.name}`} </strong> </Link>
+
+					{ creatorId === currentUser.id &&
+            		<div class="btnCont">
+            		  <button onClick={editClickHandle} className="comment-editBtn">
+            		   {editButton} 
+            		  </button>
+            		  <button  onClick={handleDelete} className="comment-deleteBtn">
+            		    {trashCan} 
+            		  </button>
+            		</div>
+            		}
+
+				</div>
+
+				<div>
+					| {stars.map( i => i)}
+          		</div>
+				<div className='commentDate'>{date}</div>
+			</div>
+			<hr />
+			<div>
+				{`${comentario}`}
+			</div>
+
 
             { creatorId === currentUser.id &&
-            <div class="btnCont">
-              <button onClick={clickHandle} className="comment-editBtn">
-               {editButton} 
-              </button>
-              <button  value={`${info.id}`} onClick={handleDelete} className="deleteBtn comment-editBtn">
-                {trashCan} 
-              </button>
-            </div>
+            <form>
+            	<div className={stateEditar.edit}>
+            	  <textarea
+            	  className="commentTextArea"
+            	  readonly
+            	  col="30"
+            	  name="review"
+            	  value={editedComment}
+            	  placeholder="Agregue su comentario"
+            	  onChange={ handleCommentTextarea }
+            	  />
+            	  <button type="submit" className="reviewSubmitBtn" value="Edit" onClick={handleEdit}>
+					Editar Comentario
+				  </button>
+				  {errorMessage &&
+				  	<div className="error">
+				  		{failure} {errorMessage} <br />
+				  	</div>
+				  }
+				  {successMessage &&
+				  	<div className="success">
+				  		{success} {successMessage} <br />
+				  	</div>
+				  }
+            	</div>
+            </form>	
             }
 
-          </div>
-
-            { creatorId === currentUser.id &&
-            <div className={stateEditar.edit}>
-              <textarea
-              className="texto"
-              readonly
-              col="30"
-              name="review"
-              value={editedComment}
-              placeholder="Agregue su comentario"
-              onChange={e => {
-						if (successMessage) setSuccessMessage('');
-						if (errorMessage) setErrorMessage('');
-						setEditedComment(e.target.value);
-			  }}
-              />
-              <button type="submit" className="addEdit comment-addEdit" value="Edit" onClick={handleEdit}>
-				Aceptar
-			  </button>
-			  {errorMessage && (
-			  	<div className="error">
-			  		{failure} {errorMessage} <br />
-			  	</div>
-			  )}
-			  {successMessage && (
-			  	<div className="success">
-			  		{success} {successMessage} <br />
-			  	</div>
-			  )}
-            </div>
-            }
-
-        </div>
+    	</div>
     )
 }

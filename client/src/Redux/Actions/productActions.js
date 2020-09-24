@@ -3,15 +3,17 @@ import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
-export const getAllProducts = () => dispatch => {
+export const getAllProducts = (pag=1) => dispatch => {
 	axios
-		.get(`${urlBack}/products`)
+		.get(`${urlBack}/products/pag/?p=${pag}`)
 		.then(res => {
-			const products = res.data;
-
-			dispatch({type: actionTypes.GET_ALL_PRODUCTS, payload: products});
-
-			dispatch({type: actionTypes.CLEAN_MESSAGES});
+			const payload = {
+				products : res.data.data,
+				currentPage : res.currentPage 
+			}
+				dispatch({type: actionTypes.GET_ALL_PRODUCTS, payload: payload});
+				dispatch({type: actionTypes.CLEAN_MESSAGES});
+			
 		})
 		.catch(err => dispatch(catchError(err)));
 };
@@ -24,14 +26,14 @@ export const getAllProducts = () => dispatch => {
 
 export const postProduct = (product, categories) => dispatch => {
 	axios
-		.post(`${urlBack}/products`, product)
+		.post(`${urlBack}/products/`, product)
 		.then(res => {
 			dispatch({type: actionTypes.POST_PRODUCT, payload: res.data});
 
 			if (categories.length) dispatch(modifyProductCategories(res.data.id, categories));
 			else dispatch(getAllProducts());
 		})
-		.catch(err => dispatch(catchError( err)));
+		.catch(err => dispatch(catchError(err)));
 };
 
 export const deleteProduct = productId => dispatch => {
@@ -81,6 +83,10 @@ export const modifyProductCategories = (productId, categories) => dispatch => {
 };
 
 export const catchError = err => dispatch => {
-	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.response.data});
+	dispatch({type: actionTypes.PRODUCTS_ERROR, payload: err.response ? err.response.data : err});
 	dispatch({type: actionTypes.CLEAN_MESSAGES});
 };
+
+export const cleanProduct = () => dispatch => {
+	dispatch({type: actionTypes.CLEAN_PRODUCTS});
+}

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
+import {allActions} from '../../Redux/Actions/actions.js';
 import ProductCard from '../Product Card/ProductCard.jsx';
 import axios from 'axios';
 import './Catalogo.css';
@@ -8,16 +9,35 @@ import './Catalogo.css';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Catalogo(props) {
-	const products = useSelector(state => state.products.allProducts);
-
+	let products = useSelector(state => state.products.allProducts);
 	// React hooks
 	const [robots, setRobots] = useState([]);
+	const [pag, setPag] = useState(1)
 	const {categoria} = useParams();
 	const params = new URLSearchParams(props.location.search).get('query');
+	const dispatch = useDispatch()
+
+	const handleCargarMas = event => {
+		event.preventDefault();
+				let lastPage = pag;
+				let nextPage = pag + 1;
+				setPag(pag + 1)
+				dispatch(allActions.productActions.getAllProducts(nextPage))
+	}
 
 	useEffect(
 		() => {
-			// Main page, returns ALL products
+
+			dispatch(allActions.productActions.getAllProducts(1));
+			return () => {dispatch(allActions.productActions.cleanProduct())}
+		},
+		[]
+	);
+
+	useEffect(
+		() => {
+			// Main page, returns ALL products - or not All ...
+			let prevPages = robots;
 			if (!categoria && !params) setRobots(products);
 		},
 		[products]
@@ -58,6 +78,8 @@ export default function Catalogo(props) {
 							<ProductCard robot={bot} />
 						</li>
 					))}
+			<button className="cargarMas" onClick={handleCargarMas} > Cargar más productos </button>
+			<li> Mostrando {robots.length} items </li>
 			</ul>
 			{!robots && params && <h1>No contamos con ningún robot de ese tipo :(</h1>}
 		</div>

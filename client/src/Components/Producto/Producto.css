@@ -8,8 +8,11 @@
   --razzmatazz: #d53467ff
 }
 
+/* ===========   Container  ============ */
+
 .productContainer {
   max-width: 800px;
+  min-width: 300px;
   margin: auto;
   margin-top: 80px;
   display: flex;
@@ -21,85 +24,133 @@
   width: 100%;
 }
 
-.productTitle {
-  color: white;
-  font-size: 225%;
-}
+/* ===========   Carousel  ============ */
 
 .carItems {
-  height: 400px;
-  margin: 0px;
-  overflow: hidden;
+  height: 500px;
+  text-align: center;
   background-color: white;
-  display: flex;
-  justify-content: center;
-  align-self: center;
-  box-shadow: 0 0 15px 3px rgba(0,0,0,0.33);
-  border-radius: 15px;
+  box-shadow: 0 3px 5px 0px rgba(0,0,0,0.33);
+  border-radius: 30px 30px 0px 0px;
+}
+
+.carousel-item {
+  height: 500px;
+}
+
+.carousel img {
+  margin: 0;
 }
 
 .productImg {
-  margin-bottom: 10px;
   height: 500px;
   object-fit: cover;
 }
 
-.productCarouselItem {
-  height: 90vh;
-}
-
 .carousel-control-next {
-  background-color: rgba(116, 69, 186,0.33);
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
+  background-color: var(--ksu-purple);
+  box-shadow: 0 0px 15px 0px rgba(0,0,0,0.66);
+  opacity: 1;
+  /*background-color: rgba(116, 69, 186,0.33);*/
 }
 
 .carousel-control-prev {
-  background-color: rgba(116, 69, 186,0.33);
-  border-top-left-radius: 15px;
-  border-bottom-left-radius: 15px
+  background-color: var(--ksu-purple);
+  box-shadow: 0 0px 15px 0px rgba(0,0,0,0.66);
+  opacity: 1;
 }
 
-.carCap {
-  background-color: rgba(0,0,0,0.0);
-}
+
+/* ===================  Product Info ==================== */
 
 .infoCard {
-  background-color: var(--glaucous);
+/*  background-color: var(--glaucous);*/
+  background-image: url('../../multimedia/backgroundPattern.jpg');
+  background-size: 200%; /* Resize the background image to cover the entire container */
   color: white;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 15px;
-  box-shadow: 0 0 15px 3px rgba(0,0,0,0.33);
+  padding: 15px;
+  border-radius: 0 0 30px 30px;
+  box-shadow: inset 0 0 27px 3px rgba(0,0,0,0.45);
 }
 
-.infoCont {
-  display: flex;
-  justify-content: space-around;
+.infoCardHeader{
+  display: grid;
+  grid-template-columns: 15fr 5fr;
+  background-color: var(--glaucous);
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 12px;
+  padding-right: 9px;
+  padding-left: 9px;
+  border-radius: 22px;
+  box-shadow: 0 0 15px 0px rgba(0,0,0,0.45);
+
 }
 
-.infoCardDesc {
-}
-
-.infoCardData {
-  font-weight: bold;
-  text-align: right;
-}
-
-.Reviews{
-  margin-top: 20px;
+.productTitle {
+  color: white;
+  font-size: 225%;
+  text-shadow: 0 0 5px rgba(0,0,0,0.66)
 }
 
 .editProdBtn {
-  height: 30px;
-  background: #d53467;
-  border-radius: 4px;
-  border: 4px solid #d53467;
+  background: var(--razzmatazz);
+  border: none;
+  border-radius: 7px;
   color:white;
-  margin:0;
+  font-size: 0.8em;
+  vertical-align: top;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.starQualification {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin: 0;
+  margin-top: 7px;
+  font-size: 1.3em;
+  text-shadow: 0 0 5px rgba(0,0,0,0.66)
+}
+
+.infoCardDescription {
+  font-size: 1.2em;
+}
+
+/* ================  Buy Button  =================== */
+
+.bigBuyButton {
+  transition: 0.15s;
+  background-color: var(--razzmatazz);
+  width: 100%;
+  border: none;
   margin-top: 7px;
   margin-bottom: 7px;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  border-radius: 22px;
+  box-shadow: 0 0 15px 0px rgba(0,0,0,0.45);
+  color: white;
+  padding-top: 5px;
+}
+
+.bigBuyButton:hover {
+  text-shadow: 0 0 7px white;
+  box-shadow: 0 0 33px 0 rgba(0,0,0,0.66)
+}
+
+
+/* ===================  Review  ===================== */
+
+.reviewContainer {
+  background-color: var(--glaucous);
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 7px;
+  padding-top: 15px;
+  padding-right: 9px;
+  padding-left: 9px;
+  border-radius: 22px;
+  box-shadow: 0 0 15px 0px rgba(0,0,0,0.45);
 }

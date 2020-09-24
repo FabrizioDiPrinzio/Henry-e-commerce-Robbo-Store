@@ -153,6 +153,7 @@ export default function Purchase_order(props) {
 						{purchaseOrderData.orderlines && purchaseOrderData.orderlines.map(bot => 
 						<div className='orderline' key={bot.id}>
 							<Orderline robot={bot} orderProducts={purchaseOrderData.products} />
+							<br/>
 						</div> )}
 
 					</div>

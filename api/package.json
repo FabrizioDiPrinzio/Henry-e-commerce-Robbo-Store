@@ -10,10 +10,6 @@
   },
   "author": "Dev5",
   "license": "ISC",
-  "engines": {
-    "node": ">=12.18.3",
-    "npm": ">=6.14.6"
-  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
@@ -31,7 +27,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.3.0",
-    "sequelize": "^6.3.4"
+    "sequelize": "^6.3.4",
+    "mailgun-js": "^0.22.0"
   },
   "devDependencies": {
     "supertest-session": "^4.0.0",

@@ -3,17 +3,16 @@ import {Link, useParams} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import {allActions} from '../../Redux/Actions/actions';
 import axios from 'axios';
-
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import './UserProfile.css';
-
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Collapse from 'react-bootstrap/Collapse';
-
 // ======================== Fin de Imports ======================== //
 
+
 const urlBack = process.env.REACT_APP_API_URL;
+
 
 export default function UserProfile() {
 
@@ -48,24 +47,6 @@ export default function UserProfile() {
 
 			axios.get(`${urlBack}/orders/users/${id}`)
 			.then(response => {
-				/*  response = {
-					address: null
-					buyer: {id: 10, name: "usuario", rol: null, email: "usuario@usuario.com", googleId: null, …}
-					buyerId: 10
-					city: null
-					country: null
-					createdAt: "2020-09-24T05:59:21.296Z"
-					id: 2 <---------------------------------------- IMPORTANT (order ID)
-					phone_number: null
-					postal_code: null
-					recipient_lastname: null
-					recipient_name: null
-					shipping_type: null
-					status: "enCarrito" <--------------------------------- IMPORTANT
-					updatedAt: "2020-09-24T05:59:21.296Z" <--------------- IMPORTANT
-					}
-				*/
-				console.log(response.data)
 				setPurchaseOrders(response.data)
 
 			}).catch(err => {
@@ -86,6 +67,7 @@ export default function UserProfile() {
 	return (
 		<div className='profileContainer'>
 			<div className="profilePage">
+
 				<div className='profileCard'>
 					<h2>
 						<strong className='text-shadow-drop-center'>
@@ -109,14 +91,6 @@ export default function UserProfile() {
 							</h6>
 							{userProfile.rol}
 						</div>
-						{/*
-						<div>
-							<h6>
-								Email:
-							</h6>
-							{userProfile.email}
-						</div>
-						*/}
 					</div>
 				</div>
 				
@@ -135,22 +109,30 @@ export default function UserProfile() {
 	
 					<Collapse in={openPurchaseHistory}>
 	      				<div className=''>
+
 	      					{authFlag &&
 	      						purchaseOrders.map(order => {
 	      							return (
+
 	      							<Link to={`/purchase_order/${order.id}`} style={{ textDecoration: 'none' }}>
-	      							<div key={order.id} className='orderRow'>
-	      								<h6><span className='idBox'>{order.id}</span>
-	      								Status: <span className='statusBox'>{order.status}</span></h6>
-	      								<span><time>{Date(order.updatedAt)}</time></span>
-	      							</div>
+	      								<div key={order.id} className='orderRow'>
+
+	      									<h6><span className='idBox'>{order.id}</span>
+
+	      									Status: <span className='statusBox'>{order.status}</span></h6>
+	      									
+	      									<span><time>{Date(order.updatedAt)}</time></span>
+	      								</div>
 	      							</Link>
+
 	      							)
 	      						})
 							}
+
 							{!authFlag &&
 								<h7>No puedes ver el historial de compras de otro usuario</h7>
 							}
+
 							<br/>
 						</div>
 	      			</Collapse>

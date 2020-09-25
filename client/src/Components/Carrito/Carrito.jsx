@@ -39,7 +39,7 @@ export default function Carrito() {
 					className="cerrarForm"
 					onClick={() => setFormulario((formularioState.visibility = false))}
 				>
-					X
+					<span>X</span>
 				</button>
 			)}
 			<ul className="list">

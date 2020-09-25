@@ -108,6 +108,7 @@ export default function Catalogo(props) {
 			// Main page, returns ALL products - or not All ...
 			if (!categoria && !params) setRobots(products);
 			if (more) setCargarMasVisibiliy(true)
+			if (!robots.length) setCargarMasVisibiliy(false)
 		},
 		[products]
 	);
@@ -140,9 +141,10 @@ export default function Catalogo(props) {
 						{robots.length === 0 && params && 
 						<li><h5>No encontramos nada :´(</h5></li>}
 						<div>
-								{cargarMasVisibiliy && 
+								{cargarMasVisibiliy &&
 								<button className='cargarMas' onClick={handleCargarMas} > Cargar más productos </button>}
-								<button onClick={handleSubir} className='subir'>Subir</button>
+								{!!robots.length &&
+								<button onClick={handleSubir} className='subir'>Subir</button>}
 						</div>
 						{!cargarMasVisibiliy && 
 						<li><span>Eso es todo por ahora...</span></li>}

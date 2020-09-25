@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Link, Redirect, useParams} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from '../../Redux/Actions/actions.js';
 import Menu from './Menu/Menu.jsx';
@@ -10,7 +10,6 @@ import {cartButton, userButton, searchButton, success} from '../../multimedia/SV
 import 'bootstrap/dist/css/bootstrap.css';
 import './navBar.css';
 // ------- Fin de imports --------------
-
 
 document.addEventListener('scroll', e => {
 	const searchBar = document.querySelector('.SearchBarContainer');
@@ -24,7 +23,7 @@ document.addEventListener('scroll', e => {
 	}
 });
 
-export default function NavBar() {
+export default function NavBar(props) {
 	// Redux
 	const dispatch = useDispatch();
 	const user = useSelector(state => state.user);
@@ -34,6 +33,11 @@ export default function NavBar() {
 	const [showModal, setShowModal] = useState(false);
 	const [statusChanged, setStatusChanged] = useState(false);
 	const [redirect, setRedirect] = useState(false);
+
+	const {categoria} = useParams();
+	const params = new URLSearchParams(props.location.search).get('query');
+
+	// ----------- Functionality --------------------------
 
 	useEffect(
 		() => {
@@ -59,14 +63,16 @@ export default function NavBar() {
 
 	const handleClickTitle = () => {
 		dispatch(allActions.productActions.cleanProduct());
-		dispatch(allActions.productActions.getAllProducts(1));
-	} 
+		if (!categoria || params) dispatch(allActions.productActions.getAllProducts(1));
+	};
 
 	return (
 		<div className="navBarContainer">
 			<nav className="NavBar">
 				<Link to="/">
-					<span onClick={handleClickTitle} className="Title">Robbo Store</span>
+					<span onClick={handleClickTitle} className="Title">
+						Robbo Store
+					</span>
 				</Link>
 				<img src="../favicon.svg" alt="logo" className="logo" />
 				<span className="espacioBlanco"> </span>

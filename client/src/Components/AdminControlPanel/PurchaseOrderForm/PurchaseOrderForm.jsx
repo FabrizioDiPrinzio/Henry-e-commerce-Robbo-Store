@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import './PurchaseOrderForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -9,53 +9,45 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function PurchaseOrderForm() {
 
 	const [selectedStatus, setSelectedStatus] = useState('0');
-	const [productOrders, setProductOrders] = useState([]);
-	const [orders, setOrders] = useState([]);
-	const lista = useRef(0);
+	const [selectedOrders, setSelectedOrders] = useState([]);
+	const [allOrders, setAllOrders] = useState([]);
 
 	useEffect(() => {
 		axios
 			.get(`${urlBack}/orders`)
 			.then(response => {
-				setProductOrders(response.data);
-				setOrders(response.data);
+				setSelectedOrders(response.data);
+				setAllOrders(response.data);
 			})
 			.catch(err => console.log(err.response.data));
 	}, []);
 
 	const handleSelectChange = event => {
-		setProductOrders(orders);
 
-		let status = event.target.value;
-		setSelectedStatus(status);
-
-		if (status !== "0") {
-			setProductOrders(productOrders.filter(order => order.status === status));
+		if (event.target.value !== "0") {
+			setSelectedOrders(allOrders.filter(order => order.status === event.target.value));
 		}
 		else {
-			setProductOrders(orders);
-			setSelectedStatus('0');
+			setSelectedOrders(allOrders);
 		}
 	};
 
 	return (
 		<div className="productFormAdmin">
-			<div>
-				<div>Filtrar por estado: </div>
-				<select ref={lista} className="statusSelect" defaultValue="Estado..." onChange={handleSelectChange}>
-					<option selected value="0">Todo</option>
-					<option value="enCarrito">En carrito</option>
-					<option value="creada">Creada</option>
-					<option value="pagada">Pagada</option>
-					<option value="Entregada">Entregada</option>
-					<option value="Rechazada">Rechazada</option>
-				</select>
-			</div>
 			<div className="productTableTitleContainer">
 				<div className="productTableTitle">
 					<h6>Id Orden</h6>
 					<h6>Nombre</h6>
-					<h6>Estado</h6>
+					<h6>
+						<select className="statusSelect" onChange={handleSelectChange}>
+							<option selected value="0">Estado</option>
+							<option value="enCarrito">En carrito</option>
+							<option value="creada">Creada</option>
+							<option value="pagada">Pagada</option>
+							<option value="entregada">Entregada</option>
+							<option value="rechazada">Rechazada</option>
+						</select>
+					</h6>
 					<h6>Envío</h6>
 					<h6>Fecha</h6>
 					<h6>Precio Total</h6>
@@ -63,8 +55,8 @@ export default function PurchaseOrderForm() {
 			</div>
 			<div className="productListContainer">
 				<ul className="productList">
-					{productOrders &&
-						productOrders.map(order => (
+					{selectedOrders &&
+						selectedOrders.map(order => (
 							<li key={order.id}>
 								<PurchaseOrderFormLine info={order} />
 							</li>

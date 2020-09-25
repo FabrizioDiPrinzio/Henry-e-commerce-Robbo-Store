@@ -1,0 +1,54 @@
+:root {
+	--max-width: 700px;
+	--beau-blue: #d2e3f9ff;
+	--baby-blue-eyes: #98b7f0ff;
+	--glaucous: #617cc7ff;
+	--glaucous-transparent: rgba(66, 135, 245, 0.66);
+	--ksu-purple: #563488ff;
+	--razzmatazz: #d53467ff;
+}
+
+.loading-screen {
+	position: absolute;
+	top: 100px;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	height: 200%;
+	width: 100%;
+	background-image: url("../../multimedia/backgroundPattern.jpg");
+	justify-content: center;
+	align-items: center;
+	z-index: 100;
+}
+
+#loading-logo {
+	margin-top: 125px;
+}
+
+#loading-spinner {
+	color: var(--razzmatazz);
+	margin-bottom: 400px;
+	height: 60px;
+	width: 60px;
+}
+
+@keyframes fadeOutAnimation {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		display: none;
+		visibility: hidden;
+	}
+}
+
+.hideLoading {
+	animation: fadeOutAnimation ease-in-out 0.7s;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}

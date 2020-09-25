@@ -112,7 +112,7 @@ router.put('/:id', async (req, res) => {
 			from : 'RobboStore <sanchezlismairy@gmail.com>', 
 			to : userEmail, 
 			subject : 'Pedido recibido', 
-			text :'¡Probando algo de genialidad Mailgun!', 
+			text :'Tu pedido se ha recibido correctamente', 
 			template: "envio.test"
 	};
 

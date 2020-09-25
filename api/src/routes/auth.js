@@ -62,6 +62,9 @@ router.post('/forgot', async (req, res) => {
 		const user = await User.findOne({where: {email}});
 		if (!user) return res.status(404).send('No hay usuarios registrados con ese email');
 
+
+
+
 		const salt = await User.generateSalt();
 
 		user.forgotPasswordToken = salt;
@@ -77,8 +80,8 @@ router.post('/forgot', async (req, res) => {
 			from : 'RobboStore <sanchezlismairy@gmail.com>', 
 			to : email, 
 			subject : 'Reseteo de Password', 
-			text :'¡Probando algo de genialidad Mailgun!', 
-			// template: "envio.test"
+			text :`http://localhost:3000/reset/${salt}`, 
+			template: "password"
 	};
 
 		mailgun.messages().send(data, function (error, body) {
@@ -88,7 +91,7 @@ router.post('/forgot', async (req, res) => {
 			}
 
 		return res.status(200).send({salt, statusEmail: 'enviado'});
-				//return res.send(salt);
+	
 	});
 
 	} catch (error) {

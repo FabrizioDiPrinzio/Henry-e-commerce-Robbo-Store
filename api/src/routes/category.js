@@ -76,7 +76,7 @@ router.get('/:nombreCategoria/', (req, res) => {
 		let productos = response.products
 		let pagina = productos.slice(firstIndex, lastIndex);
 		let result = {
-			currentPage: p,
+			currentPage: productos.length > 0 ? p : p - 1,
 			products : pagina
 		}
 		res.send(result)

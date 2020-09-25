@@ -21,22 +21,33 @@ export default function Catalogo(props) {
 		event.preventDefault();
 				let lastPage = pag;
 				let nextPage = pag + 1;
-				setPag(pag + 1)
 				if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(nextPage))
 				if (categoria)  {
-					axios
-					.get(`${urlBack}/products/category/${categoria}/?p=${nextPage}`)
-					.then(res => setRobots(robots.concat(res.data.products)))
-					.catch(err => {
-						setRobots(null);
-						console.log(err.response.data);
-					});
+					cargarCategoria(nextPage)
 				}
+				setPag(pag + 1)
+	}
+
+	const cargarCategoria = (nextPage) => {
+		axios
+			.get(`${urlBack}/products/category/${categoria}/?p=${nextPage}`)
+			.then(res => {
+				setRobots(['nada'])
+				if (nextPage === 1) {
+					setRobots(res.data.products)
+				} else {
+					setRobots(robots.concat(res.data.products))
+				}
+			})
+			.catch(err => {
+				setRobots(null);
+				console.log(err.response.data);
+			});
 	}
 
 	useEffect(
 		() => {
-			dispatch(allActions.productActions.getAllProducts(1));
+			if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(1));
 			return () => {dispatch(allActions.productActions.cleanProduct())}
 		},
 		[]
@@ -45,32 +56,25 @@ export default function Catalogo(props) {
 	useEffect(
 		() => {
 			// Main page, returns ALL products - or not All ...
-			setRobots(products);
+			if (!categoria && !params) setRobots(products);
 		},
 		[products]
 	);
 
 	useEffect(
 		() => {
+			setPag(1);
 			if (categoria) {
 				// Filter by category
-				{dispatch(allActions.productActions.cleanProduct())}
-				axios
-					.get(`${urlBack}/products/category/${categoria}/?p=${pag}`)
-					.then(res => setRobots(res.data.products))
-					.catch(err => {
-						setRobots(null);
-						console.log(err.response.data);
-					});
+				cargarCategoria(1)
 			}
 			else if (params) {
 				// Search by query
-				{dispatch(allActions.productActions.cleanProduct())}
 				axios
 					.get(`${urlBack}/search?query=${params}`)
 					.then(res => setRobots(res.data))
 					.catch(err => {
-						setRobots(null);
+						setRobots([]);
 						console.log(err.response.data);
 					});
 			}

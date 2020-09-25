@@ -34,14 +34,6 @@ export default function Carrito() {
 
 	return (
 		<div className="containerCarrito">
-			{formularioState.visibility && (
-				<button
-					className="cerrarForm"
-					onClick={() => setFormulario((formularioState.visibility = false))}
-				>
-					<span>X</span>
-				</button>
-			)}
 			<ul className="list">
 				{productsInCart &&
 					productsInCart.map(bot => (
@@ -52,7 +44,6 @@ export default function Carrito() {
 			</ul>
 
 			<div className="datostotales">
-				<h3>Envio:</h3>
 				<h2>Total: U$S {total ? total.price : 0}</h2>
 			</div>
 
@@ -64,7 +55,13 @@ export default function Carrito() {
 				<UserForm />
 			</Modal>
 
-			<div>{formularioState.visibility && <FormularioDatosEnvio />}</div>
+			<Modal
+				show={formularioState.visibility}
+				dialogClassName="purchase-order-modal"
+				onHide={() => setFormulario((formularioState.visibility = false))}
+			>
+				<FormularioDatosEnvio />
+			</Modal>
 		</div>
 	);
 }

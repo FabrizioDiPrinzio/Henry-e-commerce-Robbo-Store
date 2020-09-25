@@ -100,7 +100,7 @@ video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-  user-select: none;
+	user-select: none;
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -143,14 +143,13 @@ html {
 	width: 100%;
 }
 .tooltip-inner {
-    max-width: none;
+	max-width: none;
 }
 
 button:focus {
-  outline: none !important;
+	outline: none !important;
 }
 
 a:hover {
-  text-decoration: none !important;
-  color: white !important;
+	color: var(--razzmatazz) !important;
 }

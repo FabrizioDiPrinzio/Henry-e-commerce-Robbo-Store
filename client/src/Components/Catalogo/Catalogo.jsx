@@ -27,7 +27,6 @@ export default function Catalogo(props) {
 
 	useEffect(
 		() => {
-
 			dispatch(allActions.productActions.getAllProducts(1));
 			return () => {dispatch(allActions.productActions.cleanProduct())}
 		},

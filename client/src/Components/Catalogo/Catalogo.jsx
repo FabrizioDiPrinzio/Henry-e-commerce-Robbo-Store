@@ -83,12 +83,14 @@ export default function Catalogo(props) {
 		}
 	}
 
-	const	handleSubir = () => {
-		window.scrollTo(0,0)
+	const	handleSubir = e => {
+		e.preventDefault();
+		window.scrollTo(0,0);
 	}
 
 	useEffect(
 		() => {
+			setPag(1)
 			if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(1));
 			return () => {
 				dispatch(allActions.productActions.cleanProduct())
@@ -107,8 +109,7 @@ export default function Catalogo(props) {
 		() => {
 			// Main page, returns ALL products - or not All ...
 			if (!categoria && !params) setRobots(products);
-			if (more) setCargarMasVisibiliy(true)
-			if (!robots.length) setCargarMasVisibiliy(false)
+			if (more) setCargarMasVisibiliy(true);
 		},
 		[products]
 	);
@@ -141,9 +142,10 @@ export default function Catalogo(props) {
 						{robots.length === 0 && params && 
 						<li><h5>No encontramos nada :´(</h5></li>}
 						<div>
-								{cargarMasVisibiliy &&
-								<button className='cargarMas' onClick={handleCargarMas} > Cargar más productos </button>}
 								{!!robots.length &&
+								cargarMasVisibiliy &&
+								<button className='cargarMas' onClick={handleCargarMas} > Cargar más productos </button>}
+								{robots.length > 3 &&
 								<button onClick={handleSubir} className='subir'>Subir</button>}
 						</div>
 						{!cargarMasVisibiliy && 

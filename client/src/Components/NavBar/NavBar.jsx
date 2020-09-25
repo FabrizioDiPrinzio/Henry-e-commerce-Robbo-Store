@@ -62,8 +62,8 @@ export default function NavBar(props) {
 	};
 
 	const handleClickTitle = () => {
-		dispatch(allActions.productActions.cleanProduct());
-		if (!categoria || params) dispatch(allActions.productActions.getAllProducts(1));
+		if (categoria || params) dispatch(allActions.productActions.cleanProduct());
+		if (params || categoria) dispatch(allActions.productActions.getAllProducts(1));
 	};
 
 	return (

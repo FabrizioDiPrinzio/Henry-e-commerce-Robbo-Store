@@ -112,7 +112,7 @@ export default function Catalogo(props) {
 			if (!categoria && !params) setRobots(products);
 			if (more) setCargarMasVisibiliy(true);
 		},
-		[products]
+		[products, params, categoria]
 	);
 
 	useEffect(

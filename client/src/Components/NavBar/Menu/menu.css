@@ -1,12 +1,11 @@
-
 :root {
-  --max-width: 700px;
-  --beau-blue: #d2e3f9ff;
-  --baby-blue-eyes: #98b7f0ff;
-  --glaucous: #617cc7ff;
-  --glaucous-transparent: rgba(66, 135, 245, 0.66);
-  --ksu-purple: #563488ff;
-  --razzmatazz: #d53467ff
+	--max-width: 700px;
+	--beau-blue: #d2e3f9ff;
+	--baby-blue-eyes: #98b7f0ff;
+	--glaucous: #617cc7ff;
+	--glaucous-transparent: rgba(66, 135, 245, 0.66);
+	--ksu-purple: #563488ff;
+	--razzmatazz: #d53467ff;
 }
 
 .containerMenu {
@@ -30,7 +29,7 @@
 }
 
 .botonMenu:hover {
-	background-color: var( --razzmatazz)
+	background-color: var(--razzmatazz);
 }
 
 .line {
@@ -84,15 +83,12 @@
 	margin-top: 6px; /*esto es para alinearlo con el searchbar*/
 	align-items: center;
 	border-radius: 0 0px 3px 3px;
-	box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2),
-							inset 0 0 1px 0 var(--beau-blue),
-							inset 0px 10px 10px 0 rgb(0,0,0,0.2);
+	box-shadow: 10px 10px 10px 0 rgb(0, 0, 0, 0.2), inset 0 0 1px 0 var(--beau-blue),
+		inset 0px 10px 10px 0 rgb(0, 0, 0, 0.2);
 	position: absolute;
 	overflow: hidden;
-	width: 350px
+	width: 350px;
 	/*  ↑ arriba tiene que ser igual a open ↑  ↓ abajo tiene las props que cambian al cerrarse ↓ */
-
-
 }
 
 .menuClose {
@@ -100,12 +96,11 @@
 	background-color: var(--ksu-purple);
 	background-image: url("../../../multimedia/backgroundPattern.jpg");
 	background-size: 1500px 900px;
-	margin-top: 6px;  /*esto es para alinearlo con el searchbar*/
+	margin-top: 6px; /*esto es para alinearlo con el searchbar*/
 	align-items: center;
 	border-radius: 0 0px 3px 3px;
-	box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2),
-							inset 0 0 1px 0 var(--beau-blue),
-							inset 0px 10px 10px 0 rgb(0,0,0,0.2);
+	box-shadow: 10px 10px 10px 0 rgb(0, 0, 0, 0.2), inset 0 0 1px 0 var(--beau-blue),
+		inset 0px 10px 10px 0 rgb(0, 0, 0, 0.2);
 	position: absolute;
 	overflow: hidden;
 
@@ -131,7 +126,6 @@
 	padding: 4px 8px 4px 8px;
 	border-radius: 3px;
 	max-width: 300px;
-
 }
 
 .categoria:hover > a {
@@ -157,3 +151,7 @@
 	text-decoration: none;
 }
 
+.link-categoria:hover {
+	text-decoration: none !important;
+	color: white !important;
+}

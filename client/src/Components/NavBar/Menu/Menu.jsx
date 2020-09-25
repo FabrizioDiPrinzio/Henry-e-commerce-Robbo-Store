@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import './menu.css';
 
 export default function Menu() {
@@ -35,9 +35,11 @@ export default function Menu() {
 				<ul className="menuList">
 					{categories.map(categoria => {
 						return (
-							<li onClick={clickHandle}
-								className="categoria" key={categoria.name}>
-								<Link to={`/categories/${categoria.name}`}> {categoria.name}</Link>
+							<li onClick={clickHandle} className="categoria" key={categoria.name}>
+								<NavLink to={`/categories/${categoria.name}`} className="link-categoria">
+									{' '}
+									{categoria.name}
+								</NavLink>
 								<div />
 							</li>
 						);

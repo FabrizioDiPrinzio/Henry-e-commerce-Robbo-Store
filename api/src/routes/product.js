@@ -19,7 +19,7 @@ router.get('/pag/', (req, res, next) => {
 	Product.findAll({include: [Categories, Pics]}).then(data => {
 		const productos = data.slice(firstIndex, lastIndex);
 		const result = {
-			data : productos,
+			data: productos,
 			currentPage: p,
 			more: productos.length > 0 ? true : false
 		};
@@ -28,6 +28,10 @@ router.get('/pag/', (req, res, next) => {
 });
 
 router.post('/', async (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {name, price, stock, description, images, mainImage} = req.body;
 	if (!name || !price || typeof stock !== 'number' || !description || !images || !mainImage)
 		return res.status(400).send('Falta algún parámetro');
@@ -50,6 +54,10 @@ router.post('/', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {name, price, stock, description, images, mainImage} = req.body;
 	// const image = req.body.image ? req.body.image[0] : null;
 	const {id} = req.params;
@@ -102,6 +110,10 @@ router.get('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {id} = req.params;
 
 	Product.destroy({where: {id}, include: [Pics]}).then(response => {
@@ -111,6 +123,10 @@ router.delete('/:id', (req, res) => {
 });
 
 router.post('/:idProducto/category/:idCategoria', async (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {idProducto, idCategoria} = req.params;
 	const producto = await Product.findByPk(idProducto);
 	const categoria = await Categories.findByPk(idCategoria);
@@ -125,6 +141,10 @@ router.post('/:idProducto/category/:idCategoria', async (req, res) => {
 });
 
 router.delete('/:idProducto/category/:idCategoria', (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {idProducto, idCategoria} = req.params;
 
 	product_categories

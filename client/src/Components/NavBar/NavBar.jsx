@@ -12,7 +12,7 @@ import './navBar.css';
 
 document.addEventListener('scroll', e => {
 	const searchBar = document.querySelector('.SearchBarContainer');
-	if (!searchBar) return // when apps crashes navbar does not exist and stacks an error
+	if (!searchBar) return; // when apps crashes navbar does not exist and stacks an error
 
 	if (window.scrollY > 55) {
 		searchBar.style.top = '0';
@@ -68,8 +68,7 @@ export default function NavBar() {
 						{userButton}
 					</button>
 					{user.rol === 'Guest' &&
-					!statusChanged &&
-					showModal && (
+					!statusChanged && (
 						<Modal show={showModal} onHide={hideModals}>
 							<UserForm />
 						</Modal>

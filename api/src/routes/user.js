@@ -17,10 +17,11 @@ router.get('/:id', (req, res) => {
 	const {id} = req.params;
 
 	// Guard clauses
-	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
-	if (req.user.id !== Number(id) && req.user.rol !== 'Admin') {
-		return res.status(401).send('No puedes editar a otro usuario');
-	}
+	
+	// if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	// if (req.user.id !== Number(id) && req.user.rol !== 'Admin') {
+	// 	return res.status(401).send('No puedes editar a otro usuario');
+	// }
 
 	User.findByPk(id).then(user => {
 		if (!user) res.status(404).send('No se encontró el usuario');

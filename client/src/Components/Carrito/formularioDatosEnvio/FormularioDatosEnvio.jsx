@@ -13,6 +13,7 @@ export default function FormularioDatosEnvio() {
 	// Redux
 	const currentCart = useSelector(state => state.cart.currentCart);
 	const userId = useSelector(state => state.user.id);
+	const userEmail = useSelector(state => state.user.email);
 	const dispatch = useDispatch();
 
 	// React Hooks
@@ -56,7 +57,7 @@ export default function FormularioDatosEnvio() {
 	const handleSend = event => {
 		event.preventDefault();
 
-		const createdOrder = {...inputValues, status: 'creada'};
+		const createdOrder = {...inputValues, status: 'creada', userEmail };
 
 		axios
 			.put(`${urlBack}/orders/${currentCart.id}`, createdOrder)

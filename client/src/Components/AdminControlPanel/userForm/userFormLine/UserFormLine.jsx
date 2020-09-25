@@ -117,7 +117,7 @@ export default function UserFormAdmin(props) {
 					<div>
 					<div className="usrTableCell">
 						<select className="usrTableCell" defaultValue={rol} onChange={handleSelectChange}>
-							<option value="Usuario">Usuario</option>
+							<option value="Client">Client</option>
 							<option value="Admin">Admin</option>
 						</select>
 					</div>

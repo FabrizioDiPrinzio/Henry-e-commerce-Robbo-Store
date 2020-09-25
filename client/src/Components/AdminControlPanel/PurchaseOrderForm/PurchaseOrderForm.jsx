@@ -24,7 +24,6 @@ export default function PurchaseOrderForm() {
 	}, []);
 
 	const handleSelectChange = event => {
-		event.preventDefault();
 		setProductOrders(orders);
 
 		let status = event.target.value;

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {allActions} from './Redux/Actions/actions.js';
 import axios from 'axios';
@@ -23,7 +23,10 @@ import Carrito from './Components/Carrito/Carrito.jsx';
 import Purchase_order from './Components/Purchase_order/Purchase_order.jsx';
 import OAuthSuccess from './Components/OAuth/OAuthSuccess';
 import Welcome from './Components/OAuth/Welcome';
+import LoadingScreen from './Components/Loading/LoadingScreen';
 // =========== FIN DE IMPORTS ============
+
+const urlBack = process.env.REACT_APP_API_URL;
 
 // ======== Inicializando el uso de algunas propiedades de Bootstrap que usan Jquery ======= //
 
@@ -42,12 +45,16 @@ $('.collapse').collapse();
 
 // ================================== Fin de jquery ======================================= //
 
-const urlBack = process.env.REACT_APP_API_URL;
-
-function App() {
+export default function App() {
+	// Redux
 	const user = useSelector(state => state.user);
 	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
+
+	// React Hooks
+	const [loading, setLoading] = useState(true);
+
+	// --------------- Functionality ------------------------
 
 	useEffect(() => {
 		// PLACEHOLDER ONLY, creates admin. Mail: 'admin@admin.com', Password: 'admin'
@@ -75,8 +82,9 @@ function App() {
 
 					dispatch(allActions.userActions.login(usuario.data));
 					dispatch(allActions.cartActions.getUserCart(usuario.data.id));
+					setLoading(false);
 				} catch (error) {
-					console.log(error); // Se queda con el carrito del guest
+					setLoading(false);
 				}
 			};
 
@@ -88,39 +96,46 @@ function App() {
 	return (
 		<div>
 			<Router>
-				<Route path="/" component={NavBar} />
-				<Route exact path="/" component={Home} />
-				<Switch>
-					<Route exact path="/" component={Catalogo} />
-					<Route exact path="/welcome" component={Welcome} />
-					<Route exact path="/categories/:categoria" component={Catalogo} />
-					<Route exact path="/search" component={Catalogo} />
-					<Route exact path="/carrito" component={Carrito} />
-					<Route exact path="/oauth/success" component={OAuthSuccess} />
-					<Route exact path="/producto/:id" component={Producto} />
-					<Route exact path="/user/:id" component={UserProfile} />
-					<Route exact path="/purchase_order/:purchaseOrderId" component={Purchase_order} />
-					<Route exact path="/reset/:token" component={ResetPasswordForm} />
-					<Route
-						exact
-						path="/product_form"
-						component={user.rol === 'Admin' ? FormularioProducto : NotFound}
-					/>
-					<Route
-						exact
-						path="/category_form"
-						component={user.rol === 'Admin' ? FormularioCategoria : NotFound}
-					/>
-					<Route
-						exact
-						path="/admin"
-						component={user.rol === 'Admin' ? AdminControlPanel : NotFound}
-					/>
-					<NotFound />
-				</Switch>
+				<Route path="/" render={() => <LoadingScreen loading={loading} />} />
+				{!loading && (
+					<div>
+						<Route path="/" component={NavBar} />
+						<Route exact path="/" component={Home} />
+						<Switch>
+							<Route exact path="/" component={Catalogo} />
+							<Route exact path="/welcome" component={Welcome} />
+							<Route exact path="/categories/:categoria" component={Catalogo} />
+							<Route exact path="/search" component={Catalogo} />
+							<Route exact path="/carrito" component={Carrito} />
+							<Route exact path="/oauth/success" component={OAuthSuccess} />
+							<Route exact path="/producto/:id" component={Producto} />
+							<Route exact path="/user/:id" component={UserProfile} />
+							<Route
+								exact
+								path="/purchase_order/:purchaseOrderId"
+								component={Purchase_order}
+							/>
+							<Route exact path="/reset/:token" component={ResetPasswordForm} />
+							<Route
+								exact
+								path="/product_form"
+								component={user.rol === 'Admin' ? FormularioProducto : NotFound}
+							/>
+							<Route
+								exact
+								path="/category_form"
+								component={user.rol === 'Admin' ? FormularioCategoria : NotFound}
+							/>
+							<Route
+								exact
+								path="/admin"
+								component={user.rol === 'Admin' ? AdminControlPanel : NotFound}
+							/>
+							<NotFound />
+						</Switch>
+					</div>
+				)}
 			</Router>
 		</div>
 	);
 }
-
-export default App;

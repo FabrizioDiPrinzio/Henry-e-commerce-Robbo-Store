@@ -19,18 +19,10 @@ router.get('/pag/', (req, res, next) => {
 	Product.findAll({include: [Categories, Pics]}).then(data => {
 		const productos = data.slice(firstIndex, lastIndex);
 		const result = {
-			prevPage: parseInt(p) < 2 ? null : parseInt(p) - 1,
-			currentPage: parseInt(p),
-			nextPage: parseInt(p) + 1
+			data : productos,
+			currentPage: p,
+			more: productos.length > 0 ? true : false
 		};
-		result.data = productos;
-		if (result.data.length < 1) {
-			result = {
-				prevPage: result.prevPage - 1,
-				currentPage: result.currentPage - 1,
-				nextPage: result.nextPage - 1
-			};
-		}
 		res.send(result);
 	});
 });

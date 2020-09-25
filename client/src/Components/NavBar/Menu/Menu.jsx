@@ -35,7 +35,8 @@ export default function Menu() {
 				<ul className="menuList">
 					{categories.map(categoria => {
 						return (
-							<li className="categoria" key={categoria.name}>
+							<li onClick={clickHandle}
+								className="categoria" key={categoria.name}>
 								<Link to={`/categories/${categoria.name}`}> {categoria.name}</Link>
 								<div />
 							</li>

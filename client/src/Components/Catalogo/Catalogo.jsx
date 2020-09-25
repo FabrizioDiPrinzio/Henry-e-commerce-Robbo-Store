@@ -83,6 +83,10 @@ export default function Catalogo(props) {
 		}
 	}
 
+	const	handleSubir = () => {
+		window.scrollTo(0,0)
+	}
+
 	useEffect(
 		() => {
 			if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(1));
@@ -133,13 +137,16 @@ export default function Catalogo(props) {
 							<ProductCard robot={bot} />
 						</li>
 					))}
-			{robots.length === 0 && params && <li><h5>No encontramos nada :´(</h5></li>}
-			<div>
-					{cargarMasVisibiliy && <button className='cargarMas' onClick={handleCargarMas} > Cargar más productos </button>}
-					<button className='subir'>Subir</button>
-			</div>
-			{!cargarMasVisibiliy && <li><span>Eso es todo por ahora...</span></li>}
-			<li> Mostrando {robots.length} items </li>
+						{robots.length === 0 && params && 
+						<li><h5>No encontramos nada :´(</h5></li>}
+						<div>
+								{cargarMasVisibiliy && 
+								<button className='cargarMas' onClick={handleCargarMas} > Cargar más productos </button>}
+								<button onClick={handleSubir} className='subir'>Subir</button>
+						</div>
+						{!cargarMasVisibiliy && 
+						<li><span>Eso es todo por ahora...</span></li>}
+						<li> Mostrando {robots.length} items </li>
 			</ul>
 			
 		</div>

@@ -59,3 +59,16 @@
 .noVisibleMas {
 	display: none;
 }
+
+.subir {
+	padding: 5px 10px 5px 10px;
+	width: 10%;
+	max-width: 70px;
+	margin: auto;
+	border: none;
+	color: white;
+	font-family: 'Tomorrow', sans-serif;
+	background-color: var(--razzmatazz);
+	border-radius: 10px;
+	box-shadow: 5px 0 5px 0 rgba(30,30,30,0.2)
+}

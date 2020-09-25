@@ -1,21 +1,21 @@
-var  apiKey  = '1f329c28bd5d533b74a297f71b1d5ee0-cb3791c4-3c5c3c83'; 
-var  domain  = 'sandbox0c3cd1b64bf049a0b1fc4ecac8fc8aae.mailgun.org'; 
-var mailgun = require ('mailgun-js') ({apiKey : apiKey , domain : domain}); 
+require('dotenv').config(); //Es la forma de requerir el archivo .env//
 
-const  data  = {
-    from : 'RobboStore <sanchezlismairy@gmail.com>', 
-    to : 'sanchezlismairy@gmail.com', 
-    subject : ' Hola mundo', 
-    text :'¡Probando algo de genialidad Mailgun!', 
-    html: '<div style="width: 500px; height: 400px: background: #ebebeb; color: red"> <p><b> Esto es un mensaje de prueba</p></div>'
+const {mailgunApiKey, mailgunDomain} = process.env;
+
+var mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: mailgunDomain});
+
+const data = {
+	from: 'RobboStore <sanchezlismairy@gmail.com>',
+	to: 'sanchezlismairy@gmail.com',
+	subject: ' Hola mundo',
+	text: '¡Probando algo de genialidad Mailgun!',
+	html:
+		'<div style="width: 500px; height: 400px: background: #ebebeb; color: red"> <p><b> Esto es un mensaje de prueba</p></div>'
 };
 
-mailgun.messages().send( data, function (error , body){    
-    if (error){
-        console.log(error);
-    }
-    console.log(body);
-}) ;
-
-
-
+mailgun.messages().send(data, function(error, body) {
+	if (error) {
+		console.log(error);
+	}
+	console.log(body);
+});

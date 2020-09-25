@@ -21,6 +21,10 @@
 }
 .addBtn {
 	margin: 0px;
+	background: #563488ff;
+  border-radius: 4px;
+  border: solid #563488ff;
+  color:white
 }
 
 #googleBtn {

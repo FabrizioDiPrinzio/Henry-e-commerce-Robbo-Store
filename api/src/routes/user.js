@@ -47,7 +47,7 @@ router.post('/signup', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-	const {name, email, password} = req.body;
+	const {name, email, rol, password} = req.body;
 	const {id} = req.params;
 
 	// Guard clauses
@@ -64,6 +64,7 @@ router.put('/:id', (req, res) => {
 
 				user.name = name || user.name;
 				user.email = email || user.email;
+				user.rol = rol || user.rol;
 				user.password = password || user.password;
 				user.save();
 

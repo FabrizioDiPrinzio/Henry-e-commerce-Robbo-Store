@@ -22,7 +22,16 @@ export default function Catalogo(props) {
 				let lastPage = pag;
 				let nextPage = pag + 1;
 				setPag(pag + 1)
-				dispatch(allActions.productActions.getAllProducts(nextPage))
+				if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(nextPage))
+				if (categoria)  {
+					axios
+					.get(`${urlBack}/products/category/${categoria}/?p=${nextPage}`)
+					.then(res => setRobots(robots.concat(res.data.products)))
+					.catch(err => {
+						setRobots(null);
+						console.log(err.response.data);
+					});
+				}
 	}
 
 	useEffect(
@@ -36,8 +45,7 @@ export default function Catalogo(props) {
 	useEffect(
 		() => {
 			// Main page, returns ALL products - or not All ...
-			let prevPages = robots;
-			if (!categoria && !params) setRobots(products);
+			setRobots(products);
 		},
 		[products]
 	);
@@ -46,8 +54,9 @@ export default function Catalogo(props) {
 		() => {
 			if (categoria) {
 				// Filter by category
+				{dispatch(allActions.productActions.cleanProduct())}
 				axios
-					.get(`${urlBack}/products/category/${categoria}`)
+					.get(`${urlBack}/products/category/${categoria}/?p=${pag}`)
 					.then(res => setRobots(res.data.products))
 					.catch(err => {
 						setRobots(null);
@@ -56,6 +65,7 @@ export default function Catalogo(props) {
 			}
 			else if (params) {
 				// Search by query
+				{dispatch(allActions.productActions.cleanProduct())}
 				axios
 					.get(`${urlBack}/search?query=${params}`)
 					.then(res => setRobots(res.data))

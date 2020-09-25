@@ -18,7 +18,7 @@ export default function Purchase_order(props) {
 	
 	//=====================   redux state    ==================== //
 
-	const userId = useSelector(state => state.user.userId);
+	const userId = useSelector(state => state.user.id);
 	const userRol = useSelector(state => state.user.rol);
 	const dispatch = useDispatch();
 
@@ -47,20 +47,18 @@ export default function Purchase_order(props) {
 	useEffect(() => {
 		axios.get(`${urlBack}/orders/${purchaseOrderId}`)
 		.then(response => {
-			if (response.data.buyerId === userId || userRol === 'Admin') {
-				console.log(userId);
+			if (response.data.buyerId === userId) {
 				setAuthFlag(true);
+			} else if (userRol === 'Admin') {
+				setAuthFlag(true)
 			} else {
-				console.log(userRol);
-				setAuthFlag(false);
+				setAuthFlag(false)
 			}
-
+			
 			setPurchaseOrderData(response.data);
-			return response.data
 		})
-		.then(response => {console.log(response)})
 		.catch(error => {alert(error)})
-	}, [])
+	}, [userId])
 
 
 	// ================== component event handlers ================ //

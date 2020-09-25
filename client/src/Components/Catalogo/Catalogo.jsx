@@ -25,6 +25,9 @@ export default function Catalogo(props) {
 				if (categoria)  {
 					cargarCategoria(nextPage)
 				}
+				if (params) {
+					cargarSearch(nextPage)
+				}
 				setPag(pag + 1)
 	}
 
@@ -45,6 +48,23 @@ export default function Catalogo(props) {
 			});
 	}
 
+	const cargarSearch = (nextPage) => {
+		axios
+				.get(`${urlBack}/search?query=${params}&p=${nextPage}`)
+				.then(res => {
+					setRobots(['nada'])
+					if (nextPage === 1) {
+						setRobots(res.data.products)
+					} else {
+						setRobots(robots.concat(res.data.products))
+					}
+				})
+				.catch(err => {
+					setRobots([]);
+					console.log(err.response.data);
+				});
+	}
+
 	useEffect(
 		() => {
 			if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(1));
@@ -61,6 +81,7 @@ export default function Catalogo(props) {
 		[products]
 	);
 
+
 	useEffect(
 		() => {
 			setPag(1);
@@ -70,13 +91,7 @@ export default function Catalogo(props) {
 			}
 			else if (params) {
 				// Search by query
-				axios
-					.get(`${urlBack}/search?query=${params}`)
-					.then(res => setRobots(res.data))
-					.catch(err => {
-						setRobots([]);
-						console.log(err.response.data);
-					});
+				cargarSearch(1)
 			}
 		},
 		[categoria, params]

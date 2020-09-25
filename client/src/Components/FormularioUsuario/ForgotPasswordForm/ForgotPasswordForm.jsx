@@ -63,12 +63,6 @@ export default function ForgotPasswordForm() {
 			{token && (
 				<div className="success">
 					{success} Te hemos enviado un email con las instrucciones a seguir.
-					<br />
-					<p>(Haz de cuenta que esto es un email)</p>
-					<p>
-						Para reestablecer tu contraseña, haz click en el siguiente enlace:{' '}
-						<Link to={`/reset/${token}`}>{`localhost:3000/reset/${token}`}</Link>
-					</p>
 				</div>
 			)}
 

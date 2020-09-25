@@ -19,6 +19,7 @@
     "express-session": "^1.17.1",
     "ioredis": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "^0.22.0",
     "morgan": "^1.10.0",
     "nodejs": "0.0.0",
     "passport": "^0.4.1",
@@ -27,8 +28,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.3.0",
-    "sequelize": "^6.3.4",
-    "mailgun-js": "^0.22.0"
+    "sequelize": "^6.3.4"
   },
   "devDependencies": {
     "supertest-session": "^4.0.0",

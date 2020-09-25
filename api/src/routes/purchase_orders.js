@@ -109,21 +109,21 @@ router.put('/:id', async (req, res) => {
 
 		const savedOrder = await order.reload();
 
-		const data = {
-			from: 'RobboStore <sanchezlismairy@gmail.com>',
-			to: userEmail,
-			subject: 'test with user artur',
-			text: '¡Probando algo de genialidad Mailgun! testss',
-			html: `<div style="width: 500px; height: 400px: background: #ebebeb; color: red"> <p><b> Esto es un ${recipient_name} mensaje de prueba ${userEmail}</p></div>`
-		};
+		const  data  = {
+			from : 'RobboStore <sanchezlismairy@gmail.com>', 
+			to : userEmail, 
+			subject : 'Pedido recibido', 
+			text :'Tu pedido se ha recibido correctamente', 
+			template: "envio.test"
+	};
 
-		mailgun.messages().send(data, function(error, body) {
-			if (error) {
-				console.log({error});
-				return res.status(200).send({savedOrder, statusEmail: 'error'});
-			}
-			return res.status(200).send({savedOrder, statusEmail: 'enviado'});
-		});
+	mailgun.messages().send(data, function (error, body) {
+    if (error) {
+			console.log({ error })
+			return res.status(200).send({savedOrder, statusEmail: 'error'});
+    }
+		return res.status(200).send({savedOrder, statusEmail: 'enviado'});
+});
 	} catch (error) {
 		return res.status(400).send(error.message);
 	}

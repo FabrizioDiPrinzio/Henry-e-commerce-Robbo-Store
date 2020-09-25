@@ -1,6 +1,6 @@
 require('dotenv').config(); //Es la forma de requerir el archivo .env//
-
 const {mailgunApiKey, mailgunDomain} = process.env;
+
 
 var mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: mailgunDomain});
 

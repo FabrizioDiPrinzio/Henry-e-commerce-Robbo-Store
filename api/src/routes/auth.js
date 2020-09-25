@@ -3,6 +3,12 @@ const router = express.Router();
 const passport = require('passport');
 const {User} = require('../db');
 
+//Mailgun
+var  apiKey  = '1f329c28bd5d533b74a297f71b1d5ee0-cb3791c4-3c5c3c83'; 
+var  domain  = 'sandbox0c3cd1b64bf049a0b1fc4ecac8fc8aae.mailgun.org'; 
+var mailgun = require ('mailgun-js') ({apiKey : apiKey , domain : domain}); 
+
+
 // Google login
 router.get(
 	'/google',
@@ -61,13 +67,32 @@ router.post('/forgot', async (req, res) => {
 		user.forgotPasswordToken = salt;
 		await user.save();
 
+		
 		setTimeout(() => {
 			user.forgotPasswordToken = null;
 			user.save();
 		}, 3600000); // Caduca en una hora
 
-		return res.send(salt);
+		const  data  = {
+			from : 'RobboStore <sanchezlismairy@gmail.com>', 
+			to : email, 
+			subject : 'Reseteo de Password', 
+			text :'¡Probando algo de genialidad Mailgun!', 
+			// template: "envio.test"
+	};
+
+		mailgun.messages().send(data, function (error, body) {
+			if (error) {
+					console.log({ error })
+					return res.status(200).send({salt, statusEmail: 'error'});
+			}
+
+		return res.status(200).send({salt, statusEmail: 'enviado'});
+				//return res.send(salt);
+	});
+
 	} catch (error) {
+		
 		return res.sendStatus(500);
 	}
 });

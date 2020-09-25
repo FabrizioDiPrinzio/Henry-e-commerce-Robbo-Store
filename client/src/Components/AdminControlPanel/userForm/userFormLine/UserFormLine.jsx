@@ -65,71 +65,81 @@ export default function UserFormAdmin(props) {
 	};
 
 	return (
-		<div>
-			<ul className="userFormLine">
-				<div className="inputTag" id={name}>
-					{name}
-				</div>
-				<div className="inputTag" id={email}>
-					{email}
-				</div>
-				<div className="inputTag" id={rol}>
-					{rol}
-				</div>
-				<div className="userActionContainer">
-					<button type="submit" className="editBtn" value="Edit" onClick={clickHandle}>
-						{editButton}
-					</button>
-
-					<OverlayTrigger
-						show={tooltip === 'Se eliminó el usuario'}
-						overlay={
-							<Tooltip>
-								{success} {tooltip}
-							</Tooltip>
-						}
-					>
-						<button type="submit" className="deleteBtn" value="Delete" onClick={handleDelete}>
-							{deleteButton}
+		<div className="userTableCont">
+			<div className="userTable">
+				<div className="userFormLine">
+					<div className="usrTableCell" id={name}>
+						{name}
+					</div>
+					<div className="usrTableCell" id={email}>
+						{email}
+					</div>
+					<div className="usrTableCell" id={rol}>
+						{rol}
+					</div>
+					<div className="userActionContainer">
+						<button type="submit" className="openEditBtn" value="Edit" onClick={clickHandle}>
+							{editButton}
 						</button>
-					</OverlayTrigger>
-
+							<OverlayTrigger
+								show={tooltip === 'Se eliminó el usuario'}
+								overlay={
+									<Tooltip>
+										{success} {tooltip}
+									</Tooltip>
+								}
+							>
+							<button type="submit" className="deleteUserBtn" value="Delete" onClick={handleDelete}>
+								{deleteButton}
+							</button>
+						</OverlayTrigger>
+					</div>
 				</div>
-			</ul>
-			<form className={stateEdit.edit}>
-				<input
-					className="inputTag"
-					type="text"
-					name="name"
-					value={inputValues.name}
-					onChange={handleInputChange}
-				/>
-				<input
-					className="inputTag"
-					type="text"
-					name="email"
-					value={inputValues.email}
-					onChange={handleInputChange}
-				/>
-				<select className="inputTag" defaultValue={rol} onChange={handleSelectChange}>
-					<option value="Usuario">Usuario</option>
-					<option value="Admin">Admin</option>
-				</select>
-				<div calssName="userActionContainer">
-					<OverlayTrigger
-						show={tooltip === 'Se realizaron los cambios'}
-						overlay={
-							<Tooltip>
-								{success} {tooltip}
-							</Tooltip>
-						}
-					>
-						<button type="submit" className="editBtn" value="Edit" onClick={handleEdit}>
-							Aceptar
-						</button>
-					</OverlayTrigger>
+				<div className={stateEdit.edit}>
+					<div>
+						<input
+							className="usrTableCell"
+							type="text"
+							name="name"
+							value={inputValues.name}
+							onChange={handleInputChange}
+						/>
+					</div>
+					<div>
+						<input
+							className="usrTableCell"
+							type="text"
+							name="email"
+							value={inputValues.email}
+							onChange={handleInputChange}
+						/>
+					</div>
+					<div>
+					<div className="usrTableCell">
+						<select className="usrTableCell" defaultValue={rol} onChange={handleSelectChange}>
+							<option value="Client">Client</option>
+							<option value="Admin">Admin</option>
+						</select>
+					</div>
+					</div>
+					<div calssName="userActionContainer">
+						<div>
+							<OverlayTrigger
+								show={tooltip === 'Se realizaron los cambios'}
+								overlay={
+									<Tooltip>
+										{success} {tooltip}
+									</Tooltip>
+								}
+							>
+							<button type="submit" className="editUserBtn" value="Edit" onClick={handleEdit}>
+								Aceptar
+							</button>
+							</OverlayTrigger>
+							</div>
+					</div>
 				</div>
-			</form>
+			</div>
 		</div>
 	);
 }

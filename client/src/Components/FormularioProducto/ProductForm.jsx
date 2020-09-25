@@ -1,20 +1,17 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {allActions} from '../../Redux/Actions/actions';
-import {useSelector, useDispatch} from 'react-redux';
-import {Row, Container, Col, Form, Table} from 'react-bootstrap';
+import {useSelector} from 'react-redux';
+import {Table} from 'react-bootstrap';
 import {success, failure} from '../../multimedia/SVGs';
 import './ProductForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import axios from 'axios';
 //------ Fin de imports -----
 
-const {productActions} = allActions;
+const urlBack = process.env.REACT_APP_API_URL;
 
 export default function ProductFormFunction({preSelected}) {
 	// Redux
 	const categories = useSelector(state => state.categories.allCategories);
-	const productStore = useSelector(state => state.products);
-	const {allProducts: products, lastResponse, lastError} = productStore;
-	const dispatch = useDispatch();
 
 	// React Hooks
 	const [inputValues, setInputValues] = useState({
@@ -23,6 +20,8 @@ export default function ProductFormFunction({preSelected}) {
 		stock: '',
 		description: ''
 	});
+	const [products, setProducts] = useState([]);
+	const [update, setUpdate] = useState(false);
 	const [checkboxes, setCheckboxes] = useState([]);
 	const [selected, setSelected] = useState(0);
 	const [successMessage, setSuccessMessage] = useState('');
@@ -30,6 +29,7 @@ export default function ProductFormFunction({preSelected}) {
 	const lista = useRef(0);
 
 	const [images, setImages] = useState([]);
+	const [mainImage, setMainImage] = useState('');
 	const [newImage, setnewImage] = useState('');
 
 	// Auxiliary functions
@@ -53,26 +53,31 @@ export default function ProductFormFunction({preSelected}) {
 		});
 	}
 
-	function resetImg() {
-		lista.current.value = 0;
-		setnewImage('');
-	}
-
 	function resetImages() {
 		setImages([]);
 	}
 
 	// ------------  Functionality ----------------------
 
-	// If a preSelected bot comes in props
+	// Fetches the products from the backend
 	useEffect(
 		() => {
-			if (preSelected) {
-				const eventWrapper = {target: {}}
-				eventWrapper.target.value = preSelected.id;
-				handleSelectChange(eventWrapper);
-			}
-		}, [])
+			axios
+				.get(`${urlBack}/products`)
+				.then(res => setProducts(res.data))
+				.catch(err => console.log(err.response.data));
+		},
+		[update]
+	);
+
+	// If a preSelected bot comes in props
+	useEffect(() => {
+		if (preSelected) {
+			const eventWrapper = {target: {}};
+			eventWrapper.target.value = preSelected.id;
+			handleSelectChange(eventWrapper);
+		}
+	}, []);
 
 	// Creates category checkboxes
 	useEffect(
@@ -87,19 +92,6 @@ export default function ProductFormFunction({preSelected}) {
 			setCheckboxes(categoryTypes);
 		},
 		[categories]
-	);
-
-	// Creates an success or error message after each successful or failed operation
-	useEffect(
-		() => {
-			if (lastResponse) {
-				setSuccessMessage(lastResponse.message);
-				resetFields();
-				resetImages();
-			}
-			if (lastError) setErrorMessage(lastError);
-		},
-		[products, lastError]
 	);
 
 	// Lets you add an image with the enter key without needing to click the button.
@@ -140,6 +132,7 @@ export default function ProductFormFunction({preSelected}) {
 				return i.imageUrl;
 			});
 			setImages(imagenes);
+			setMainImage(currentProduct.image);
 
 			// If the product has a category, it is checked, else it is unchecked
 			currentProduct.categories.map(productCategory => {
@@ -162,7 +155,7 @@ export default function ProductFormFunction({preSelected}) {
 	};
 
 	// Sets which categories are being checked
-	const handleChecks = event => {
+	const handleCategoryChecks = event => {
 		const checkbox = event.target;
 		const modifiedCategories = [...checkboxes];
 		modifiedCategories[checkbox.value].add = checkbox.checked;
@@ -170,10 +163,13 @@ export default function ProductFormFunction({preSelected}) {
 		setCheckboxes(modifiedCategories);
 	};
 
+	// Sets which is the main image
+	const handleImageRadios = event => setMainImage(event.target.value);
+
 	const handleAddImg = event => {
 		event.preventDefault();
 		images.push(newImage);
-		resetImg();
+		setnewImage('');
 	};
 
 	const handleDeleteImg = event => {
@@ -184,38 +180,77 @@ export default function ProductFormFunction({preSelected}) {
 	};
 
 	// Creates products
-	const handleAdd = event => {
+	const handleAdd = async event => {
 		event.preventDefault();
 
-		const changedState = {...inputValues, image: images, id: null};
+		const changedState = {...inputValues, images, mainImage: mainImage || images[0], id: null};
 
 		// If a user selects a preexisting product with some checkboxes, they should still be able to add those categories.
 		const checkedCategories = checkboxes.map(c => {
 			if (c.add) c.modified = true;
+			if (!c.add) c.modified = false;
 			return c;
 		});
 
 		const modifiedCategories = checkedCategories.filter(cat => cat.modified);
 
-		dispatch(productActions.postProduct(changedState, modifiedCategories));
+		try {
+			// Creates the new product
+			const newProduct = await axios.post(`${urlBack}/products`, changedState);
+
+			for await (const cat of modifiedCategories) {
+				axios.post(`${urlBack}/products/${newProduct.data.id}/category/${cat.id}`);
+			}
+
+			setSuccessMessage('El producto se agregó existosamente');
+			resetFields();
+			resetImages();
+			setUpdate(!update);
+		} catch (error) {
+			setErrorMessage(error.response.data);
+		}
 	};
 
 	// Deletes the selected product
 	const handleDelete = event => {
 		event.preventDefault();
 
-		dispatch(productActions.deleteProduct(selected));
+		axios
+			.delete(`${urlBack}/products/${selected}`)
+			.then(() => {
+				setSuccessMessage('El producto se borró existosamente');
+				resetFields();
+				resetImages();
+				setUpdate(!update);
+			})
+			.catch(error => setErrorMessage(error.response.data));
 	};
 
 	// Edits the selected product
-	const handleEdit = event => {
+	const handleEdit = async event => {
 		event.preventDefault();
 
-		const changedState = {...inputValues, image: images};
+		const changedState = {...inputValues, images, mainImage};
 
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
-		dispatch(productActions.putProduct(selected, changedState, modifiedCategories));
+		try {
+			const changedProduct = await axios.put(`${urlBack}/products/${selected}`, changedState);
+
+			for await (const cat of modifiedCategories) {
+				if (cat.add)
+					axios.post(`${urlBack}/products/${changedProduct.data.id}/category/${cat.id}`);
+				if (!cat.add)
+					axios.delete(`${urlBack}/products/${changedProduct.data.id}/category/${cat.id}`);
+			}
+
+			setSuccessMessage('El producto fue editado existosamente');
+			resetFields();
+			resetImages();
+			setUpdate(!update);
+		} catch (error) {
+			setErrorMessage(error.response.data);
+		}
 	};
 
 	return (
@@ -284,7 +319,7 @@ export default function ProductFormFunction({preSelected}) {
 									className="checks"
 									value={i}
 									checked={categoria.add}
-									onChange={handleChecks}
+									onChange={handleCategoryChecks}
 								/>
 								{categoria.name}
 							</label>
@@ -297,41 +332,53 @@ export default function ProductFormFunction({preSelected}) {
 					<h5>Agregar Imagen</h5>
 					<div className="inpt">
 						<form>
-								<input
+							<input
 								className="imageInput"
 								type="text"
 								autocomplete="off"
 								value={newImage}
-								onChange={e=>setnewImage(e.target.value)}
+								onChange={e => setnewImage(e.target.value)}
 								onKeyPress={onImageEnterKey}
-								placeholder="URL de la imagen"/>
-								{' '}
-								<button onClick={handleAddImg} className="submitBtn" type="button" >Agregar imagen</button>
+								placeholder="URL de la imagen"
+							/>{' '}
+							<button onClick={handleAddImg} className="submitBtn" type="button">
+								Agregar imagen
+							</button>
 						</form>
-						<br/>
+						<br />
 						<Table>
 							<thead>
 								<tr class="picsTableRow">
 									<th>Imagen</th>
-									{/*<th>Url</th>*/}
+									<th>Principal?</th>
 									<th>Eliminar</th>
 								</tr>
 							</thead>
 							<tbody>
-								{images.map(image =>(
-								<tr key={image}>
-									<td><img className="prodImg" src={image}></img></td>
-									{/*<td className="imgUrl">{image}</td>*/}
-									<td>
-										<button
-										className="deleteBtn"
-										type="button"
-										value={image}
-										onClick={handleDeleteImg}>
-											Eliminar
-										</button>
-									</td>
-								</tr>
+								{images.map(image => (
+									<tr key={image}>
+										<td>
+											<img className="prodImg" src={image} />
+										</td>
+										<input
+											type="radio"
+											name="mainImage"
+											className="checks"
+											value={image}
+											checked={mainImage === image}
+											onChange={handleImageRadios}
+										/>
+										<td>
+											<button
+												className="deleteBtn"
+												type="button"
+												value={image}
+												onClick={handleDeleteImg}
+											>
+												Eliminar
+											</button>
+										</td>
+									</tr>
 								))}
 							</tbody>
 						</Table>
@@ -346,7 +393,14 @@ export default function ProductFormFunction({preSelected}) {
 					<div className={'botonOpcion'}>
 						<h4 className="titulo">Editar / Eliminar producto</h4>
 
-						<select className="product-form-control" ref={lista} id="select" defaultValue={preSelected ? preSelected.id : '0'} onChange={handleSelectChange} size='6'>
+						<select
+							className="product-form-control"
+							ref={lista}
+							id="select"
+							defaultValue={preSelected ? preSelected.id : '0'}
+							onChange={handleSelectChange}
+							size="6"
+						>
 							<option value="0">Robots...</option>
 							{products.map(product => {
 								return (

@@ -1,10 +1,6 @@
 import * as actionTypes from '../Actions/actionTypes';
 
-const initialState = {
-	allProducts: [],
-	lastResponse: null,
-	lastError: null
-};
+const initialState = {allProducts: [], more: true};
 
 export default function productReducer(state = initialState, action) {
 	switch (action.type) {
@@ -12,59 +8,14 @@ export default function productReducer(state = initialState, action) {
 			return {
 				...state,
 				allProducts: state.allProducts.concat(action.payload.products),
+				more: action.payload.more
 			};
-
-		case actionTypes.GET_PRODUCT:
-			return;
-
-		case actionTypes.POST_PRODUCT:
-			return {
-				...state,
-				lastResponse: {
-					response: action.payload,
-					message: 'El producto fue agregado exitosamente'
-				},
-				lastError: null
-			};
-
-		case actionTypes.DELETE_PRODUCT:
-			return {
-				...state,
-				lastResponse: {
-					response: action.payload,
-					message: 'El producto fue borrado exitosamente'
-				},
-				lastError: null
-			};
-
-		case actionTypes.PUT_PRODUCT:
-			return {
-				...state,
-				lastResponse: {
-					response: action.payload,
-					message: 'El producto fue editado exitosamente'
-				},
-				lastError: null
-			};
-
-		case actionTypes.PRODUCTS_ERROR:
-			return {
-				...state,
-				lastResponse: null,
-				lastError: action.payload
-			};
-
-		// case actionTypes.CLEAN_MESSAGES:
-		// 	return {
-		// 		...state,
-		// 		lastResponse: null,
-		// 		lastError: null
-		// 	};
 
 		case actionTypes.CLEAN_PRODUCTS:
 			return {
 				...state,
 				allProducts: [],
+				more: true
 			};
 
 		default:

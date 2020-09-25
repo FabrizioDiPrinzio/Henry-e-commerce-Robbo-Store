@@ -8,7 +8,6 @@ const category = require('./category.js');
 const auth = require('./auth');
 const {Product, User} = require('../db.js');
 const {Op} = require('sequelize');
-
 const app = express();
 
 // load each router on a route
@@ -22,21 +21,30 @@ app.use('/user', user);
 app.use('/orders', purchase_orders);
 app.use('/auth', auth);
 
+
 app.get('/', (req, res) => {
 	res.send('Estas en index, no en redirect');
 });
 
 app.get('/search', (req, res) => {
-	const {query} = req.query;
+	const {query,p} = req.query;
+	const firstIndex = (p - 1) * 2;
+	const lastIndex = firstIndex + 2;
 	Product.findAll({
 		where: {
 			[Op.or]: [{name: {[Op.iLike]: `%${query}%`}}, {description: {[Op.iLike]: `%${query}%`}}]
 		}
 	})
 		.then(response => {
-			if (response.length <= 0)
-				return res.status(404).send('No se encontró ningún robot de ese tipo :(');
-			return res.send(response);
+			if (response.length <= 0) return res.status(404).send('No se encontró ningún robot de ese tipo :(');
+			let productos = response
+			let page = productos.slice(firstIndex, lastIndex);
+			let result = {
+				currentPage: productos.length > 0 ? p : p - 1,
+				products : page,
+				more: page.length > 0 ? true : false
+			}
+			return res.send(result);
 		})
 		.catch(() => res.status(400).send('Algo salió mal'));
 });

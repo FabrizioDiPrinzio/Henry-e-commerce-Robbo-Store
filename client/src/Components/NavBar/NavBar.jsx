@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Menu from './Menu/Menu.jsx';
 import Modal from 'react-bootstrap/Modal';
 import UserOptions from './UserOptions/UserOptions';
@@ -12,7 +12,7 @@ import './navBar.css';
 
 document.addEventListener('scroll', e => {
 	const searchBar = document.querySelector('.SearchBarContainer');
-	if (!searchBar) return // when apps crashes navbar does not exist and stacks an error
+	if (!searchBar) return; // when apps crashes navbar does not exist and stacks an error
 
 	if (window.scrollY > 55) {
 		searchBar.style.top = '0';
@@ -22,8 +22,9 @@ document.addEventListener('scroll', e => {
 	}
 });
 
-export default function NavBar() {
+export default function NavBar(props) {
 	// Redux
+	const dispatch = useDispatch();
 	const user = useSelector(state => state.user);
 
 	// React Hooks
@@ -31,6 +32,8 @@ export default function NavBar() {
 	const [showModal, setShowModal] = useState(false);
 	const [statusChanged, setStatusChanged] = useState(false);
 	const [redirect, setRedirect] = useState(false);
+
+	// ----------- Functionality --------------------------
 
 	useEffect(
 		() => {
@@ -68,8 +71,7 @@ export default function NavBar() {
 						{userButton}
 					</button>
 					{user.rol === 'Guest' &&
-					!statusChanged &&
-					showModal && (
+					!statusChanged && (
 						<Modal show={showModal} onHide={hideModals}>
 							<UserForm />
 						</Modal>

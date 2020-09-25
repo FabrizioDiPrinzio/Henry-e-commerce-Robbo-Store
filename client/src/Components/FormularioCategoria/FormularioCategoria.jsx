@@ -120,7 +120,7 @@ export default function FormularioCategoria() {
 					placeholder="Ingrese una descripción de la categoría"
 					onChange={handleInputChange}
 				/>
-				<button type="submit" className="addBtn" value="Enviar" onClick={handleAdd}>
+				<button type="submit" className="addCatBtn" value="Enviar" onClick={handleAdd}>
 					Agregar
 				</button>
 
@@ -137,13 +137,17 @@ export default function FormularioCategoria() {
 								return <option value={categoria.id}>{categoria.name}</option>;
 							})}
 						</select>
-						<button type="submit" className="editBtn" value="Editar" onClick={handleEdit}>
+						<button
+							type="submit"
+							className="editCatBtn"
+							value="Editar"
+							onClick={handleEdit}>
 							Editar
 						</button>
 
 						<button
 							type="submit"
-							className="deleteBtn"
+							className="deleteCatBtn"
 							value="Eliminar"
 							onClick={handleDelete}
 						>

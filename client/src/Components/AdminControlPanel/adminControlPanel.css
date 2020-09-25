@@ -13,3 +13,18 @@
   min-width: 300px;
   width: 100%;
 }
+
+.CPButtons {
+  margin: 1%;
+  width: 50%;
+  padding:1%;
+  background-image: url("../../multimedia/backgroundPattern.jpg");
+  border-radius: 5px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBtn {
+  margin-right: 5%
+}

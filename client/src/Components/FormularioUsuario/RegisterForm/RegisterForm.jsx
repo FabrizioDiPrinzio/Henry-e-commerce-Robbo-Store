@@ -101,8 +101,16 @@ export default function RegisterForm() {
 					onChange={handleInputChange}
 					onKeyPress={onEnterKey}
 				/>
-				{hidePassword && <i onClick={revealPassword}>{openEye}</i>}
-				{!hidePassword && <i onClick={revealPassword}>{closedEye}</i>}
+				{hidePassword && (
+					<i className="eye" onClick={revealPassword}>
+						{openEye}
+					</i>
+				)}
+				{!hidePassword && (
+					<i className="eye" onClick={revealPassword}>
+						{closedEye}
+					</i>
+				)}
 			</div>
 			<br />
 			<label htmlFor="nombre">Confirmar contraseña:</label>
@@ -115,8 +123,16 @@ export default function RegisterForm() {
 					value={inputValues.confirmPassword}
 					onChange={handleInputChange}
 				/>
-				{hideConfirmedPassword && <i onClick={revealConfirmedPassword}>{openEye}</i>}
-				{!hideConfirmedPassword && <i onClick={revealConfirmedPassword}>{closedEye}</i>}
+				{hideConfirmedPassword && (
+					<i className="eye" onClick={revealConfirmedPassword}>
+						{openEye}
+					</i>
+				)}
+				{!hideConfirmedPassword && (
+					<i className="eye" onClick={revealConfirmedPassword}>
+						{closedEye}
+					</i>
+				)}
 			</div>
 			<br />
 

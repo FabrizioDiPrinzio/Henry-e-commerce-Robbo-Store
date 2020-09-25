@@ -1,7 +1,12 @@
+require('dotenv').config(); //Es la forma de requerir el archivo .env//
 const express = require('express');
 const router = express.Router();
 const {Orderline, User, Purchase_order, Product} = require('../db.js');
 const {Op} = require('sequelize');
+
+const {mailgunApiKey, mailgunDomain} = process.env;
+
+var mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: mailgunDomain});
 
 // Cart es Purchase_order con status "enCarrito", purchase_orders son las que tienen cualquier otro estado
 
@@ -28,7 +33,7 @@ router.get('/:id', (req, res) => {
 
 	console.log(id);
 
-	Purchase_order.findByPk(id, {include:[{model: Orderline}, {model: Product}]})
+	Purchase_order.findByPk(id, {include: [{model: Orderline}, {model: Product}]})
 		.then(response => {
 			if (!response) return res.status(404).send('No se encontró la orden');
 			else return res.send(response);
@@ -68,7 +73,8 @@ router.put('/:id', async (req, res) => {
 		address,
 		postal_code,
 		phone_number,
-		shipping_type
+		shipping_type,
+		userEmail
 	} = req.body;
 
 	if (
@@ -102,7 +108,22 @@ router.put('/:id', async (req, res) => {
 		await order.save();
 
 		const savedOrder = await order.reload();
-		return res.status(200).send(savedOrder);
+
+		const  data  = {
+			from : 'RobboStore <sanchezlismairy@gmail.com>', 
+			to : userEmail, 
+			subject : 'Pedido recibido', 
+			text :'Tu pedido se ha recibido correctamente', 
+			template: "envio.test"
+	};
+
+	mailgun.messages().send(data, function (error, body) {
+    if (error) {
+			console.log({ error })
+			return res.status(200).send({savedOrder, statusEmail: 'error'});
+    }
+		return res.status(200).send({savedOrder, statusEmail: 'enviado'});
+});
 	} catch (error) {
 		return res.status(400).send(error.message);
 	}

@@ -7,17 +7,31 @@
 }
 
 .cerrarForm {
-    height: 30px;
-    width: 30px;
+    height: 38px;
+    width: 38px;
+    padding: 0 1px 1px 0;
     position: absolute;
     top: 140px;
-    right: 25vw;
+    right: 25px;
     border-radius: 50%;
     border: none;
     background-color: var(--razzmatazz);
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    z-index: 35;
+}
+
+.cerrarForm>span {
     color: white;
     font-weight: bold;
-    z-index: 35;
+    font-size: 23px;
+    margin: auto;
+}
+
+.cerrarForm:focus {
+    outline: none;
 }
 
 .containerCarrito {
@@ -26,6 +40,7 @@
     margin: auto;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 

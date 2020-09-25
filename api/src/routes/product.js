@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const category = require('./category'); // rutas
 const {Product, Categories, product_categories, Pics, Reviews, User} = require('../db.js'); //database
-
 
 router.get('/', (req, res, next) => {
 	Product.findAll({include: [Categories, Pics]})
@@ -16,47 +14,90 @@ router.get('/', (req, res, next) => {
 
 router.get('/pag/', (req, res, next) => {
 	const {p} = req.query;
-	const firstIndex = ( p - 1 ) * 2;
+	const firstIndex = (p - 1) * 2;
 	const lastIndex = firstIndex + 2;
-	Product.findAll({include: [Categories, Pics]})
-		.then(data => {
-			const productos = data.slice(firstIndex,lastIndex);
-			const result = {
-					prevPage: parseInt(p) < 2 ? null : parseInt(p) - 1,
-					currentPage: parseInt(p),
-					nextPage: parseInt(p) + 1,
-			}
-			result.data = productos
-			if (result.data.length < 1) {
-				result = {
-					prevPage: result.prevPage - 1,
-					currentPage: result.currentPage - 1 ,
-					nextPage: result.nextPage - 1 
-				}
-			}
-			res.send(result);
-		})
+	Product.findAll({include: [Categories, Pics]}).then(data => {
+		const productos = data.slice(firstIndex, lastIndex);
+		const result = {
+			data: productos,
+			currentPage: p,
+			more: productos.length > 0 ? true : false
+		};
+		res.send(result);
+	});
 });
 
-
-
 router.post('/', async (req, res) => {
-	const {name, price, stock, image, description} = req.body;
-	if (!name || !price || typeof stock !== 'number' || !image || !description)
-		return res.status(400).send('Falta algún parámetro o stock typeof incorrecto');
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
+	const {name, price, stock, description, images, mainImage} = req.body;
+	if (!name || !price || typeof stock !== 'number' || !description || !images || !mainImage)
+		return res.status(400).send('Falta algún parámetro');
 
 	const newBody = {
 		...req.body,
-		image: image[0]
+		image: mainImage
 	};
 
 	try {
 		let newProduct = await Product.create(newBody);
-		image.map(img => {
+		images.map(img => {
 			Pics.create({imageUrl: img})
 				.then(newPic => newProduct.addPic(newPic))
 				.then(response => res.status(201).send(response));
 		});
+	} catch (error) {
+		res.status(400).send(error.message);
+	}
+});
+
+router.put('/:id', async (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
+	const {name, price, stock, description, images, mainImage} = req.body;
+	// const image = req.body.image ? req.body.image[0] : null;
+	const {id} = req.params;
+
+	if (
+		!name &&
+		typeof price !== 'number' &&
+		typeof stock !== 'number' &&
+		!images &&
+		!mainImage &&
+		!description
+	) {
+		return res.status(400).send('Debes enviar al menos un parámetro para editar');
+	}
+	if (!images[0]) {
+		return res.status(400).send('El producto debe contener al menos una imagen');
+	}
+
+	const robot = await Product.findByPk(id);
+	if (!robot) return res.status(400).send('No se encontró el robot :(');
+
+	try {
+		robot.name = name || robot.name;
+		robot.description = description || robot.description;
+		robot.price = price || robot.price;
+		robot.stock = stock || stock === 0 ? stock : robot.stock;
+		robot.image = mainImage || robot.image;
+		if (images) {
+			await Pics.destroy({where: {productId: robot.id}});
+
+			images.map(img => {
+				Pics.create({imageUrl: img})
+					.then(newPic => robot.addPic(newPic))
+					.then(response => res.status(201).send(response));
+			});
+		}
+
+		await robot.save();
+		const savedRobot = await robot.reload();
+		res.status(200).send(savedRobot);
 	} catch (error) {
 		res.status(400).send(error.message);
 	}
@@ -69,6 +110,10 @@ router.get('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {id} = req.params;
 
 	Product.destroy({where: {id}, include: [Pics]}).then(response => {
@@ -77,49 +122,11 @@ router.delete('/:id', (req, res) => {
 	});
 });
 
-router.put('/:id', async (req, res) => {
-
-	const {name, price, stock, description, image} = req.body;
-	// const image = req.body.image ? req.body.image[0] : null;
-	const {id} = req.params;
-
-	if (!name && typeof price !== 'number' && typeof stock !== 'number' && !image && !description) {
-		return res.status(400).send('Debes enviar al menos un parámetro para editar');
-	}
-	if(image[0] === undefined) {
-		return res.status(400).send('El producto debe contener al menos una imagen');
-	}
-
-	const robot = await Product.findByPk(id);
-	if (!robot) return res.status(400).send('No se encontró el robot :(');
-
-	try {
-		robot.name = name || robot.name;
-		robot.description = description || robot.description;
-		robot.price = price || robot.price;
-		robot.stock = stock || stock === 0 ? stock : robot.stock;
-		robot.image = image[0] || robot.image;
-		if (image) {
-		// 	await Pics.findOrCreate({where: {imageUrl: image, productId: robot.id}});
-		// 	robot.image = image;
-		await Pics.destroy({where: {productId: robot.id}});
-
-			image.map(img => {
-				Pics.create({imageUrl: img})
-					.then(newPic => robot.addPic(newPic))
-					.then(response => res.status(201).send(response));
-			})
-		}
-
-		await robot.save();
-		const savedRobot = await robot.reload();
-		res.status(200).send(savedRobot);
-	} catch (error) {
-		res.status(400).send(error.message);
-	}
-});
-
 router.post('/:idProducto/category/:idCategoria', async (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {idProducto, idCategoria} = req.params;
 	const producto = await Product.findByPk(idProducto);
 	const categoria = await Categories.findByPk(idCategoria);
@@ -134,6 +141,10 @@ router.post('/:idProducto/category/:idCategoria', async (req, res) => {
 });
 
 router.delete('/:idProducto/category/:idCategoria', (req, res) => {
+	//Guard Clauses
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
 	const {idProducto, idCategoria} = req.params;
 
 	product_categories
@@ -141,12 +152,7 @@ router.delete('/:idProducto/category/:idCategoria', (req, res) => {
 		.then(() => res.sendStatus(200));
 });
 
-
-
-
 // =================================== Reviews =================================== //
-
-
 
 //Obtener reviews
 router.get('/:productId/review', (req, res) => {
@@ -224,7 +230,6 @@ router.delete('/:productId/review/:idReview', async (req, res) => {
 			return res.status(400).send('No puedes borrar la review de otra persona');
 		}
 
-
 		await review.destroy();
 
 		return res.send('Review eliminada');
@@ -232,6 +237,5 @@ router.delete('/:productId/review/:idReview', async (req, res) => {
 		return res.status(400).send(error.message);
 	}
 });
-
 
 module.exports = router;

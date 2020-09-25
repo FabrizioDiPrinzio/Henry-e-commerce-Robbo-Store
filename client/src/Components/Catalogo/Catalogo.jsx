@@ -11,16 +11,19 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function Catalogo(props) {
 	let products = useSelector(state => state.products.allProducts);
 	// React hooks
+	const [cargarMasVisibiliy, setCargarMasVisibiliy] = useState('visibleMas')
 	const [robots, setRobots] = useState([]);
 	const [pag, setPag] = useState(1)
 	const {categoria} = useParams();
 	const params = new URLSearchParams(props.location.search).get('query');
 	const dispatch = useDispatch()
 
+
 	const handleCargarMas = event => {
 		event.preventDefault();
 				let lastPage = pag;
 				let nextPage = pag + 1;
+				
 				if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(nextPage))
 				if (categoria)  {
 					cargarCategoria(nextPage)
@@ -52,7 +55,7 @@ export default function Catalogo(props) {
 		axios
 				.get(`${urlBack}/search?query=${params}&p=${nextPage}`)
 				.then(res => {
-					setRobots(['nada'])
+					setRobots([])
 					if (nextPage === 1) {
 						setRobots(res.data.products)
 					} else {
@@ -67,8 +70,17 @@ export default function Catalogo(props) {
 
 	useEffect(
 		() => {
+			if (robots.length === 0 ) setCargarMasVisibiliy('noVisibleMas')
+				else setCargarMasVisibiliy('visibleMas')
+		},
+	);
+
+
+	useEffect(
+		() => {
 			if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(1));
 			return () => {dispatch(allActions.productActions.cleanProduct())}
+			//comprobando si hay productos 
 		},
 		[]
 	);
@@ -106,10 +118,11 @@ export default function Catalogo(props) {
 							<ProductCard robot={bot} />
 						</li>
 					))}
-			<button className="cargarMas" onClick={handleCargarMas} > Cargar más productos </button>
+			{robots.length === 0 && params && <li><h5>No encontramos nada :´(</h5></li>}
+			<button className={`cargarMas ${cargarMasVisibiliy}`} onClick={handleCargarMas} > Cargar más productos </button>
 			<li> Mostrando {robots.length} items </li>
 			</ul>
-			{!robots && params && <h1>No contamos con ningún robot de ese tipo :(</h1>}
+			
 		</div>
 	);
 }

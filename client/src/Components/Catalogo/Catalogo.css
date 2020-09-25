@@ -47,11 +47,15 @@
 	box-shadow: 5px 0 5px 0 rgba(30,30,30,0.2)
 }
 
-.cargarMas:focus {
-	outline: none;
-}
-
 .cargarMas:active {
 	box-shadow: none;
 	box-shadow: inset -5px -5px 15px 0 rgba(30,30,30,0.5)
+}
+
+.visibleMas {
+	display: auto;
+}
+
+.noVisibleMas {
+	display: none;
 }

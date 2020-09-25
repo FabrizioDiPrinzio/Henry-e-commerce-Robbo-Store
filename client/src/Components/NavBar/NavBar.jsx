@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {Link, Redirect, useParams} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {allActions} from '../../Redux/Actions/actions.js';
 import Menu from './Menu/Menu.jsx';
 import Modal from 'react-bootstrap/Modal';
 import UserOptions from './UserOptions/UserOptions';
@@ -34,9 +33,6 @@ export default function NavBar(props) {
 	const [statusChanged, setStatusChanged] = useState(false);
 	const [redirect, setRedirect] = useState(false);
 
-	const {categoria} = useParams();
-	const params = new URLSearchParams(props.location.search).get('query');
-
 	// ----------- Functionality --------------------------
 
 	useEffect(
@@ -61,18 +57,11 @@ export default function NavBar(props) {
 		setStatusChanged(false);
 	};
 
-	const handleClickTitle = () => {
-		if (categoria || params) dispatch(allActions.productActions.cleanProduct());
-		if (params || categoria) dispatch(allActions.productActions.getAllProducts(1));
-	};
-
 	return (
 		<div className="navBarContainer">
 			<nav className="NavBar">
 				<Link to="/">
-					<span onClick={handleClickTitle} className="Title">
-						Robbo Store
-					</span>
+					<span className="Title">Robbo Store</span>
 				</Link>
 				<img src="../favicon.svg" alt="logo" className="logo" />
 				<span className="espacioBlanco"> </span>

@@ -91,13 +91,16 @@ export default function Catalogo(props) {
 		window.scrollTo(0, 0);
 	};
 
-	useEffect(() => {
-		setPag(1);
-		if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(1));
-		return () => {
-			dispatch(allActions.productActions.cleanProduct());
-		};
-	}, []);
+	useEffect(
+		() => {
+			setPag(1);
+			if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(1));
+			return () => {
+				dispatch(allActions.productActions.cleanProduct());
+			};
+		},
+		[categoria, params]
+	);
 
 	useEffect(
 		() => {

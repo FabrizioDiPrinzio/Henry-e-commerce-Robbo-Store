@@ -23,23 +23,14 @@
 }
 
 .userTableTitle {
-	/* margin-left: 2%; */
 	height: auto;
-	display:flex;
-	justify-content: space-around;
-	/* display: grid;
-	grid-template-columns: 3fr 3fr 2fr 2fr 2fr; */
+	margin-top: 8px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 	color: white;
 }
 
-.userTableTitle > h5 {
-  color: white;
-}
-
-.userTableTitle {
-	margin-top: 8px;
-}
-
-.userTableTitlelabel {
-  color: white
+.tableTitle {
+	display:flex;
+	justify-content: center
 }

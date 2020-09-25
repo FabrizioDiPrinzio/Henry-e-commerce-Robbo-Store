@@ -21,23 +21,23 @@ export default function UserFormAdmin() {
 	return (
 		<div className="userFormAdmin">
 			<h2>Usuarios</h2>
-			<table className="userTableTitleContainer">
-				<tr className="userTableTitle">
-					<td><h5>Nombre</h5></td>
-					<td><h5>Email</h5></td>
-					<td><h5>Rol</h5></td>
-					<td><h5>Editar/Eliminar</h5></td>
-				</tr>
-			</table>
+			<div className="userTableTitleContainer">
+				<div className="userTableTitle">
+					<div className="tableTitle"><h5>Nombre</h5></div>
+					<div className="tableTitle"><h5>Email</h5></div>
+					<div className="tableTitle"><h5>Rol</h5></div>
+					<div className="tableTitle"><h5>Editar/Eliminar</h5></div>
+				</div>
+			</div>
 			<div className="userListContainer">
-				<table className="userList">
+				<div className="userList">
 					{userList &&
 						userList.map(user => (
-							<tr className="listItem" key={user.id}>
+							<div className="listItem" key={user.id}>
 								<UserFormLine userInfo={user} />
-							</tr>
+							</div>
 						))}
-				</table>
+				</div>
 			</div>
 		</div>
 	);

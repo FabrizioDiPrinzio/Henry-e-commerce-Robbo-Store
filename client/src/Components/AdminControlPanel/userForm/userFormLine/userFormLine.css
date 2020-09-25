@@ -1,33 +1,32 @@
+.userTableCont {
+  width: 100%;
+}
+
 .userTable {
-  max-width: 100%
+  width: 100%;
 }
 
 .userFormLine {
-  max-width: 100%;
-  display: flex;
-  justify-content: space-around;
-  /* display: grid;
-  grid-template-columns: 3fr 3fr 2fr 2fr 2fr; */
-  /* padding-left: 5%;
-  padding-right: 5%; */
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   overflow: hidden;
-  margin-left: 10px;
   height: 35px;
 }
 
 .editOpen {
   transition: 0.3s;
-  max-width: 800px;
+  width: 100%;
   display: grid;
-  grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   height: 30px;
 }
 
 .editClose {
   transition: 0.3s;
-  max-width: 800px;
+  width: 100%;
   display: grid;
-  grid-template-columns: 3fr 3fr 2fr 2fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   overflow: hidden;
   height: 0px;
 }
@@ -35,30 +34,39 @@
 .userActionContainer {
   width: auto;
   display: flex;
-  justify-content: space-around;
-  /* grid-template-columns: 1fr 1fr; */
+  justify-content: center
 }
 
-.inputTag {
+.usrTableCell {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-self: center
 }
 
-.editUserBtn {
-  margin: 5%;
+.openEditBtn {
+  width: 20%;
+  margin:1%;
   background: #617CC7;
   border-radius: 4px;
   border: solid #617CC7;
   color:white;
-  justify-content: center;
-  align-items: center;
 }
 
 .deleteUserBtn {
-  margin: 5%;
+  width: 20%;
+  margin:1%;
   background: #D53467;
   border-radius: 4px;
   border: solid #D53467;
   color:white;
-  justify-content: center;
-  align-items: center;
+}
+
+.editUserBtn {
+  width: 40%;
+  margin-left: 27%;
+  background: #563488ff;
+  border-radius: 4px;
+  border: solid #563488ff;
+  color:white;
 }

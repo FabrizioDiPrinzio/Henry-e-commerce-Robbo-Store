@@ -10,8 +10,9 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Catalogo(props) {
 	let products = useSelector(state => state.products.allProducts);
+	let more = useSelector(state => state.products.more)
 	// React hooks
-	const [cargarMasVisibiliy, setCargarMasVisibiliy] = useState('visibleMas')
+	const [cargarMasVisibiliy, setCargarMasVisibiliy] = useState(true)
 	const [robots, setRobots] = useState([]);
 	const [pag, setPag] = useState(1)
 	const {categoria} = useParams();
@@ -23,8 +24,7 @@ export default function Catalogo(props) {
 		event.preventDefault();
 				let lastPage = pag;
 				let nextPage = pag + 1;
-				
-				if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(nextPage))
+				if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(nextPage));
 				if (categoria)  {
 					cargarCategoria(nextPage)
 				}
@@ -44,9 +44,12 @@ export default function Catalogo(props) {
 				} else {
 					setRobots(robots.concat(res.data.products))
 				}
+				const more = res.data.more
+				compobarSiHayMas(more)
 			})
 			.catch(err => {
 				setRobots(null);
+				compobarSiHayMas(false)
 				console.log(err.response.data);
 			});
 	}
@@ -61,34 +64,46 @@ export default function Catalogo(props) {
 					} else {
 						setRobots(robots.concat(res.data.products))
 					}
+					const more = res.data.more
+					compobarSiHayMas(more)
 				})
 				.catch(err => {
 					setRobots([]);
+					compobarSiHayMas(false);
 					console.log(err.response.data);
 				});
 	}
 
-	useEffect(
-		() => {
-			if (robots.length === 0 ) setCargarMasVisibiliy('noVisibleMas')
-				else setCargarMasVisibiliy('visibleMas')
-		},
-	);
-
+	const compobarSiHayMas = (more) => {
+		if (!more){
+			setCargarMasVisibiliy(false)
+			setPag(1)
+			} else {
+			setCargarMasVisibiliy(true)
+		}
+	}
 
 	useEffect(
 		() => {
 			if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(1));
-			return () => {dispatch(allActions.productActions.cleanProduct())}
-			//comprobando si hay productos 
+			return () => {
+				dispatch(allActions.productActions.cleanProduct())
+			}
 		},
 		[]
 	);
 
 	useEffect(
 		() => {
+			compobarSiHayMas(more)
+		},[more]
+	);
+
+	useEffect(
+		() => {
 			// Main page, returns ALL products - or not All ...
 			if (!categoria && !params) setRobots(products);
+			if (more) setCargarMasVisibiliy(true)
 		},
 		[products]
 	);
@@ -119,7 +134,11 @@ export default function Catalogo(props) {
 						</li>
 					))}
 			{robots.length === 0 && params && <li><h5>No encontramos nada :´(</h5></li>}
-			<button className={`cargarMas ${cargarMasVisibiliy}`} onClick={handleCargarMas} > Cargar más productos </button>
+			<div>
+					{cargarMasVisibiliy && <button className='cargarMas' onClick={handleCargarMas} > Cargar más productos </button>}
+					<button className='subir'>Subir</button>
+			</div>
+			{!cargarMasVisibiliy && <li><span>Eso es todo por ahora...</span></li>}
 			<li> Mostrando {robots.length} items </li>
 			</ul>
 			

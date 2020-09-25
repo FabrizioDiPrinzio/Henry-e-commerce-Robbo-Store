@@ -20,7 +20,8 @@ router.get('/pag/', (req, res, next) => {
 		const productos = data.slice(firstIndex, lastIndex);
 		const result = {
 			data : productos,
-			currentPage: productos.length > 0 ? p : p - 1
+			currentPage: p,
+			more: productos.length > 0 ? true : false
 		};
 		res.send(result);
 	});

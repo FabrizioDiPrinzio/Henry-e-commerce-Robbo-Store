@@ -41,7 +41,8 @@ app.get('/search', (req, res) => {
 			let page = productos.slice(firstIndex, lastIndex);
 			let result = {
 				currentPage: productos.length > 0 ? p : p - 1,
-				products : page
+				products : page,
+				more: page.length > 0 ? true : false
 			}
 			return res.send(result);
 		})

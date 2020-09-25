@@ -74,10 +74,11 @@ router.get('/:nombreCategoria/', (req, res) => {
 	const lastIndex = firstIndex + 2;
 	Categories.findOne({where: {name: {[Op.iLike]: name}}, include: [Product]}).then(response => {
 		let productos = response.products
-		let pagina = productos.slice(firstIndex, lastIndex);
+		let page = productos.slice(firstIndex, lastIndex);
 		let result = {
-			currentPage: productos.length > 0 ? p : p - 1,
-			products : pagina
+			currentPage: page.length > 0 ? p : p - 1,
+			products : page,
+			more: page.length > 0 ? true : false
 		}
 		res.send(result)
 	})

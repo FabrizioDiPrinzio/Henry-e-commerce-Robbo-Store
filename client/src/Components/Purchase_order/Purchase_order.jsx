@@ -15,7 +15,10 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function Purchase_order(props) {
 	//=====================   redux state    ==================== //
 
-	const user = useSelector(state => state.user);
+	const userId = useSelector(state => state.user.id);
+	const userRol = useSelector(state => state.user.rol);
+	const dispatch = useDispatch();
+
 
 	//=====================   react-component state    ==================== //
 
@@ -24,10 +27,11 @@ export default function Purchase_order(props) {
 	const totalPrice =
 		purchaseOrderData.orderlines &&
 		purchaseOrderData.orderlines.length > 0 &&
-		purchaseOrderData.orderlines.reduce((previous, current) => ({
-			price: previous.price + current.price
-		}));
+		purchaseOrderData.orderlines.reduce((previous, current) => ({price: previous.price + current.price}));
 
+	const [ authFlag, setAuthFlag ] = useState();
+
+  
 	// ========================== react-bootstrap ================================= //
 
 	const [openShippingData, setOpenShippingData] = useState(false); // Elemento desplegable (desplegado / no desplegado)
@@ -37,19 +41,20 @@ export default function Purchase_order(props) {
 	// =========================== useEffect´s ================================//
 
 	useEffect(() => {
-		axios
-			.get(`${urlBack}/orders/${purchaseOrderId}`)
-			.then(response => {
-				setPurchaseOrderData(response.data);
-				return response.data;
-			})
-			.then(response => {
-				console.log(response);
-			})
-			.catch(error => {
-				alert(error);
-			});
-	}, []);
+		axios.get(`${urlBack}/orders/${purchaseOrderId}`)
+		.then(response => {
+			if (response.data.buyerId === userId) {
+				setAuthFlag(true);
+			} else if (userRol === 'Admin') {
+				setAuthFlag(true)
+			} else {
+				setAuthFlag(false)
+			}
+			
+			setPurchaseOrderData(response.data);
+		})
+		.catch(error => {alert(error)})
+	}, [userId])
 
 	// ================== component event handlers ================ //
 
@@ -83,6 +88,14 @@ export default function Purchase_order(props) {
 		setPurchaseOrderData({...purchaseOrderData, status: event.target.value});
 		console.log(purchaseOrderData);
 	};
+
+	if (!authFlag) return (
+		<div className='outerContainer'>
+			<div className="purchaseOrderContainer">
+				<h3>No puedes ver las ordenes de compra de otro usuario</h3>
+			</div>
+		</div>
+	);
 
 	return (
 		<div className="outerContainer">

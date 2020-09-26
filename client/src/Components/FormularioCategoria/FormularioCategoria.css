@@ -8,14 +8,10 @@
   --razzmatazz: #d53467ff
 }
 
-.container {
-margin-bottom: 80px;
-}
-
 .form {
   color: var(--ksu-purple);
   margin: auto;
-  margin-top: 100px;
+  margin-top: 5%;
   max-width: var(--max-width);
 }
 
@@ -50,4 +46,19 @@ width: 350px;
   color:white;
   justify-content: center;
   align-items: center;
+}
+
+.goBackBtn {
+  width: 4%;
+  margin: 1%;
+  background: #563488ff;
+  border-radius: 4px;
+  border: 4px solid #563488ff;
+  color:white;
+  margin: 1%;
+  display: flex
+}
+
+.catFormContainer{
+  padding-bottom: 10%
 }

@@ -115,6 +115,42 @@ router.put('/:id', async (req, res) => {
 	}
 });
 
+router.put('/:id/stockChange', async (req, res) => {
+
+	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
+	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
+
+	const {id} = req.params;
+
+	const {stockChange, type} = req.body;
+	if (!stockChange && !type) return res.status(500).send('faltan parametros')
+
+	const robot = await Product.findByPk(id);
+	if (!robot) return res.status(400).send('No se encontró el robot :(');	
+
+	try {
+		
+		switch (type) {
+			case 'add':
+				robot.stock = robot.stock + Number(stockChange);
+				break;
+			case 'substract':
+				robot.stock = robot.stock - Number(stockChange);
+				break;
+		}
+
+		if (robot.stock < 0) return res.status(400).send('No hay suficiente stock :(')
+
+		await robot.save();
+
+	} catch(error) {
+		res.status(500).send(error.message)
+	}
+
+	await robot.reload();
+	return res.send(robot);
+})
+
 router.get('/:id', (req, res) => {
 	const {id} = req.params;
 

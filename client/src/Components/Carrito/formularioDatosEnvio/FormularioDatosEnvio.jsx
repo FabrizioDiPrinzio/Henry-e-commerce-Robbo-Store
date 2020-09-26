@@ -54,16 +54,26 @@ export default function FormularioDatosEnvio() {
 
 	// ------------- Functionality -------------
 
-	const handleSend = event => {
+	const handleSend = async event => {
 		event.preventDefault();
 
 		const createdOrder = {...inputValues, status: 'creada', userEmail };
 
-		axios
-			.put(`${urlBack}/orders/${currentCart.id}`, createdOrder)
-			.then(() => setSuccessMessage('Fomulario enviado con éxito'))
-			.then(() => dispatch(allActions.cartActions.postUserCart(userId)))
-			.catch(err => setErrorMessage(err.response.data));
+		try {
+			
+			await currentCart.orderlines.forEach(orderline => {
+				axios.put(`${urlBack}/products/${orderline.productId}/stockChange`, {stockChange: orderline.quantity, type: 'substract'})
+			})
+
+			await axios.put(`${urlBack}/orders/${currentCart.id}`, createdOrder)
+
+			setSuccessMessage('Fomulario enviado con éxito')
+
+		} catch (error) {
+			setErrorMessage(error.response.data)
+		} finally {
+			dispatch(allActions.cartActions.postUserCart(userId))
+		}
 	};
 
 	return (

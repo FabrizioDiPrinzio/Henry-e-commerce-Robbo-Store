@@ -67,11 +67,21 @@ router.put('/:id', (req, res) => {
 	}
 });
 
-router.get('/:nombreCategoria', async (req, res) => {
+router.get('/:nombreCategoria/', (req, res) => {
 	const name = decodeURI(req.params.nombreCategoria);
-	Categories.findOne({where: {name: {[Op.iLike]: name}}, include: [Product]}).then(response =>
-		res.send(response)
-	);
+	const  {p} = req.query
+	const firstIndex = (p - 1) * 2;
+	const lastIndex = firstIndex + 2;
+	Categories.findOne({where: {name: {[Op.iLike]: name}}, include: [Product]}).then(response => {
+		let productos = response.products
+		let page = productos.slice(firstIndex, lastIndex);
+		let result = {
+			currentPage: page.length > 0 ? p : p - 1,
+			products : page,
+			more: page.length > 0 ? true : false
+		}
+		res.send(result)
+	})
 });
 
 module.exports = router;

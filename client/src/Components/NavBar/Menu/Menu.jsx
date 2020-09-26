@@ -1,16 +1,34 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {useSelector} from 'react-redux';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import './menu.css';
 
 export default function Menu() {
+	// Redux
 	const categories = useSelector(state => state.categories.allCategories);
 
+	// React Hooks
 	const [stateMenu, setStateMenu] = useState({
 		line: 'line',
 		menu: 'menuClose',
 		cross: 'crossHide'
 	});
+	const menuButton = useRef(null);
+
+	// ------------ Functionality ----------
+
+	const onClickOutside = useCallback(
+		e => {
+			if (!menuButton.current.contains(e.target)) {
+				setStateMenu({line: 'line', menu: 'menuClose', cross: 'crossHide'});
+			}
+		},
+		[menuButton.current]
+	);
+
+	useEffect(() => {
+		document.addEventListener('click', onClickOutside);
+	}, []);
 
 	const clickHandle = event => {
 		event.preventDefault();
@@ -24,7 +42,7 @@ export default function Menu() {
 
 	return (
 		<div className="containerMenu">
-			<div className={'botonMenu'} onClick={clickHandle}>
+			<div className={'botonMenu'} ref={menuButton} onClick={clickHandle}>
 				<div className={stateMenu.cross} />
 				<div className={stateMenu.line} />
 				<div className={stateMenu.line} />
@@ -35,8 +53,11 @@ export default function Menu() {
 				<ul className="menuList">
 					{categories.map(categoria => {
 						return (
-							<li className="categoria" key={categoria.name}>
-								<Link to={`/categories/${categoria.name}`}> {categoria.name}</Link>
+							<li onClick={clickHandle} className="categoria" key={categoria.name}>
+								<NavLink to={`/categories/${categoria.name}`} className="link-categoria">
+									{' '}
+									{categoria.name}
+								</NavLink>
 								<div />
 							</li>
 						);

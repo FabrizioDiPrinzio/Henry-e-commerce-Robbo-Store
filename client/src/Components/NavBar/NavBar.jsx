@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Menu from './Menu/Menu.jsx';
 import Modal from 'react-bootstrap/Modal';
 import UserOptions from './UserOptions/UserOptions';
@@ -22,8 +22,9 @@ document.addEventListener('scroll', e => {
 	}
 });
 
-export default function NavBar() {
+export default function NavBar(props) {
 	// Redux
+	const dispatch = useDispatch();
 	const user = useSelector(state => state.user);
 
 	// React Hooks
@@ -31,6 +32,8 @@ export default function NavBar() {
 	const [showModal, setShowModal] = useState(false);
 	const [statusChanged, setStatusChanged] = useState(false);
 	const [redirect, setRedirect] = useState(false);
+
+	// ----------- Functionality --------------------------
 
 	useEffect(
 		() => {

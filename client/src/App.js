@@ -76,6 +76,10 @@ export default function App() {
 				try {
 					const usuario = await axios.get(`${urlBack}/auth/me`);
 
+					await axios
+						.post(`${urlBack}/user/${usuario.data.id}/cart`)
+						.catch(err => console.log(err.response.data));
+
 					for await (const order of orderlines) {
 						axios
 							.put(`${urlBack}/user/${usuario.data.id}/cart`, order)

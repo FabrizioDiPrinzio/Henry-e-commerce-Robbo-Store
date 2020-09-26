@@ -27,15 +27,19 @@ export default function UserProfile() {
 
 	useEffect(
 		() => {
+			if (Number(id) === user.id) {
+				console.log(id, user.id)
+				setAuthFlag(true);
+			} else if (user.rol === 'Admin') {
+				console.log(user.rol)
+				setAuthFlag(true)
+			} else {
+				setAuthFlag(false)
+			}
+
 			axios.get(`${urlBack}/user/${id}`)
 			.then(response => {
 				setUserProfile(response.data)
-
-				if(user.id !== userProfile.id && user.rol !== 'Admin') {
-					setAuthFlag(false)
-				} else {
-					setAuthFlag(true)
-				}
 			})
 			.catch(err => {
 				alert('Hubo un problema con la petición del usuario, revisa la consola')

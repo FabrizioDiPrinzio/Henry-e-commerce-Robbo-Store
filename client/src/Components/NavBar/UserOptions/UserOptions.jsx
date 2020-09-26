@@ -42,7 +42,7 @@ export default function UserOptions() {
 					</Link>
 				</div>
 			)}
-			<Link className="myProfileBtn" to={`user/${user.id}`}> Mi perfil </Link>
+			<Link className="myProfileBtn" to={`/user/${user.id}`}> Mi perfil </Link>
 			<a className="closeSessBtn" href="#" onClick={logout}>
 				Cerrar sesión
 			</a>

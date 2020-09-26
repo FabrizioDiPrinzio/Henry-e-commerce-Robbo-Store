@@ -1,11 +1,12 @@
+require('dotenv').config(); //Es la forma de requerir el archivo .env//
 const express = require('express');
 const router = express.Router();
 const {Orderline, User, Purchase_order, Product} = require('../db.js');
 const {Op} = require('sequelize');
 
-var  apiKey  = '1f329c28bd5d533b74a297f71b1d5ee0-cb3791c4-3c5c3c83'; 
-var  domain  = 'sandbox0c3cd1b64bf049a0b1fc4ecac8fc8aae.mailgun.org'; 
-var mailgun = require ('mailgun-js') ({apiKey : apiKey , domain : domain}); 
+const {mailgunApiKey, mailgunDomain} = process.env;
+
+var mailgun = require('mailgun-js')({apiKey: mailgunApiKey, domain: mailgunDomain});
 
 // Cart es Purchase_order con status "enCarrito", purchase_orders son las que tienen cualquier otro estado
 
@@ -32,7 +33,7 @@ router.get('/:id', (req, res) => {
 
 	console.log(id);
 
-	Purchase_order.findByPk(id, {include:[{model: Orderline}, {model: Product}]})
+	Purchase_order.findByPk(id, {include: [{model: Orderline}, {model: Product}]})
 		.then(response => {
 			if (!response) return res.status(404).send('No se encontró la orden');
 			else return res.send(response);
@@ -73,7 +74,7 @@ router.put('/:id', async (req, res) => {
 		postal_code,
 		phone_number,
 		shipping_type,
-		userEmail,
+		userEmail
 	} = req.body;
 
 	if (
@@ -111,9 +112,9 @@ router.put('/:id', async (req, res) => {
 		const  data  = {
 			from : 'RobboStore <sanchezlismairy@gmail.com>', 
 			to : userEmail, 
-			subject : 'test with user artur', 
-			text :'¡Probando algo de genialidad Mailgun! testss', 
-			html: `<div style="width: 500px; height: 400px: background: #ebebeb; color: red"> <p><b> Esto es un ${recipient_name} mensaje de prueba ${userEmail}</p></div>`
+			subject : 'Pedido recibido', 
+			text :'Tu pedido se ha recibido correctamente', 
+			template: "envio.test"
 	};
 
 	mailgun.messages().send(data, function (error, body) {
@@ -123,7 +124,6 @@ router.put('/:id', async (req, res) => {
     }
 		return res.status(200).send({savedOrder, statusEmail: 'enviado'});
 });
-
 	} catch (error) {
 		return res.status(400).send(error.message);
 	}

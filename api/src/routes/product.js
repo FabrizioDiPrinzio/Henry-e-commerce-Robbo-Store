@@ -127,6 +127,8 @@ router.put('/:id/stockChange', async (req, res) => {
 				break;
 		}
 
+		if (robot.stock < 0) return res.status(400).send('No hay suficiente stock :(')
+
 		await robot.save();
 
 	} catch(error) {
@@ -135,7 +137,6 @@ router.put('/:id/stockChange', async (req, res) => {
 
 	await robot.reload();
 	return res.send(robot);
-
 })
 
 router.get('/:id', (req, res) => {

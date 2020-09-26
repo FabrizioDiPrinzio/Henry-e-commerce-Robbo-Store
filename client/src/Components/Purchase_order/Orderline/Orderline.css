@@ -20,25 +20,22 @@
 	vertical-align: baseline;
 	background-color: var(--glaucous);
 	border-radius: 10px;
-    box-shadow: 0px 0px 9px 3px rgb(0,0,0,0.3);
-    user-select: none;
-    text-decoration: none;
-    font-family: 'Titillium Web', sans-serif;
-
+	box-shadow: 0px 0px 9px 3px rgb(0, 0, 0, 0.3);
+	user-select: none;
+	text-decoration: none;
+	font-family: 'Titillium Web', sans-serif;
 }
 
 .imageContainer {
 	background-color: var(--glaucous);
 	width: 140px;
-
 }
 
 .image {
 	object-fit: cover;
 	width: 140px;
 	height: 140px;
-	box-shadow: 0px 0px 15px 2px rgb(0,0,0,0.3);
-
+	box-shadow: 0px 0px 15px 2px rgb(0, 0, 0, 0.3);
 }
 
 .infoContainer {
@@ -51,7 +48,7 @@
 .title {
 	text-align: left;
 	color: white;
-	border-bottom: 3px solid rgb(240,240,240,0.3);
+	border-bottom: 3px solid rgb(240, 240, 240, 0.3);
 	text-transform: uppercase;
 	font-size: 80%;
 }
@@ -59,6 +56,14 @@
 .title:hover {
 	text-decoration: none;
 	opacity: 0.7;
+}
+
+.product-link {
+	transition: 0.15s;
+}
+.product-link:hover {
+	color: white !important;
+	text-decoration: none !important;
 }
 
 .body {
@@ -74,14 +79,13 @@
 	display: inline-block;
 }
 
-.stock{
+.stock {
 	color: white;
 	display: inline-block;
 	font-size: 80%;
-	
 }
 
-.control{
+.control {
 	display: block;
 	padding: 10px;
 }
@@ -129,14 +133,12 @@
 	font-weight: bold;
 	text-align: center;
 	background-color: white;
-	box-shadow:  3px 3px 2px 0 rgb(0,0,0,0.2),
-						 	 inset 3px 3px 2px 0 rgb(240,240,240,0.3);
-	display: inline-block; 
+	box-shadow: 3px 3px 2px 0 rgb(0, 0, 0, 0.2), inset 3px 3px 2px 0 rgb(240, 240, 240, 0.3);
+	display: inline-block;
 }
 
-.control .boton:active{
-	box-shadow:  inset 3px 3px 2px 0 rgb(0,0,0,0.2),
-							 inset -3px -3px 2px 0 rgb(240,240,240,0.2);
+.control .boton:active {
+	box-shadow: inset 3px 3px 2px 0 rgb(0, 0, 0, 0.2), inset -3px -3px 2px 0 rgb(240, 240, 240, 0.2);
 }
 
 .boton.add {
@@ -152,4 +154,3 @@
 .iconButtom {
 	margin-top: -11px;
 }
-

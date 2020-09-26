@@ -117,7 +117,7 @@ export default function ProductCard({robot}) {
 				<img className="image" src={robot.image} alt={robot.name} />
 			</div>
 			<div className="infoContainer">
-				<Link to={`/producto/${robot.id}`}>
+				<Link to={`/producto/${robot.id}`} className="product-link">
 					<div className="title">
 						<h3>{robot.name}</h3>
 					</div>

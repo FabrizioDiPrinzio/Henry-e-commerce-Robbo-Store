@@ -1,11 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import {Table} from 'react-bootstrap';
-import {success, failure} from '../../multimedia/SVGs';
+import {success, failure, returnArrow} from '../../multimedia/SVGs';
 import './ProductForm.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import Spinner from 'react-bootstrap/Spinner';
 //------ Fin de imports -----
 
 const urlBack = process.env.REACT_APP_API_URL;
@@ -31,7 +32,7 @@ export default function ProductFormFunction({preSelected}) {
 
 	const [images, setImages] = useState([]);
 	const [mainImage, setMainImage] = useState('');
-	const [newImage, setnewImage] = useState('');
+	const [uploading, setUploading] = useState(false);
 
 	// Auxiliary functions
 	function resetFields() {
@@ -94,11 +95,6 @@ export default function ProductFormFunction({preSelected}) {
 		},
 		[categories]
 	);
-
-	// Lets you add an image with the enter key without needing to click the button.
-	const onImageEnterKey = e => {
-		if (e.key === 'Enter') handleAddImg(e);
-	};
 
 	// Updates the state when something is written in the forms
 	const handleInputChange = event => {
@@ -168,9 +164,21 @@ export default function ProductFormFunction({preSelected}) {
 	const handleImageRadios = event => setMainImage(event.target.value);
 
 	const handleAddImg = event => {
-		event.preventDefault();
-		images.push(newImage);
-		setnewImage('');
+		const files = event.target.files;
+		const uploaded = [...images];
+		setUploading(true);
+
+		for (let i = 0; i < files.length; i++) {
+			const reader = new FileReader();
+
+			reader.onloadend = () => {
+				uploaded.push(reader.result);
+				if (i === files.length - 1) setUploading(false);
+				if (!uploading) setImages(uploaded);
+			};
+
+			reader.readAsDataURL(files[i]);
+		}
 	};
 
 	const handleDeleteImg = event => {
@@ -257,8 +265,8 @@ export default function ProductFormFunction({preSelected}) {
 	return (
 		<div>
 			<form className="prodForm">
-				<Link className="goBackBtn" to="/admin/">
-					<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M13.427 3.021h-7.427v-3.021l-6 5.39 6 5.61v-3h7.427c3.071 0 5.561 2.356 5.561 5.427 0 3.071-2.489 5.573-5.561 5.573h-7.427v5h7.427c5.84 0 10.573-4.734 10.573-10.573s-4.733-10.406-10.573-10.406z"/></svg>
+				<Link className="goBackBtn " to="/admin/">
+					{returnArrow}
 				</Link>
 				<h3 className="titulo">Agregar producto</h3>
 				<div className="">
@@ -335,20 +343,17 @@ export default function ProductFormFunction({preSelected}) {
 				<div className="picsTable">
 					<h5>Agregar Imagen</h5>
 					<div className="inpt">
-						<form>
-							<input
-								className="imageInput"
-								type="text"
-								autocomplete="off"
-								value={newImage}
-								onChange={e => setnewImage(e.target.value)}
-								onKeyPress={onImageEnterKey}
-								placeholder="URL de la imagen"
-							/>{' '}
-							<button onClick={handleAddImg} className="submitBtn" type="button">
-								Agregar imagen
-							</button>
-						</form>
+						<label htmlFor="file-upload" className="submitBtn file-label ">
+							Subir imágenes
+						</label>
+						<input
+							type="file"
+							id="file-upload"
+							accept="image/*"
+							onChange={handleAddImg}
+							multiple
+						/>
+
 						<br />
 						<Table>
 							<thead>
@@ -359,6 +364,7 @@ export default function ProductFormFunction({preSelected}) {
 								</tr>
 							</thead>
 							<tbody>
+								{uploading && <Spinner animation="border" id="img-spinner" />}
 								{images.map(image => (
 									<tr key={image}>
 										<td>
@@ -366,8 +372,7 @@ export default function ProductFormFunction({preSelected}) {
 										</td>
 										<input
 											type="radio"
-											name="mainImage"
-											className="checks"
+											className="radio"
 											value={image}
 											checked={mainImage === image}
 											onChange={handleImageRadios}

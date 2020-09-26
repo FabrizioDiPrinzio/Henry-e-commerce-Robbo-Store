@@ -74,6 +74,8 @@ export default function UserFormAdmin({userInfo, superReload}) {
 				superReload();
 			})
 			.catch(err => alert(err.response.data));
+		
+		clickHandle(event);
 	};
 
 	const handleDelete = event => {

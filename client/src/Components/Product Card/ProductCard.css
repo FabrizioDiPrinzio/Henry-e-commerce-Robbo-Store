@@ -55,8 +55,17 @@
 }
 
 .title:hover {
-	text-decoration: none;
+	text-decoration: none !important;
 	opacity: 0.7;
+	color: white !important;
+}
+
+.product-link {
+	transition: 0.15s;
+}
+.product-link:hover {
+	color: white !important;
+	text-decoration: none !important;
 }
 
 .body {

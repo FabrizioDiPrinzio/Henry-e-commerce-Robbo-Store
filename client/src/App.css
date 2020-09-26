@@ -153,3 +153,11 @@ button:focus {
 a:hover {
 	color: var(--razzmatazz) !important;
 }
+
+.white-link {
+	transition: 0.15s;
+}
+.white-link:hover {
+	text-shadow: 0 0 2px white;
+	color: white !important;
+}

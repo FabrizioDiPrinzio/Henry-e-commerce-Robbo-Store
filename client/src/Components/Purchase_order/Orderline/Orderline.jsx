@@ -10,11 +10,11 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Orderline({robot, orderProducts}) {
 	// React hooks
-	
+
 	const currentRobot = orderProducts.find(item => item.id === robot.productId);
 
-	console.log(robot, orderProducts, currentRobot)
-	
+	console.log(robot, orderProducts, currentRobot);
+
 	// ------------------- Funcionalidad ----------------
 
 	return (
@@ -23,7 +23,7 @@ export default function Orderline({robot, orderProducts}) {
 				<img className="image" src={currentRobot.image} alt={currentRobot.name} />
 			</div>
 			<div className="infoContainer">
-				<Link to={`/producto/${currentRobot.id}`}>
+				<Link to={`/producto/${currentRobot.id}`} className="product-link">
 					<div className="title">
 						<h3>{currentRobot.name}</h3>
 					</div>
@@ -43,9 +43,7 @@ export default function Orderline({robot, orderProducts}) {
 					Sub Total:<br />
 					u$d {`${robot.price}`}
 				</div>
-
 			</div>
 		</div>
 	);
-
 }

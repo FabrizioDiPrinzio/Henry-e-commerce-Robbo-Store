@@ -15,8 +15,7 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function Purchase_order(props) {
 	//=====================   redux state    ==================== //
 
-	const userId = useSelector(state => state.user.id);
-	const userRol = useSelector(state => state.user.rol);
+	const user = useSelector(state => state.user);
 	const dispatch = useDispatch();
 
 
@@ -43,9 +42,9 @@ export default function Purchase_order(props) {
 	useEffect(() => {
 		axios.get(`${urlBack}/orders/${purchaseOrderId}`)
 		.then(response => {
-			if (response.data.buyerId === userId) {
+			if (response.data.buyerId === user.id) {
 				setAuthFlag(true);
-			} else if (userRol === 'Admin') {
+			} else if (user.rol === 'Admin') {
 				setAuthFlag(true)
 			} else {
 				setAuthFlag(false)
@@ -54,7 +53,7 @@ export default function Purchase_order(props) {
 			setPurchaseOrderData(response.data);
 		})
 		.catch(error => {alert(error)})
-	}, [userId])
+	}, [user.id])
 
 	// ================== component event handlers ================ //
 

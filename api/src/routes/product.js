@@ -16,7 +16,7 @@ router.get('/pag/', (req, res, next) => {
 	const {p} = req.query;
 	const firstIndex = (p - 1) * 2;
 	const lastIndex = firstIndex + 2;
-	Product.findAll({include: [Categories, Pics]}).then(data => {
+	Product.findAll({order: [[ 'updatedAt', 'DESC']], include: [Categories, Pics] }).then(data => {
 		const productos = data.slice(firstIndex, lastIndex);
 		const result = {
 			data: productos,
@@ -26,6 +26,18 @@ router.get('/pag/', (req, res, next) => {
 		res.send(result);
 	});
 });
+
+// Top 5 products
+
+router.get('/bestOnes', (req, res, next) => {
+	Product.findAll({ order: [ ['averageQualification', 'DESC'] ], limit: 5 })
+	.then(response => {
+		res.send(response)
+	}).catch(err => {
+		res.status(500).send(err)
+	})
+})
+
 
 router.post('/', async (req, res) => {
 	//Guard Clauses

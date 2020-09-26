@@ -36,11 +36,8 @@ module.exports = sequelize => {
 		},
 
 		image: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			validate: {
-				isUrl: true
-			}
+			type: DataTypes.TEXT,
+			allowNull: false
 		},
 
 		description: {

@@ -10,13 +10,19 @@ const urlBack = process.env.REACT_APP_API_URL;
 export default function UserFormAdmin() {
 	// React Hooks
 	const [userList, setUserList] = useState([]);
+	const [reloadData, setReloadData] = useState(false)
+
+	const superReload = () => {
+		console.log('super Reload ha sido invocada')
+		setReloadData(!reloadData)
+	};
 
 	// ----------------- Functionality -------------
 	useEffect(() => {
 		axios.get(`${urlBack}/user`).then(response => {
 			setUserList(response.data);
 		});
-	}, []);
+	}, [reloadData]);
 
 	return (
 		<div className="userFormAdmin">
@@ -34,7 +40,7 @@ export default function UserFormAdmin() {
 					{userList &&
 						userList.map(user => (
 							<div className="listItem" key={user.id}>
-								<UserFormLine userInfo={user} />
+								<UserFormLine userInfo={user} superReload={superReload}/>
 							</div>
 						))}
 				</div>

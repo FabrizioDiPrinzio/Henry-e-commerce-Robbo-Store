@@ -15,13 +15,13 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 
 export default function Purchase_order(props) {
-	
+
 	//=====================   redux state    ==================== //
 
 	const userRol = useSelector(state => state.user.rol);
 	const dispatch = useDispatch();
 
-	
+
 	//=====================   react-component state    ==================== //
 
 	const { purchaseOrderId } = useParams();
@@ -30,10 +30,10 @@ export default function Purchase_order(props) {
 		purchaseOrderData.orderlines &&
 		purchaseOrderData.orderlines.length > 0 &&
 		purchaseOrderData.orderlines.reduce((previous, current) => ({price: previous.price + current.price}));
- 
-	
+
+
 	// ========================== react-bootstrap ================================= //
-	
+
 	const [openShippingData, setOpenShippingData] = useState(false); // Elemento desplegable (desplegado / no desplegado)
 	const [openPaymentData, setOpenPaymentData] = useState(false); // Elemento desplegable (desplegado / no desplegado)
 	const [ alertMessage, setAlertMessage ] = useState('Selecciona Algun Status'); // mensaje del tooltip para cambiar el status
@@ -96,36 +96,36 @@ export default function Purchase_order(props) {
 					</div>
 
 					<div className='purchaseOrderStatus'>
-					
+
 						{
-						userRol === 'Admin' && 
+						userRol === 'Admin' &&
 
 						<form className="orderStatusSelector" onSubmit={handleSubmit}  >
 
 							<OverlayTrigger overlay={<Tooltip id="tooltip-SubmitStatus">{`${alertMessage}`}</Tooltip>}>
 
-							<button 
-							onClick={handleSubmit} 
+							<button
+							onClick={handleSubmit}
 							className="submitBtn">
 								Confirmar Cambio de Status
 							</button>
 
 							</OverlayTrigger>
-							
+
 
 							<select id="selectStatus" value={purchaseOrderData.status} onChange={handleStatusChange}>
 								<option value= "enCarrito"> En Carrito </option>
 								<option value="creada"> Creada </option>
 								<option value="pagada"> Pagada </option>
 								<option value="entregada"> Entregada </option>
-								<option value="rechazada"> Rrechazada </option>
+								<option value="rechazada"> Rechazada </option>
 							</select>
 
 						</form>
 						}
 
 						{
-						userRol !== 'Admin' && 
+						userRol !== 'Admin' &&
 
 						<h3>
 							Estado de la orden:{' '}
@@ -137,7 +137,7 @@ export default function Purchase_order(props) {
 							</OverlayTrigger>
 						</h3>
 						}
-						
+
 
 					</div>
 
@@ -150,7 +150,7 @@ export default function Purchase_order(props) {
 					<div className='orderLines'>
 
 						<hr /> <br />
-						{purchaseOrderData.orderlines && purchaseOrderData.orderlines.map(bot => 
+						{purchaseOrderData.orderlines && purchaseOrderData.orderlines.map(bot =>
 						<div className='orderline' key={bot.id}>
 							<Orderline robot={bot} orderProducts={purchaseOrderData.products} />
 							<br/>
@@ -164,10 +164,10 @@ export default function Purchase_order(props) {
 				</div>
 
 				<hr />
-				
+
 				<div className='shippingData'>
-					
-					<h5 
+
+					<h5
 					onClick={() => setOpenShippingData(!openShippingData)}
 					aria-controls="example-collapse-text"
 					aria-expanded={openShippingData}>
@@ -191,11 +191,11 @@ export default function Purchase_order(props) {
 
 				</div>
 
-				<hr /> 
-				
+				<hr />
+
 				<div className='paymentData'>
 
-					<h5 
+					<h5
 					onClick={() => setOpenPaymentData(!openPaymentData)}
 					aria-controls="example-collapse-text"
 					aria-expanded={openPaymentData}>

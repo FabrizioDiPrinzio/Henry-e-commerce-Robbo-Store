@@ -15,7 +15,7 @@ export default function RegisterForm() {
 	const [registered, setRegistered] = useState('');
 	const [inputValues, setInputValues] = useState({
 		name: null,
-		rol: null,
+		rol: 'Client',
 		email: null,
 		password: null,
 		confirmPassword: null
@@ -51,7 +51,7 @@ export default function RegisterForm() {
 			await axios.post(`${urlBack}/user/${user.data.id}/cart`);
 
 			setRegistered('Usuario registrado correctamente');
-			setInputValues({name: null, rol: null, email: null, password: null});
+			setInputValues({name: null, rol: 'Client', email: null, password: null});
 			formulario.current.reset();
 		} catch (error) {
 			setError(error.response.data);

@@ -27,6 +27,18 @@ router.get('/pag/', (req, res, next) => {
 	});
 });
 
+// Top 5 products
+
+router.get('/bestOnes', (req, res, next) => {
+	Product.findAll({ order: [ ['averageQualification', 'DESC'] ], limit: 3 })
+	.then(response => {
+		res.send(response)
+	}).catch(err => {
+		res.status(500).send(err)
+	})
+})
+
+
 router.post('/', async (req, res) => {
 	//Guard Clauses
 	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');

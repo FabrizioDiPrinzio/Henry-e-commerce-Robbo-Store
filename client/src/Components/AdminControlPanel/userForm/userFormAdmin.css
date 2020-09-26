@@ -8,8 +8,16 @@
 	--razzmatazz: #d53467ff;
 }
 
+.Userstitulo{
+	color:#563488ff;
+}
+
 .userFormAdmin {
 	display: block;
+	margin-top: 5%;
+	max-width: 800px;
+	position:relative;
+	left: 20%
 }
 
 .userTableTitleContainer {

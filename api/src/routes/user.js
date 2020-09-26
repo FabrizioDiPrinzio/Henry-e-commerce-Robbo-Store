@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
 	const {id} = req.params;
 
 	// Guard clauses
-	
+
 	// if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
 	// if (req.user.id !== Number(id) && req.user.rol !== 'Admin') {
 	// 	return res.status(401).send('No puedes editar a otro usuario');
@@ -47,7 +47,7 @@ router.post('/signup', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-	const {name, email, rol, password} = req.body;
+	const {name, email} = req.body;
 	const {id} = req.params;
 
 	// Guard clauses
@@ -56,7 +56,7 @@ router.put('/:id', (req, res) => {
 		return res.status(401).send('No puedes editar a otro usuario');
 	}
 
-	if (!name && !email && !password) return res.status(400).send('Faltan parámetros');
+	if (!name && !email) return res.status(400).send('Faltan parámetros');
 	else {
 		User.findByPk(id)
 			.then(user => {
@@ -64,8 +64,6 @@ router.put('/:id', (req, res) => {
 
 				user.name = name || user.name;
 				user.email = email || user.email;
-				user.rol = rol || user.rol;
-				user.password = password || user.password;
 				user.save();
 
 				return user;

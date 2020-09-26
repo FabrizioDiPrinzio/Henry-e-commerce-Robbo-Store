@@ -1,17 +1,30 @@
 .controlPanel {
-  margin: 0px;
-  margin-top: 60px;
-  text-align: center;
-  align-content: center;
-  align-items: center;
   width: 100%;
-}
-.centerColumn {
-  display: inline-block;
-  text-align: left;
   max-width: 800px;
-  min-width: 300px;
+  margin: auto;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
+
+.centerColumn {
+  position: relative;
+  left: 25%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  margin-bottom: 8%
+}
+
+.CPTitle {
+  color: #563488ff;
+  margin: auto;
+  margin-bottom: 2%
 }
 
 .CPButtons {
@@ -22,9 +35,10 @@
   border-radius: 5px;
   display:flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .iconBtn {
-  margin-right: 5%
+  margin-right: 5%;
+  margin-right: 2%
 }

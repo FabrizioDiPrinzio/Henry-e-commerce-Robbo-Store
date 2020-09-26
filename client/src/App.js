@@ -24,6 +24,8 @@ import Purchase_order from './Components/Purchase_order/Purchase_order.jsx';
 import OAuthSuccess from './Components/OAuth/OAuthSuccess';
 import Welcome from './Components/OAuth/Welcome';
 import LoadingScreen from './Components/Loading/LoadingScreen';
+import Users from './Components/AdminControlPanel/userForm/UserFormAdmin.jsx';
+import PurchaseOrders from './Components/AdminControlPanel/PurchaseOrderForm/PurchaseOrderForm.jsx'
 // =========== FIN DE IMPORTS ============
 
 const urlBack = process.env.REACT_APP_API_URL;
@@ -134,6 +136,16 @@ export default function App() {
 								exact
 								path="/admin"
 								component={user.rol === 'Admin' ? AdminControlPanel : NotFound}
+							/>
+							<Route 
+								exact path="/admin/users/" 
+								component={Users} 
+								component={user.rol === 'Admin' ? Users : NotFound}
+							/>
+							<Route 
+								exact path="/admin/purchase_orders/" 
+								component={PurchaseOrders} 
+								component={user.rol === 'Admin' ? PurchaseOrders : NotFound}
 							/>
 							<NotFound />
 						</Switch>

@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Link} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 // import {useSelector, useDispatch} from 'react-redux';
 // import {allActions} from '../../../../Redux/Actions/actions.js'
 import './PurchaseOrderFormLine.css';
-import axios from 'axios';
+//import axios from 'axios';
 
 const urlBack = process.env.REACT_APP_API_URL;
 
@@ -18,13 +18,13 @@ export default function FormFormAdmin(props) {
 		status,
 		recipient_name,
 		recipient_lastname,
-		country,
-		city,
-		address,
-		postal_code,
-		phone_number,
+		// country,
+		// city,
+		// address,
+		// postal_code,
+		// phone_number,
 		shipping_type,
-		buyerId,
+		//buyerId,
 		createdAt,
 		products,
 		orderlines

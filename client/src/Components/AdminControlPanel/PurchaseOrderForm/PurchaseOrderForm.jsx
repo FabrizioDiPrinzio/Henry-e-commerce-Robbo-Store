@@ -9,7 +9,7 @@ import {Link} from 'react-router-dom';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function PurchaseOrderForm() {
-	const [selectedStatus, setSelectedStatus] = useState('0');
+	//const [selectedStatus, setSelectedStatus] = useState('0');
 	const [selectedOrders, setSelectedOrders] = useState([]);
 	const [allOrders, setAllOrders] = useState([]);
 

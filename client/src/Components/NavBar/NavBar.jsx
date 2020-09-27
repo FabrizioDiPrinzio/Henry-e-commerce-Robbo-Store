@@ -24,7 +24,7 @@ document.addEventListener('scroll', e => {
 
 export default function NavBar(props) {
 	// Redux
-	const dispatch = useDispatch();
+	//const dispatch = useDispatch();
 	const user = useSelector(state => state.user);
 
 	// React Hooks

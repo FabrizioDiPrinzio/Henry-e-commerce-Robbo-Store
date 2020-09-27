@@ -35,10 +35,20 @@ export default function ProductCard({robot}) {
 
 	// ------------------- Funcionalidad ----------------
 
+	const handleMouseEnterAdd = () => {
+		if (robot.stock <= carrito.quantity) setShowTooltips(true);
+	};
+
+	const handleMouseEnterRemove = () => {
+		if (carrito.quantity <= 0) setShowTooltips(true);
+	};
+
+	const handleMouseLeave = () => setShowTooltips(false);
+
 	const handleClickAdd = e => {
 		e.preventDefault();
 
-		if (robot.stock <= carrito.quantity || loading === true) return;
+		if (robot.stock <= carrito.quantity || loading === true) return setShowTooltips(true);
 
 		const productValues = {
 			productId: robot.id,
@@ -76,38 +86,38 @@ export default function ProductCard({robot}) {
 	const handleClickRemove = e => {
 		e.preventDefault();
 
+		if (carrito.quantity <= 0) return setShowTooltips(true);
+
 		const changes = {
 			productId: robot.id,
 			quantity: carrito.quantity - 1,
 			price: (carrito.quantity - 1) * robot.price
 		};
 
-		if (carrito.quantity > 0 && loading === false) {
-			setLoading(true);
+		setLoading(true);
 
-			if (user.rol === 'Guest') {
-				dispatch(
-					allActions.cartActions.editGuestCart(
-						changes,
-						orderlines,
-						robot,
-						changes.quantity === 0 ? 'RemoveFromProducts' : 'No changes'
-					)
-				);
-				setLoading(false);
-			}
-			else {
-				axios
-					.put(`${urlBack}/user/${user.id}/cart`, changes)
-					.then(() => {
-						setLoading(false);
-						dispatch(allActions.cartActions.getUserCart(user.id));
-					})
-					.catch(error => {
-						alert(error.response.data);
-						setLoading(false);
-					});
-			}
+		if (user.rol === 'Guest') {
+			dispatch(
+				allActions.cartActions.editGuestCart(
+					changes,
+					orderlines,
+					robot,
+					changes.quantity === 0 ? 'RemoveFromProducts' : 'No changes'
+				)
+			);
+			setLoading(false);
+		}
+		else {
+			axios
+				.put(`${urlBack}/user/${user.id}/cart`, changes)
+				.then(() => {
+					setLoading(false);
+					dispatch(allActions.cartActions.getUserCart(user.id));
+				})
+				.catch(error => {
+					alert(error.response.data);
+					setLoading(false);
+				});
 		}
 	};
 
@@ -140,6 +150,7 @@ export default function ProductCard({robot}) {
 				<div className="botones">
 					<OverlayTrigger
 						show={robot.stock <= carrito.quantity && showTooltips}
+						trigger="click"
 						overlay={
 							<Tooltip id="disabledAdd">{exclamationMark} No queda más stock!</Tooltip>
 						}
@@ -153,10 +164,8 @@ export default function ProductCard({robot}) {
 							>
 								<div
 									className="iconButtom"
-									onMouseEnter={() => {
-										if (robot.stock <= carrito.quantity) setShowTooltips(true);
-									}}
-									onMouseLeave={() => setShowTooltips(false)}
+									onMouseEnter={handleMouseEnterAdd}
+									onMouseLeave={handleMouseLeave}
 								>
 									+
 								</div>
@@ -177,10 +186,8 @@ export default function ProductCard({robot}) {
 									className={`iconButtom ${carrito.quantity === 0
 										? 'disabledRemove'
 										: ''}`}
-									onMouseEnter={() => {
-										if (carrito.quantity === 0) setShowTooltips(true);
-									}}
-									onMouseLeave={() => setShowTooltips(false)}
+									onMouseEnter={handleMouseEnterRemove}
+									onMouseLeave={handleMouseLeave}
 								>
 									-
 								</div>

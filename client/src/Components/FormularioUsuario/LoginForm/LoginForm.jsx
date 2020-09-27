@@ -1,5 +1,5 @@
 import React, {useState, useRef} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {allActions} from '../../../Redux/Actions/actions';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../UserForm.css';
@@ -19,7 +19,7 @@ const urlBack = process.env.REACT_APP_API_URL;
 
 export default function LoginForm() {
 	// Redux
-	const orderlines = useSelector(state => state.cart.currentCart.orderlines);
+	//const orderlines = useSelector(state => state.cart.currentCart.orderlines);
 	const dispatch = useDispatch();
 
 	// React Hooks

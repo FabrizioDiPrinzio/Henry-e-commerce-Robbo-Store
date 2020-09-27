@@ -1,9 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import './Orderline.css';
-import {useSelector, useDispatch} from 'react-redux';
-import {allActions} from '../../../Redux/Actions/actions';
-import axios from 'axios';
+
 // =========== FIN DE IMPORTS ============
 
 const urlBack = process.env.REACT_APP_API_URL;

@@ -15,14 +15,12 @@ import ProductForm from '../FormularioProducto/ProductForm';
 const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Producto() {
-
 	// ========================== Redux State ========================== //
 
 	const currentUser = useSelector(state => state.user);
 	const currentCart = useSelector(state => state.cart.currentCart);
 	const productStore = useSelector(state => state.products);
 	const dispatch = useDispatch();
-
 
 	// ========================== React State ========================== //
 
@@ -31,23 +29,21 @@ export default function Producto() {
 	const {id} = useParams();
 	const [showModal, setShowModal] = useState(false);
 	const [index, setIndex] = useState(0); // carousel Image Index
-	const [reloadData, setReloadData] = useState(false)
+	const [reloadData, setReloadData] = useState(false);
 
 	useEffect(
 		() => {
 			Axios.get(`${urlBack}/products/${id}`)
-			.then(res => {
-				setRobot(res.data);
-				setPics(res.data.pics.map(i => i.imageUrl));
-			})
-			.catch(err => {
-				console.log(err);
-				alert(err);
-			})
+				.then(res => {
+					setRobot(res.data);
+					setPics(res.data.pics.map(i => i.imageUrl));
+				})
+				.catch(err => {
+					console.log(err);
+				});
 		},
-		[ id, productStore, reloadData ]
+		[id, productStore, reloadData]
 	);
-
 
 	// ===================== Utility Functions ====================== //
 
@@ -62,10 +58,9 @@ export default function Producto() {
 	const stars = showStars(`${robot.averageQualification}`);
 
 	const superReload = () => {
-		console.log('super Reload ha sido invocada')
-		setReloadData(!reloadData)
+		console.log('super Reload ha sido invocada');
+		setReloadData(!reloadData);
 	};
-
 
 	// ======================= Event Hnadlers ======================= //
 
@@ -78,9 +73,8 @@ export default function Producto() {
 	const handleBuy = event => {
 		event.preventDefault();
 
-
 		if (robot.stock < 1) return; // Si no hay en stock no se compra
-		if (currentCart && currentCart.products.find(product => product.id === robot.id)) return;// ya lo tiene en carrito
+		if (currentCart && currentCart.products.find(product => product.id === robot.id)) return; // ya lo tiene en carrito
 
 		const productValues = {
 			productId: robot.id,
@@ -99,8 +93,7 @@ export default function Producto() {
 			);
 		}
 		else {
-			Axios
-				.put(`${urlBack}/user/${currentUser.id}/cart`, productValues)
+			Axios.put(`${urlBack}/user/${currentUser.id}/cart`, productValues)
 				.then(() => {
 					dispatch(allActions.cartActions.getUserCart(currentUser.id));
 				})
@@ -110,38 +103,28 @@ export default function Producto() {
 		}
 	};
 
-
-
 	// =============== Render if robot not found ============== //
 
 	if (!robot)
 		return (
-		<h1 className="not-found">
-			Lo sentimos, pero ese producto no se encuentra en nuestra base de datos!
-		</h1>
-	);
-
-
+			<h1 className="product-not-found">
+				Lo sentimos, pero ese producto no se encuentra en nuestra base de datos!
+			</h1>
+		);
 
 	// ================ Render if robot IS found ================== //
 
 	return (
 		<div className="productContainer">
 			<div className="productCont2">
-
-				<Carousel 
-				className="carItems"
-				activeIndex={index}
-
-				onSelect={handleSelect}>
-
+				<Carousel className="carItems" activeIndex={index} onSelect={handleSelect}>
 					{pics.map(image => (
 						<Carousel.Item>
 							<img
-							// d-block w-100
-							className="productImg"
-							src={image}
-							alt={pics.indexOf(image)}
+								// d-block w-100
+								className="productImg"
+								src={image}
+								alt={pics.indexOf(image)}
 							/>
 							{/*
 							<Carousel.Caption className="">
@@ -150,31 +133,32 @@ export default function Producto() {
 							*/}
 						</Carousel.Item>
 					))}
-
 				</Carousel>
 
-
 				<div className="infoCard">
-
-					<div className='infoCardHeader'>
+					<div className="infoCardHeader">
 						<h3 className="productTitle">
-							{robot.name}{' '}{' '}
+							{robot.name} {' '}
 							{currentUser.rol === 'Admin' && (
-							<button type="submit" className="editProdBtn" value="Editar" onClick={() => setShowModal(!showModal)}>
-								{editButton}
-							</button>
+								<button
+									type="submit"
+									className="editProdBtn"
+									value="Editar"
+									onClick={() => setShowModal(!showModal)}
+								>
+									{editButton}
+								</button>
 							)}
-							<hr/>
+							<hr />
 						</h3>
-						<div className='starQualification'>
-							<div>{stars.map( i => i)}</div>
-							| {`${robot.averageQualification && robot.averageQualification.toFixed(1)} / 5`}
+						<div className="starQualification">
+							<div>{stars.map(i => i)}</div>
+							|{' '}
+							{`${robot.averageQualification && robot.averageQualification.toFixed(1)} / 5`}
 						</div>
 						<p className="infoCardDescription">{robot.description}</p>
 						<div className="infoCardData">
-							<span className="">
-								Price U$S: {robot.price}
-							</span>
+							<span className="">Price U$S: {robot.price}</span>
 							<br />
 							<span className="">
 								{robot.stock > 0 ? `Stock: ${robot.stock} units left` : 'Out of stock!'}
@@ -182,32 +166,31 @@ export default function Producto() {
 						</div>
 					</div>
 
-					<button className='bigBuyButton' onClick={handleBuy}>
+					<button className="bigBuyButton" onClick={handleBuy}>
 						<h4>¡ Agregar al Carrito !</h4>
 					</button>
 
-					<div className='reviewContainer'>
-						<Review robotId={id} superReload={superReload}/>
-					</div>			
-		
+					<div className="reviewContainer">
+						<Review robotId={id} superReload={superReload} />
+					</div>
 				</div>
-
 			</div>
 
 			{currentUser.rol === 'Admin' && (
-				<Modal 
-				show={showModal}
-				onHide={() => {setShowModal(!showModal)}}
-				size="xl"
-				aria-labelledby="contained-modal-title-vcenter"
-				centered
+				<Modal
+					show={showModal}
+					onHide={() => {
+						setShowModal(!showModal);
+					}}
+					size="xl"
+					aria-labelledby="contained-modal-title-vcenter"
+					centered
 				>
-					<div className='container'>
+					<div className="container">
 						<ProductForm preSelected={robot} />
 					</div>
 				</Modal>
 			)}
-
 		</div>
 	);
-};
+}

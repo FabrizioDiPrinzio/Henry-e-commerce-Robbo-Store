@@ -24,27 +24,9 @@
 	padding-top: 3px;
 	padding-bottom: 3px;
 	max-width: var(--max-width);
-	min-width: 300px;
 	margin: auto;
 	height: 55px; /*definido segun position de searchar pq no la detecta pq usa position fixed*/
 }
-
-/*
-.Home {
-  color:white;
-  font-family: Ropa Sans;
-}
-
-.ProductCard {
-  color:white;
-  font-family: Ropa Sans;
-}
-
-.Catalogo {
-  color:white;
-  font-family: Ropa Sans;
-}
-*/
 
 .logo {
 	height: 45px;
@@ -119,11 +101,12 @@
 }
 
 .SearchBar {
-	width: 100%;
+	width: 100vw;
 	max-width: var(--max-width);
+	margin-left: -0vw;
+	margin-bottom: 0px;
 	margin: auto;
 	height: 50px;
-	margin-bottom: 0px;
 	padding: 0px;
 	padding-top: 4px;
 	display: flex;
@@ -135,14 +118,10 @@
 	height: 40px;
 	border: 4px solid var(--baby-blue-eyes);
 	color: white;
-	margin: 0px;
-	margin-right: 0px;
-	margin-left: 10px;
 }
-
 .SearchInput {
-	width: 80%;
 	margin: auto;
+  border:none;
 }
 
 .success-modal {
@@ -157,4 +136,29 @@
 .success-modal .modal-content {
 	width: 70%;
 	left: 15%;
+}
+
+@media (min-width: 500px) {
+	.SearchInput {
+		border:none;
+		width: 70%;
+		margin: auto;
+		align-self: flex-start;
+	}
+}
+
+@media (max-width: 500px) {
+	.SearchBar{
+		width: 98vw;
+		margin-left: 0;
+	}
+	.SearchInput{
+		width: 60%;	
+	}
+	.welcome {
+		display: none;
+	}
+	.NavBar .logo {
+		transform: scale(0.8);
+	}
 }

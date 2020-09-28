@@ -1,24 +1,69 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import './Carousel.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import Axios from 'axios';
+import CarouselBootstrap from 'react-bootstrap/Carousel';
+
+const urlBack = process.env.REACT_APP_API_URL;
 
 export default function Carousel() {
-	let botonDelante = document.querySelector('.btn delante');
+/*	let botonDelante = document.querySelector('.btn delante');
 	let botonAtras = document.querySelector('.btn delante');
+    */
+    const [index, setIndex] = useState(0); 
+	const [bestOnes, setBestOnes] = useState([{image: "#" },{image: "#" }]);
 
-	//Faltaria poner las imagenes como un estado interno de este componente, y al hacer click
-	//en delante y atrás, se cambiaría las imágenes
+
+	const handleSelect = (selectedIndex, e) => {
+		setIndex(selectedIndex);
+	};
+
+
+	useEffect(
+		() => {
+			Axios.get(`${urlBack}/products/bestOnes`)
+			.then(res => {
+				setBestOnes(res.data)
+			})
+			.catch(err => {
+				console.log(err);
+				alert(err);
+			})
+		},
+		[]
+	);
+
 
 	return (
 		<div>
-			<div className="carousel">
-				<img
-					className="img"
-					src="https://mmtcdn.blob.core.windows.net/084395e6770c4e0ebc5612f000acae8f/mmtcdn/Products20549-640x640-592019517.jpg"
-				/>
-				<h3>Oferta Robot Alfa</h3>
-				<div className="btn delante" />
-				<div className="btn atras" />
-			</div>
+		<h3 className="tituloCarousel">Nuestro top 5</h3>
+		<CarouselBootstrap 
+				className="carousel"
+				activeIndex={index}
+				onSelect={handleSelect}>
+					{
+					bestOnes.map(best =>{
+						return (
+							<CarouselBootstrap.Item>
+								<div className="cardCarrousel">
+									<img 
+										src={best && best.image}
+										alt={best.name} 
+									/>
+									<Link to={`/producto/${best.id}`} >
+										<div className="bestOneData"> 
+											<i  className='bestOneLink'>{best.name}</i>
+											<p className='descriptionCarrousel'>Precio: U$S{best.price}</p>
+											<p className='descriptionCarrousel'>{best.description}</p>
+										</div>
+									</Link>
+								</div>
+							</CarouselBootstrap.Item>
+							)
+						})
+					}
+				</CarouselBootstrap>
 		</div>
 	);
 }

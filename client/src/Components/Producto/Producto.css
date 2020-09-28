@@ -11,17 +11,22 @@
 /* ===========   Container  ============ */
 
 .productContainer {
-	max-width: 800px;
-	min-width: 300px;
-	margin: auto;
-	margin-top: 80px;
-	display: flex;
-	justify-content: center;
+  max-width: 800px;
+  min-width: 300px;
+  margin: auto;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .productCont2 {
 	margin-bottom: 50px;
 	width: 100%;
+}
+
+.tituloproductocontainer {
+  margin: -50px 0 0 0;
 }
 
 /* ===========   Carousel  ============ */

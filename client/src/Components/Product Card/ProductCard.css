@@ -109,6 +109,10 @@
 	border: none;
 }
 
+.cant:focus {
+	outline: none;
+}
+
 .botones {
 	margin-top: 10px;
 	display: grid;

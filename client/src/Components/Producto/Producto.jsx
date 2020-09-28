@@ -127,6 +127,9 @@ export default function Producto() {
 
 	return (
 		<div className="productContainer">
+			<div className="tituloproductocontainer">
+			<h3 className="tituloCarousel">{robot.name}</h3>
+			</div>
 			<div className="productCont2">
 
 				<Carousel 

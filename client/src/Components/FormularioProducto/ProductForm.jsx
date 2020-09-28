@@ -66,20 +66,19 @@ export default function ProductFormFunction({preSelected}) {
 		() => {
 			axios
 				.get(`${urlBack}/products`)
-				.then(res => setProducts(res.data))
+				.then(res => {setProducts(res.data)})
+				.then(() => {
+
+					if (preSelected) {
+						const eventWrapper = {target: {value: preSelected.id}};
+						handleSelectChange(eventWrapper);
+					}
+
+				})
 				.catch(err => console.log(err.response.data));
 		},
 		[update]
 	);
-
-	// If a preSelected bot comes in props
-	useEffect(() => {
-		if (preSelected) {
-			const eventWrapper = {target: {}};
-			eventWrapper.target.value = preSelected.id;
-			handleSelectChange(eventWrapper);
-		}
-	}, []);
 
 	// Creates category checkboxes
 	useEffect(

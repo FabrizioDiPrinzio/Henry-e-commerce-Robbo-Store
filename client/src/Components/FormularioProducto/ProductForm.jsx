@@ -66,8 +66,16 @@ export default function ProductFormFunction({preSelected}) {
 		() => {
 			axios
 				.get(`${urlBack}/products`)
-				.then(res => setProducts(res.data))
-				.catch(err => console.log(err.response ? err.response.data : err));
+				.then(res => {setProducts(res.data)})
+				.then(() => {
+
+					if (preSelected) {
+						const eventWrapper = {target: {value: preSelected.id}};
+						handleSelectChange(eventWrapper);
+					}
+
+				})
+				.catch(err => console.log(err.response.data));
 		},
 		[update]
 	);

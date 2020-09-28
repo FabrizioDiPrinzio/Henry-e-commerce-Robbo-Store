@@ -132,7 +132,7 @@ export default function Comment({info, superMegaReload}) {
 
 					<Link to='#'><strong> {`${info.creator.name}`} </strong> </Link>
 
-					{ creatorId === currentUser.id &&
+					{ (currentUser.rol === 'Admin' || creatorId === currentUser.id) &&
             		<div class="btnCont">
             		  <button onClick={editClickHandle} className="comment-editBtn">
             		   {editButton} 
@@ -156,7 +156,7 @@ export default function Comment({info, superMegaReload}) {
 			</div>
 
 
-            { creatorId === currentUser.id &&
+            { (currentUser.rol === 'Admin' || creatorId === currentUser.id) &&
             <form>
             	<div className={stateEditar.edit}>
             	  <textarea

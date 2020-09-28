@@ -43,7 +43,6 @@
 	position: absolute;
 	height: 400px;
 	width: 100%;
-	bottom: -35%;
 	left: 0;
 	right: 0;
 	color: white;
@@ -74,9 +73,26 @@
 	font-size: 1.2em;
 }
 
+@media (min-width: 500px) {
+	.bestOneData {
+		bottom: -35%;
+	}
+	.bestOneData:hover {
+		bottom: -10%;
+	}
+}
+
 @media (max-width: 500px) {
-	 .carousel 
-	 {
+	 .carousel {
 	 	height: 70vh;
 	 }
+
+	 .tituloCarousel {
+	 	margin-right: 10px;
+	 }
+
+	.bestOneData:hover {
+		bottom: -10%;
+	}
 }
+

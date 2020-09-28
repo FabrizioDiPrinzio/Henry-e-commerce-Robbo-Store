@@ -16,7 +16,7 @@ router.get('/pag/', (req, res, next) => {
 	const {p} = req.query;
 	const firstIndex = (p - 1) * 2;
 	const lastIndex = firstIndex + 2;
-	Product.findAll({order: [[ 'updatedAt', 'DESC']], include: [Categories, Pics] }).then(data => {
+	Product.findAll({order: [['updatedAt', 'DESC']], include: [Categories, Pics]}).then(data => {
 		const productos = data.slice(firstIndex, lastIndex);
 		const result = {
 			data: productos,
@@ -30,14 +30,14 @@ router.get('/pag/', (req, res, next) => {
 // Top 5 products
 
 router.get('/bestOnes', (req, res, next) => {
-	Product.findAll({ order: [ ['averageQualification', 'DESC'] ], limit: 5 })
-	.then(response => {
-		res.send(response)
-	}).catch(err => {
-		res.status(500).send(err)
-	})
-})
-
+	Product.findAll({order: [['averageQualification', 'DESC']], limit: 5})
+		.then(response => {
+			res.send(response);
+		})
+		.catch(err => {
+			res.status(500).send(err);
+		});
+});
 
 router.post('/', async (req, res) => {
 	//Guard Clauses
@@ -55,11 +55,12 @@ router.post('/', async (req, res) => {
 
 	try {
 		let newProduct = await Product.create(newBody);
-		images.map(img => {
-			Pics.create({imageUrl: img})
-				.then(newPic => newProduct.addPic(newPic))
-				.then(response => res.status(201).send(response));
-		});
+
+		Promise.all(
+			images.map(img => {
+				Pics.create({imageUrl: img}).then(newPic => newProduct.addPic(newPic));
+			})
+		).then(() => res.send(newProduct));
 	} catch (error) {
 		res.status(400).send(error.message);
 	}
@@ -101,9 +102,7 @@ router.put('/:id', async (req, res) => {
 			await Pics.destroy({where: {productId: robot.id}});
 
 			images.map(img => {
-				Pics.create({imageUrl: img})
-					.then(newPic => robot.addPic(newPic))
-					.then(response => res.status(201).send(response));
+				Pics.create({imageUrl: img}).then(newPic => robot.addPic(newPic));
 			});
 		}
 
@@ -116,20 +115,18 @@ router.put('/:id', async (req, res) => {
 });
 
 router.put('/:id/stockChange', async (req, res) => {
-
 	if (!req.isAuthenticated()) return res.status(401).send('No estás logueado');
 	if (req.user.rol !== 'Admin') return res.status(401).send('No eres admin');
 
 	const {id} = req.params;
 
 	const {stockChange, type} = req.body;
-	if (!stockChange && !type) return res.status(500).send('faltan parametros')
+	if (!stockChange && !type) return res.status(500).send('faltan parametros');
 
 	const robot = await Product.findByPk(id);
-	if (!robot) return res.status(400).send('No se encontró el robot :(');	
+	if (!robot) return res.status(400).send('No se encontró el robot :(');
 
 	try {
-		
 		switch (type) {
 			case 'add':
 				robot.stock = robot.stock + Number(stockChange);
@@ -139,17 +136,16 @@ router.put('/:id/stockChange', async (req, res) => {
 				break;
 		}
 
-		if (robot.stock < 0) return res.status(400).send('No hay suficiente stock :(')
+		if (robot.stock < 0) return res.status(400).send('No hay suficiente stock :(');
 
 		await robot.save();
-
-	} catch(error) {
-		res.status(500).send(error.message)
+	} catch (error) {
+		res.status(500).send(error.message);
 	}
 
 	await robot.reload();
 	return res.send(robot);
-})
+});
 
 router.get('/:id', (req, res) => {
 	const {id} = req.params;

@@ -23,7 +23,7 @@ export default function ProductFormFunction({preSelected}) {
 		description: ''
 	});
 	const [products, setProducts] = useState([]);
-	const [update, setUpdate] = useState(false);
+	const [update, setUpdate] = useState({refresh: false, id: 0, action: ''});
 	const [checkboxes, setCheckboxes] = useState([]);
 	const [selected, setSelected] = useState(preSelected ? preSelected.id : 0);
 	const [successMessage, setSuccessMessage] = useState('');
@@ -61,23 +61,55 @@ export default function ProductFormFunction({preSelected}) {
 
 	// ------------  Functionality ----------------------
 
-	// Fetches the products from the backend
+	// Fetches the products from the backend when the page loads for the first time
+	useEffect(() => {
+		axios
+			.get(`${urlBack}/products`)
+			.then(res => {
+				setProducts(res.data);
+			})
+			.then(() => {
+				if (preSelected) {
+					const eventWrapper = {target: {value: preSelected.id}};
+					handleSelectChange(eventWrapper);
+				}
+			})
+			.catch(err => console.log(err.response.data));
+	}, []);
+
+	// Updates the list every time a product is added, modified or removed
 	useEffect(
 		() => {
-			axios
-				.get(`${urlBack}/products`)
-				.then(res => {setProducts(res.data)})
-				.then(() => {
+			switch (update.action) {
+				case 'Add':
+					axios
+						.get(`${urlBack}/products/${update.id}`)
+						.then(res => setProducts([...products, res.data]))
+						.catch(err => console.log(err.response.data));
+					break;
 
-					if (preSelected) {
-						const eventWrapper = {target: {value: preSelected.id}};
-						handleSelectChange(eventWrapper);
-					}
+				case 'Delete':
+					const newList = products.filter(p => p.id !== update.id);
+					setProducts(newList);
+					break;
 
-				})
-				.catch(err => console.log(err.response.data));
+				case 'Edit':
+					axios
+						.get(`${urlBack}/products/${update.id}`)
+						.then(res => {
+							const newList = [...products];
+							const index = newList.findIndex(p => p.id === update.id);
+							newList[index] = res.data;
+							setProducts(newList);
+						})
+						.catch(err => console.log(err.response ? err.response.data : err));
+					break;
+
+				default:
+					break;
+			}
 		},
-		[update]
+		[update.refresh]
 	);
 
 	// If a preSelected bot comes in props
@@ -203,7 +235,7 @@ export default function ProductFormFunction({preSelected}) {
 	const handleDeleteImg = event => {
 		event.preventDefault();
 
-		if (mainImage === event.target.value) setMainImage('');
+		if (mainImage === event.target.value) setMainImage(null);
 		const updatedTable = images.filter(i => i !== event.target.value);
 		setImages(updatedTable);
 	};
@@ -231,10 +263,10 @@ export default function ProductFormFunction({preSelected}) {
 				axios.post(`${urlBack}/products/${newProduct.data.id}/category/${cat.id}`);
 			}
 
-			setSuccessMessage('El producto se agregó existosamente');
+			setSuccessMessage('El producto se agregó exitosamente');
 			resetFields();
 			resetImages();
-			setUpdate(!update);
+			setUpdate({refresh: !update.refresh, id: newProduct.data.id, action: 'Add'});
 		} catch (error) {
 			setErrorMessage(error.response.data);
 		}
@@ -247,10 +279,10 @@ export default function ProductFormFunction({preSelected}) {
 		axios
 			.delete(`${urlBack}/products/${selected}`)
 			.then(() => {
-				setSuccessMessage('El producto se borró existosamente');
+				setSuccessMessage('El producto se borró exitosamente');
 				resetFields();
 				resetImages();
-				setUpdate(!update);
+				setUpdate({refresh: !update.refresh, id: selected, action: 'Delete'});
 			})
 			.catch(error => setErrorMessage(error.response.data));
 	};
@@ -259,7 +291,7 @@ export default function ProductFormFunction({preSelected}) {
 	const handleEdit = async event => {
 		event.preventDefault();
 
-		const changedState = {...inputValues, images, mainImage};
+		const changedState = {...inputValues, images, mainImage: mainImage || images[0]};
 
 		const modifiedCategories = checkboxes.filter(cat => cat.modified);
 
@@ -273,10 +305,10 @@ export default function ProductFormFunction({preSelected}) {
 					axios.delete(`${urlBack}/products/${changedProduct.data.id}/category/${cat.id}`);
 			}
 
-			setSuccessMessage('El producto fue editado existosamente');
+			setSuccessMessage('El producto fue editado exitosamente');
 			resetFields();
 			resetImages();
-			setUpdate(!update);
+			setUpdate({refresh: !update.refresh, id: changedProduct.data.id, action: 'Edit'});
 		} catch (error) {
 			setErrorMessage(error.response.data);
 		}

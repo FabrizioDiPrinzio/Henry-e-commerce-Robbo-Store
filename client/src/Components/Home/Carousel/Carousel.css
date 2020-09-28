@@ -1,81 +1,98 @@
 
-*{
-	margin: 0;
-	padding: 0
-}
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
-
-:root {
-  --beau-blue: #d2e3f9ff;
-  --baby-blue-eyes: #98b7f0ff;
-  --glaucous: #617cc7ff;
-  --ksu-purple: #563488ff;
-  --razzmatazz: #d53467ff
+.tituloCarousel {
+	margin: 70px 0 -60px 30px;
+	font-size: 1.5em;
+	text-align: right;
+	font-family: Lobster, consolas;
+	text-decoration: blink;
+	color: var(--ksu-purple)
 }
 
 .carousel {
     margin: auto;
     margin-top: 80px;
 	max-width:  800px;
-	height: 35vmin;
+	height: 55vmin;
 	overflow: hidden;
-	display: flex;
-	flex-direction: row;
-	background-color: var( --beau-blue);
-	align-items: center;
-	justify-content: center;
+	background-color: white;
+	border-radius: 30px;
 }
 
-.carousel img {
-	margin-top: 4vmax;
-	width: 70%;
-}
-
-.carousel h3 {
-	background-color: rgb(0,0,0,0.3);
-	width: 100%;
-	position: absolute;
-	left: 0;
-	bottom: -0.35em;
-	font-size: 4vmin;
+.bestOneLink {
 	color: white;
-	text-shadow: 2px 2px var(--ksu-purple);
-	padding: 30px;
-	opacity: 0.8;
 }
 
-@media(max-width: 500px) {
-	.carousel h3 {
-		transition: 0.5s;
-		bottom: -1em;
+
+.cardCarrousel {
+	width: 70%;
+	height: 100%;
+	margin: auto;
+}
+
+.cardCarrousel img {
+	height:100%;
+	max-width:100%;
+	margin: auto;
+	object-fit: cover;
+}
+
+.bestOneData {
+	transition: 0.5s;
+	position: absolute;
+	height: 400px;
+	width: 100%;
+	left: 0;
+	right: 0;
+	color: white;
+	margin: auto;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 1.4em;
+	background-color: rgb(30,30,30,0.5);
+}
+
+.bestOneData:hover {
+	bottom: -10%;
+}
+
+.descriptionCarrousel {
+	color: transparent;
+}
+
+.bestOneData:hover>.descriptionCarrousel{
+	color: white;
+}
+.bestOneData:hover>.bestOneLink {
+	transition: 0.5s;
+	color: white !important;
+	text-decoration: none;
+	font-size: 1.2em;
+}
+
+@media (min-width: 500px) {
+	.bestOneData {
+		bottom: -35%;
+	}
+	.bestOneData:hover {
+		bottom: -10%;
 	}
 }
 
+@media (max-width: 500px) {
+	 .carousel {
+	 	height: 70vh;
+	 }
 
-@media(max-width: 300px) {
-	.carousel h3 {
-		transition: 0.5s;
-		bottom: -2em;
+	 .tituloCarousel {
+	 	margin-right: 10px;
+	 }
+
+	.bestOneData:hover {
+		bottom: -10%;
 	}
 }
 
-
-.btn {
-	background-color: transparent;
-	width: 20px;
-	height: 32px;
-	border: solid var( --glaucous);
-	border-width: 10px 10px 0 0
-}
-
-.btn.delante {
-	transform: rotate(45deg);
-	position: absolute;
-	right: 20px;
-}
-
-.btn.atras {
-	transform: rotate(-135deg);
-	position: absolute;
-	left: 20px;
-}

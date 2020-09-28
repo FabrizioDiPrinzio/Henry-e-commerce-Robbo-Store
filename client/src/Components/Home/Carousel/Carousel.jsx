@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import './Carousel.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Axios from 'axios';
@@ -37,7 +37,7 @@ export default function Carousel() {
 
 	return (
 		<div>
-		
+		<h3 className="tituloCarousel">Nuestro top 5</h3>
 		<CarouselBootstrap 
 				className="carousel"
 				activeIndex={index}
@@ -47,13 +47,17 @@ export default function Carousel() {
 						return (
 							<CarouselBootstrap.Item>
 								<div className="cardCarrousel">
-								<img 
-									src={best && best.image}
-									alt={best.name} 
-								/>
-								</div>
-								<div className="bestOneData"> 
-
+									<img 
+										src={best && best.image}
+										alt={best.name} 
+									/>
+									<Link to={`/producto/${best.id}`} >
+										<div className="bestOneData"> 
+											<i  className='bestOneLink'>{best.name}</i>
+											<p className='descriptionCarrousel'>Precio: U$S{best.price}</p>
+											<p className='descriptionCarrousel'>{best.description}</p>
+										</div>
+									</Link>
 								</div>
 							</CarouselBootstrap.Item>
 							)

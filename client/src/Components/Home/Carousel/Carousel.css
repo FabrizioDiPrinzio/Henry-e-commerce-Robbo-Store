@@ -1,12 +1,29 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+.tituloCarousel {
+	margin: 70px 0 -60px 30px;
+	font-size: 1.5em;
+	text-align: right;
+	font-family: Lobster, consolas;
+	text-decoration: blink;
+	color: var(--ksu-purple)
+}
+
 .carousel {
     margin: auto;
     margin-top: 80px;
 	max-width:  800px;
-	height: 65vmin;
+	height: 55vmin;
 	overflow: hidden;
 	background-color: white;
+	border-radius: 30px;
 }
+
+.bestOneLink {
+	color: white;
+}
+
 
 .cardCarrousel {
 	width: 70%;
@@ -19,6 +36,42 @@
 	max-width:100%;
 	margin: auto;
 	object-fit: cover;
+}
+
+.bestOneData {
+	transition: 0.5s;
+	position: absolute;
+	height: 400px;
+	width: 100%;
+	bottom: -35%;
+	left: 0;
+	right: 0;
+	color: white;
+	margin: auto;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 1.4em;
+	background-color: rgb(30,30,30,0.5);
+}
+
+.bestOneData:hover {
+	bottom: -10%;
+}
+
+.descriptionCarrousel {
+	color: transparent;
+}
+
+.bestOneData:hover>.descriptionCarrousel{
+	color: white;
+}
+.bestOneData:hover>.bestOneLink {
+	transition: 0.5s;
+	color: white !important;
+	text-decoration: none;
+	font-size: 1.2em;
 }
 
 @media (max-width: 500px) {

@@ -83,19 +83,20 @@ export default function NavBar(props) {
 						</Modal>
 					)}
 
-					{statusChanged && (
-						<Modal show={showModal} onHide={hideModals}>
-							{user.rol === 'Guest' && (
-								<div className="success"> {success} ¡Sesión cerrada! </div>
-							)}
-							{user.rol !== 'Guest' && (
-								<div className="success">
-									{' '}
-									{success} ¡Bienvenido, {user.name}!{' '}
-								</div>
-							)}
-						</Modal>
-					)}
+					<Modal
+						show={showModal && statusChanged}
+						onHide={hideModals}
+						className="success-modal"
+					>
+						{user.rol === 'Guest' && (
+							<div className="success success-modal"> {success} ¡Sesión cerrada! </div>
+						)}
+						{user.rol !== 'Guest' && (
+							<div className="success success-modal">
+								{success} ¡Bienvenido, {user.name}!
+							</div>
+						)}
+					</Modal>
 
 					<Link to="/carrito">
 						<button className="CartBtn">{cartButton}</button>

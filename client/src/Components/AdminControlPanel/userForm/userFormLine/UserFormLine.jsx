@@ -19,9 +19,7 @@ export default function UserFormAdmin({userInfo, superReload}) {
 		email,
 	});
 
-	const [rolValue, setRolValue] = useState({
-		rol,
-	});
+	const [rolValue, setRolValue] = useState('');
 
 	// ----------- Funcionalidad ----------
 
@@ -38,16 +36,17 @@ export default function UserFormAdmin({userInfo, superReload}) {
 	};
 
 	const handleSelectChange = event => {
-		setRolValue({...rolValue, status: event.target.value});
+		setRolValue(event.target.value);
 	};
 
 	const handleEdit = event => {
 		event.preventDefault();
+		console.log(rolValue)
 
-		if(rol === 'Admin') {
+		if(rolValue === 'Client') {
 		/*Demote*/
 		axios
-			.post(`${urlBack}/auth/demote/${id}`, rolValue)
+			.post(`${urlBack}/auth/demote/${id}`)
 			.then(() => {
 				//setTooltip('El usuario ahora es un "Client"');
 				superReload();
@@ -55,10 +54,10 @@ export default function UserFormAdmin({userInfo, superReload}) {
 			.catch(err => alert(err.response.data));
 		};
 
-		if(rol === 'Client') {
+		if(rolValue === 'Admin') {
 		/*Promote*/
 		axios
-			.post(`${urlBack}/auth/promote/${id}`, rolValue)
+			.post(`${urlBack}/auth/promote/${id}`)
 			.then(() => {
 				//setTooltip('El usuario ahora es un "Admin"');
 				superReload();
@@ -116,16 +115,27 @@ export default function UserFormAdmin({userInfo, superReload}) {
 									</Tooltip>
 								}
 							>
-							<button type="submit" className="deleteUserBtn" value="Delete" onClick={handleDelete}>
-								{deleteButton}
-							</button>
+							<OverlayTrigger
+								show={tooltip === 'Se realizaron los cambios'}
+								placement="right"
+								overlay={
+									<Tooltip>
+										{success} {tooltip}
+									</Tooltip>
+								}
+							>
+								<button type="submit" className="deleteUserBtn" value="Delete" onClick={handleDelete}>
+									{deleteButton}
+								</button>
+							</OverlayTrigger>
+
 						</OverlayTrigger>
 					</div>
 				</div>
 				<div className={stateEdit.edit}>
 					<div>
 						<input
-							className="usrTableCell"
+							className="usrTableCellInput"
 							type="text"
 							name="name"
 							value={inputValues.name}
@@ -134,7 +144,7 @@ export default function UserFormAdmin({userInfo, superReload}) {
 					</div>
 					<div>
 						<input
-							className="usrTableCell"
+							className="usrTableCellInput"
 							type="text"
 							name="email"
 							value={inputValues.email}
@@ -142,7 +152,7 @@ export default function UserFormAdmin({userInfo, superReload}) {
 						/>
 					</div>
 					<div>
-					<div className="usrTableCell">
+					<div className="usrTableCellInput">
 						<select className="usrTableCell" defaultValue={rol} onChange={handleSelectChange}>
 							<option value="Client">Client</option>
 							<option value="Admin">Admin</option>
@@ -151,18 +161,9 @@ export default function UserFormAdmin({userInfo, superReload}) {
 					</div>
 					<div calssName="userActionContainer">
 						<div>
-							<OverlayTrigger
-								show={tooltip === 'Se realizaron los cambios'}
-								overlay={
-									<Tooltip>
-										{success} {tooltip}
-									</Tooltip>
-								}
-							>
 							<button type="submit" className="editUserBtn" value="Edit" onClick={handleEdit}>
 								Aceptar
 							</button>
-							</OverlayTrigger>
 							</div>
 					</div>
 				</div>

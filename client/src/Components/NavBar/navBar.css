@@ -116,8 +116,12 @@
 	background: var(--baby-blue-eyes);
 	border-radius: 3px;
 	height: 40px;
+	width: 40px;
 	border: 4px solid var(--baby-blue-eyes);
 	color: white;
+	margin: 0px;
+	margin-right: 0px;
+	margin-left: 0px;
 }
 .SearchInput {
 	margin: auto;

@@ -57,6 +57,7 @@ export default function UserFormAdmin() {
 						userList.map(user => (
 							<div className="listItem" key={user.id}>
 								<UserFormLine userInfo={user} superReload={superReload} />
+								<hr/>
 							</div>
 						))}
 				</div>

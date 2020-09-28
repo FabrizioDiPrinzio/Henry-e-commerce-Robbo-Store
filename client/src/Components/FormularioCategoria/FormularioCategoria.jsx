@@ -106,7 +106,7 @@ export default function FormularioCategoria() {
 				<br />
 				<label htmlFor="nombre">Nombre:</label>
 				<input
-					className="form-control"
+					className="product-form-control"
 					type="text"
 					name="name"
 					value={inputValues.name}
@@ -118,7 +118,7 @@ export default function FormularioCategoria() {
 					Descripción:
 				</label>
 				<textarea
-					className="form-control"
+					className="product-form-control"
 					name="description"
 					value={inputValues.description}
 					placeholder="Ingrese una descripción de la categoría"
@@ -132,7 +132,7 @@ export default function FormularioCategoria() {
 					<br />
 					<h4>Editar / Eliminar Categorías</h4>
 					<div className="botonOpcion">
-						<select ref={lista} id="select" onChange={handleSelectChange}>
+						<select ref={lista} id="select" className="product-form-control" onChange={handleSelectChange} size="3">
 							<option selected value="0">
 								Categorías...
 							</option>

@@ -274,7 +274,7 @@ router.delete('/:productId/review/:idReview', async (req, res) => {
 		const review = await Reviews.findOne({where: {id: idReview, productId}});
 
 		if (!review) return res.status(404).send('No encontramos la review');
-		if (req.user.rol !== 'Admin' || review.creatorId !== req.user.id) {
+		if (req.user.rol !== 'Admin' && review.creatorId !== req.user.id) {
 			return res.status(400).send('No puedes borrar la review de otra persona');
 		}
 

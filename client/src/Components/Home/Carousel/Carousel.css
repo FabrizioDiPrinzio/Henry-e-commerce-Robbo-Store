@@ -1,81 +1,29 @@
 
-*{
-	margin: 0;
-	padding: 0
-}
-
-
-:root {
-  --beau-blue: #d2e3f9ff;
-  --baby-blue-eyes: #98b7f0ff;
-  --glaucous: #617cc7ff;
-  --ksu-purple: #563488ff;
-  --razzmatazz: #d53467ff
-}
-
 .carousel {
     margin: auto;
     margin-top: 80px;
 	max-width:  800px;
-	height: 35vmin;
+	height: 65vmin;
 	overflow: hidden;
-	display: flex;
-	flex-direction: row;
-	background-color: var( --beau-blue);
-	align-items: center;
-	justify-content: center;
+	background-color: white;
 }
 
-.carousel img {
-	margin-top: 4vmax;
+.cardCarrousel {
 	width: 70%;
+	height: 100%;
+	margin: auto;
 }
 
-.carousel h3 {
-	background-color: rgb(0,0,0,0.3);
-	width: 100%;
-	position: absolute;
-	left: 0;
-	bottom: -0.35em;
-	font-size: 4vmin;
-	color: white;
-	text-shadow: 2px 2px var(--ksu-purple);
-	padding: 30px;
-	opacity: 0.8;
+.cardCarrousel img {
+	height:100%;
+	max-width:100%;
+	margin: auto;
+	object-fit: cover;
 }
 
-@media(max-width: 500px) {
-	.carousel h3 {
-		transition: 0.5s;
-		bottom: -1em;
-	}
-}
-
-
-@media(max-width: 300px) {
-	.carousel h3 {
-		transition: 0.5s;
-		bottom: -2em;
-	}
-}
-
-
-.btn {
-	background-color: transparent;
-	width: 20px;
-	height: 32px;
-	border: solid var( --glaucous);
-	border-width: 10px 10px 0 0
-}
-
-.btn.delante {
-	transform: rotate(45deg);
-	position: absolute;
-	right: 20px;
-}
-
-.btn.atras {
-	transform: rotate(-135deg);
-	position: absolute;
-	left: 20px;
+@media (max-width: 500px) {
+	 .carousel 
+	 {
+	 	height: 70vh;
+	 }
 }

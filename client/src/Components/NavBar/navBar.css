@@ -144,3 +144,17 @@
 	width: 80%;
 	margin: auto;
 }
+
+.success-modal {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	display: flex;
+	justify-content: center;
+	font-size: 1.2rem;
+	top: 9%;
+}
+
+.success-modal .modal-content {
+	width: 70%;
+	left: 15%;
+}

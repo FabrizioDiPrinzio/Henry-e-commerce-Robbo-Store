@@ -25,7 +25,7 @@ export default function ProductFormFunction({preSelected}) {
 	const [products, setProducts] = useState([]);
 	const [update, setUpdate] = useState(false);
 	const [checkboxes, setCheckboxes] = useState([]);
-	const [selected, setSelected] = useState(0);
+	const [selected, setSelected] = useState(preSelected ? preSelected.id : 0);
 	const [successMessage, setSuccessMessage] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 	const lista = useRef(0);
@@ -80,6 +80,19 @@ export default function ProductFormFunction({preSelected}) {
 		[update]
 	);
 
+	// If a preSelected bot comes in props
+	useEffect(
+		() => {
+			if (preSelected && products.length) {
+				const eventWrapper = {target: {value: preSelected.id}};
+				handleSelectChange(eventWrapper);
+			}
+		},
+		/* On first render products.length === 0, we have to wait untilthe products
+		actually get loaded to call this useEffect or else the app crashes. */
+		[products.length]
+	);
+
 	// Creates category checkboxes
 	useEffect(
 		() => {
@@ -123,7 +136,14 @@ export default function ProductFormFunction({preSelected}) {
 
 		if (selectedId > 0) {
 			const currentProduct = products.find(p => p.id === selectedId);
-			setInputValues(currentProduct);
+
+			setInputValues({
+				...inputValues,
+				name: currentProduct.name,
+				price: currentProduct.price,
+				stock: currentProduct.stock,
+				description: currentProduct.description
+			});
 			const imagenes = currentProduct.pics.map(i => {
 				return i.imageUrl;
 			});
@@ -162,7 +182,7 @@ export default function ProductFormFunction({preSelected}) {
 	// Sets which is the main image
 	const handleImageRadios = event => setMainImage(event.target.value);
 
-	const handleAddImg = event => {
+	const handleAddImg = async event => {
 		const files = event.target.files;
 		const uploaded = [...images];
 		setUploading(true);
@@ -171,8 +191,8 @@ export default function ProductFormFunction({preSelected}) {
 			const reader = new FileReader();
 
 			reader.onloadend = () => {
-				uploaded.push(reader.result);
-				if (i === files.length - 1) setUploading(false);
+				uploaded.unshift(reader.result);
+				if (uploaded.length === files.length + images.length) setUploading(false);
 				if (!uploading) setImages(uploaded);
 			};
 
@@ -183,6 +203,7 @@ export default function ProductFormFunction({preSelected}) {
 	const handleDeleteImg = event => {
 		event.preventDefault();
 
+		if (mainImage === event.target.value) setMainImage('');
 		const updatedTable = images.filter(i => i !== event.target.value);
 		setImages(updatedTable);
 	};

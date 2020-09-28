@@ -16,7 +16,7 @@ export default function Purchase_order(props) {
 	//=====================   redux state    ==================== //
 
 	const user = useSelector(state => state.user);
-	const dispatch = useDispatch();
+	//const dispatch = useDispatch();
 
 
 	//=====================   react-component state    ==================== //

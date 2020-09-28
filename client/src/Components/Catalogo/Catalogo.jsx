@@ -22,7 +22,7 @@ export default function Catalogo(props) {
 
 	const handleCargarMas = event => {
 		event.preventDefault();
-		let lastPage = pag;
+		//let lastPage = pag;
 		let nextPage = pag + 1;
 		if (!categoria && !params) dispatch(allActions.productActions.getAllProducts(nextPage));
 		if (categoria) {

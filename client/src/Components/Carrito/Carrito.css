@@ -7,109 +7,116 @@
 }
 
 .cerrarForm {
-    height: 38px;
-    width: 38px;
-    padding: 0 1px 1px 0;
-    position: absolute;
-    top: 140px;
-    right: 25px;
-    border-radius: 50%;
-    border: none;
-    background-color: var(--razzmatazz);
-    display: flex;
-    overflow: hidden;
-    justify-content: center;
-    align-items: center;
-    z-index: 35;
+	height: 38px;
+	width: 38px;
+	padding: 0 1px 1px 0;
+	position: absolute;
+	top: 140px;
+	right: 25px;
+	border-radius: 50%;
+	border: none;
+	background-color: var(--razzmatazz);
+	display: flex;
+	overflow: hidden;
+	justify-content: center;
+	align-items: center;
+	z-index: 35;
 }
 
-.cerrarForm>span {
-    color: white;
-    font-weight: bold;
-    font-size: 23px;
-    margin: auto;
+.cerrarForm > span {
+	color: white;
+	font-weight: bold;
+	font-size: 23px;
+	margin: auto;
 }
 
 .cerrarForm:focus {
-    outline: none;
+	outline: none;
 }
 
 .containerCarrito {
-    max-width: 800px;
-    width: 90vw;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    position: relative;
+	max-width: 800px;
+	width: 90vw;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	position: relative;
 }
 
-
-.datostotales{  
-    background-color: var(--glaucous);
-    color: white;
-    width: 35vw;
-    max-width: 400px;
-    padding: 4vw;
-    margin-right: 10px;
-    border-radius: 10px 10px 0 0;
-    z-index: 10;
-    box-shadow: 10px 0 10px 0 rgb(0,0,0,0.2);
-    align-self: flex-end;
+.datostotales {
+	background-color: var(--glaucous);
+	color: white;
+	width: 35vw;
+	max-width: 400px;
+	padding: 4vw;
+	margin-right: 10px;
+	border-radius: 10px 10px 0 0;
+	z-index: 10;
+	box-shadow: 10px 0 10px 0 rgb(0, 0, 0, 0.2);
+	align-self: flex-end;
 }
 
-.datostotales h2{
-    font-size: 25px;
+.datostotales h2 {
+	font-size: 25px;
 }
 
 .datostotales h3 {
-    font-size: 20px;
+	font-size: 20px;
 }
 
-.btnComprar{
-    padding: 1vmax;
-    width: 35vw;
-    max-width: 400px;
-    background-color: var(--razzmatazz);
-    font-weight: bold;
-    border-radius: 0 0 10px 10px;
-    border: none;
-    margin-right: 10px;
-    color: white;
-    font-size: 25px;
-    z-index: 5;
-    box-shadow: 10px 10px 10px 0 rgb(0,0,0,0.2);
-    align-self: flex-end;
-    margin-bottom: 5vw;
+.btnComprar {
+	padding: 1vmax;
+	width: 35vw;
+	max-width: 400px;
+	background-color: var(--razzmatazz);
+	font-weight: bold;
+	border-radius: 0 0 10px 10px;
+	border: none;
+	margin-right: 10px;
+	color: white;
+	font-size: 25px;
+	z-index: 5;
+	box-shadow: 10px 10px 10px 0 rgb(0, 0, 0, 0.2);
+	align-self: flex-end;
+	margin-bottom: 5vw;
 }
 
 .btnComprar:hover {
-    background-color: var(--ksu-purple);
+	background-color: var(--ksu-purple);
 }
 
 @media (max-width: 900px) {
-     .datostotales h2 {
-        font-size: 3vw;
-    }
-    .datostotales h3 {
-        font-size: 2.5vw;
-    }
-    .btnComprar{
-        font-size: 3vmax;
-    }
+	.datostotales h2 {
+		font-size: 3vw;
+	}
+	.datostotales h3 {
+		font-size: 2.5vw;
+	}
+	.btnComprar {
+		font-size: 3vmax;
+	}
 }
 
-
 @media (max-width: 500px) {
-    .datostotales {
-        width: 60%;
-    }
-    .btnComprar {
-        width: 60%;
-    }
-     .datostotales h2 {
-        font-size: 6vw;
-    }
-    .datostotales h3 {
-        font-size: 5vw;
-    }
+	.datostotales {
+		width: 60%;
+	}
+	.btnComprar {
+		width: 60%;
+	}
+	.datostotales h2 {
+		font-size: 6vw;
+	}
+	.datostotales h3 {
+		font-size: 5vw;
+	}
+}
+
+.purchase-order-modal {
+	top: -5%;
+}
+
+.purchase-order-modal .modal-content {
+	background-color: rgba(255, 255, 255, 0);
+	border-color: rgba(255, 255, 255, 0);
 }

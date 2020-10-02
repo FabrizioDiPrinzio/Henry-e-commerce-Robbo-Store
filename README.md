@@ -93,3 +93,13 @@ Password: admin
 
 ### 404 Page:
 ![alt text](./Readme_Images/404_Page.jpeg "404 Page")
+
+# About Us:
+
+We are a group of 5 [Soy Henry](https://www.soyhenry.com/) students. These are our Github accounts:
+
+- [Fabrizio Di Prinzio](https://github.com/FabrizioDiPrinzio)
+- [Agustin Jaralampidis](https://github.com/ajaralampidis)
+- [Emilia Cabral Benitez](https://github.com/Em3c2)
+- [Lismairy Alejandra Sánchez Hernández](https://github.com/Lismairy-Sanchez)
+- [Luciano Pardo](https://github.com/Luciobio)
